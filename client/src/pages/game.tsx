@@ -147,12 +147,13 @@ export default function GamePage() {
     }
   };
 
-  const handlePurchasePower = async (powerIds: string[]) => {
+  const handlePurchasePower = async (powerIds: string[], wealthSpent: number) => {
     if (!gameState) return;
 
     const updatedCharacter = {
       ...gameState.character,
-      powers: [...(gameState.character.powers || []), ...powerIds]
+      powers: [...(gameState.character.powers || []), ...powerIds],
+      wealth: Math.max(0, (gameState.character.wealth || 0) - wealthSpent)
     };
 
     const updatedState: GameState = {

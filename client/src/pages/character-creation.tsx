@@ -9,8 +9,7 @@ import NameStep from "@/components/character-creation/name-step";
 import AppearanceStep from "@/components/character-creation/appearance-step";
 import OriginStep from "@/components/character-creation/origin-step";
 import TraitsStep from "@/components/character-creation/traits-step";
-import PowersStep from "@/components/character-creation/powers-step";
-import ShopStep from "@/components/character-creation/shop-step";
+import PowersStep from "@/components/character-creation/powers-shop-step";
 import SummaryStep from "@/components/character-creation/summary-step";
 import { saveGame, createNewGameState } from "@/lib/game-state";
 import allPowers from "@/data/powers.json";
@@ -53,8 +52,7 @@ export default function CharacterCreation() {
     { title: "Appearance", description: "Customize your look" },
     { title: "Origin", description: "Select your path in Hell" },
     { title: "Traits", description: "Define your personality" },
-    { title: "Powers", description: "Choose your abilities" },
-    { title: "Shop", description: "Buy power upgrades" },
+    { title: "Powers", description: "Choose and buy your abilities" },
     { title: "Summary", description: "Review your character" }
   ];
 
@@ -124,10 +122,8 @@ export default function CharacterCreation() {
       case 3:
         return characterData.selectedTraits.length > 0;
       case 4:
-        return characterData.selectedPowers.length >= 1;
+        return true; // Powers - at least something bought or confirmed
       case 5:
-        return true; // Shop always valid
-      case 6:
         return true; // Summary always valid
       default:
         return false;
@@ -197,12 +193,6 @@ export default function CharacterCreation() {
               />
             )}
             {step === 5 && (
-              <ShopStep
-                data={characterData}
-                onChange={(data) => setCharacterData({ ...characterData, ...data })}
-              />
-            )}
-            {step === 6 && (
               <SummaryStep data={characterData} />
             )}
           </CardContent>

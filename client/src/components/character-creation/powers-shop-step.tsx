@@ -71,8 +71,8 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Power Shop</CardTitle>
-            <CardDescription>Customize your starting powers with soulcoins</CardDescription>
+            <CardTitle>Select Your Powers</CardTitle>
+            <CardDescription>Choose which powers to start with using your soulcoins</CardDescription>
           </div>
           <div className="flex items-center gap-2 bg-purple-500/20 px-3 py-2 rounded-md">
             <Gem className="w-5 h-5 text-purple-500" />

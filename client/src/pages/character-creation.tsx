@@ -41,12 +41,12 @@ function getInitialSoulcoins(): number {
   try {
     const saves = getAllSaves();
     
-    // First character gets 100 base soulcoins
+    // First character gets 50 base soulcoins
     if (saves.length === 0) {
-      return 100;
+      return 50;
     }
     
-    // Subsequent characters get total from all previous saves (no additional 100)
+    // Subsequent characters get total from all previous saves (no additional 50)
     let totalSoulcoins = 0;
     saves.forEach(save => {
       if (save && save.gameState && save.gameState.character.soulcoins !== undefined) {
@@ -57,7 +57,7 @@ function getInitialSoulcoins(): number {
     return totalSoulcoins;
   } catch (error) {
     console.error("Error loading soulcoins:", error);
-    return 100;
+    return 50;
   }
 }
 

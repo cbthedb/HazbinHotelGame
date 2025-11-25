@@ -56,8 +56,14 @@ export default function BattlePanel({
   const baseOpponentHealth = isOverlord ? 300 : (isRival ? 120 : 100);
   const baseOpponentDamage = isOverlord ? 20 : (isRival ? 12 : 8);
   
+  // POWER SCALING: Higher power = more health, more CE output, more damage
+  const playerPowerLevel = gameState.character.power || 0;
+  const scaledPlayerHealth = gameState.character.health + Math.floor(playerPowerLevel * 0.5); // +0.5 health per power
+  const ceOutputMultiplier = 1 + (playerPowerLevel * 0.05); // 5% more CE per power level
+  const playerDamageMultiplier = 1 + (playerPowerLevel * 0.08); // 8% more damage per power level
+  
   const [battle, setBattle] = useState<BattleState>({
-    playerHealth: gameState.character.health,
+    playerHealth: scaledPlayerHealth,
     opponentHealth: baseOpponentHealth,
     cursedEnergy: 0,
     ultimateGauge: 0,
@@ -87,11 +93,13 @@ export default function BattlePanel({
   });
 
   const handleBaseAttack = () => {
-    const damage = baseAttackPower ? (baseAttackPower.basePower + Math.random() * 10) : 8;
+    const baseDamage = baseAttackPower ? (baseAttackPower.basePower + Math.random() * 10) : 8;
+    const damage = baseDamage * playerDamageMultiplier;
     const newLog = [...battle.battleLog];
     newLog.push(`You used ${baseAttackPower?.name || "Basic Attack"}! Hit for ${Math.floor(damage)} damage.`);
 
-    const newCE = Math.min(100, battle.cursedEnergy + 15);
+    const baseCE = Math.round(15 * ceOutputMultiplier);
+    const newCE = Math.min(100, battle.cursedEnergy + baseCE);
     const newUltimate = Math.min(700, battle.ultimateGauge + 100);
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
@@ -131,21 +139,24 @@ export default function BattlePanel({
   };
 
   const handlePowerAttack = (power: any) => {
-    if (battle.cursedEnergy < power.basePower * 3) {
+    const ceCost = Math.round(power.basePower * 3);
+    if (battle.cursedEnergy < ceCost) {
       toast({
         title: "Not Enough CE",
-        description: `Need ${power.basePower * 3} cursed energy`,
+        description: `Need ${ceCost} cursed energy`,
         variant: "destructive"
       });
       return;
     }
 
-    const damage = power.basePower + Math.random() * 20;
+    const baseDamage = power.basePower + Math.random() * 20;
+    const damage = baseDamage * playerDamageMultiplier;
     const newLog = [...battle.battleLog];
     newLog.push(`You unleashed ${power.name}! Devastating hit for ${Math.floor(damage)} damage!`);
 
-    const newCE = Math.max(0, battle.cursedEnergy - power.basePower * 3);
-    const newUltimate = Math.min(700, battle.ultimateGauge + 100);
+    const newCE = Math.max(0, battle.cursedEnergy - ceCost);
+    const baseUltimate = Math.round(100 * (1 + playerPowerLevel * 0.03)); // 3% gauge per power
+    const newUltimate = Math.min(700, battle.ultimateGauge + baseUltimate);
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
     if (newOpponentHealth <= 0) {
@@ -193,15 +204,17 @@ export default function BattlePanel({
       return;
     }
 
-    const damage = (ultimatePower?.basePower || 30) * 2.5 + Math.random() * 30;
+    const baseDamage = (ultimatePower?.basePower || 30) * 2.5;
+    const damage = (baseDamage + Math.random() * 30) * playerDamageMultiplier;
     const newLog = [...battle.battleLog];
     newLog.push(`${ultimatePower ? "ULTIMATE: " + ultimatePower.name : "ULTIMATE TECHNIQUE"}! Catastrophic damage: ${Math.floor(damage)}!`);
 
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
     if (newOpponentHealth <= 0) {
+      const powerReward = Math.round(30 * (1 + playerPowerLevel * 0.05));
       onBattleEnd(true, {
-        power: 30,
+        power: powerReward,
         influence: 25,
         wealth: 800,
         powerReward: ultimatePower

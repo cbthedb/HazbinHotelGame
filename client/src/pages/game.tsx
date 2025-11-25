@@ -13,6 +13,7 @@ import RankingPanel from "@/components/game/ranking-panel";
 import LocationPanel from "@/components/game/location-panel";
 import ActivitiesPanel from "@/components/game/activities-panel";
 import BattlePanel from "@/components/game/battle-panel";
+import ProgressionPanel from "@/components/game/progression-panel";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -194,11 +195,12 @@ export default function GamePage() {
 
       {/* Main Game Layout */}
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Left Column - Stats & Powers & Ranking */}
+        {/* Left Column - Stats & Powers & Ranking & Progression */}
         <div className="space-y-4">
           <StatsPanel character={character} />
           <PowersPanel gameState={gameState} />
           <RankingPanel gameState={gameState} />
+          <ProgressionPanel gameState={gameState} />
         </div>
 
         {/* Center Column - Events & Actions */}

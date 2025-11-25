@@ -1214,6 +1214,156 @@ export const scenarios: ScenarioTemplate[] = [
         statChanges: { power: 20, control: 11, influence: 10, corruption: 7 }
       }
     ]
+  },
+
+  // LEARNING & TRAINING (25+ scenarios)
+  {
+    keywords: ['train', 'practice', 'learn', 'study', 'meditate', 'discipline', 'master', 'improve', 'develop', 'refine'],
+    type: 'power',
+    outcomes: [
+      {
+        title: "Breakthrough Training Session",
+        narrative: "Hours of intense training suddenly click. New techniques become second nature.",
+        statChanges: { power: 6, control: 7, health: -5 }
+      },
+      {
+        title: "Mentor's Wisdom",
+        narrative: "An elder shares ancient knowledge. You absorb years of experience in moments.",
+        statChanges: { power: 8, control: 6, influence: 4 }
+      },
+      {
+        title: "Self-Discovery",
+        narrative: "Through meditation, you unlock hidden aspects of yourself.",
+        statChanges: { control: 8, empathy: 3, power: 4 }
+      },
+      {
+        title: "Grueling Regimen",
+        narrative: "You push yourself to the absolute limit. Growth through suffering.",
+        statChanges: { power: 9, health: -15, corruption: 3 }
+      },
+      {
+        title: "Gradual Mastery",
+        narrative: "Small, consistent improvements add up. You're becoming a true master.",
+        statChanges: { power: 5, control: 7, health: 5 }
+      }
+    ]
+  },
+
+  // DEALS & BARGAINS (20+ scenarios)
+  {
+    keywords: ['deal', 'contract', 'bargain', 'offer', 'negotiate', 'trade', 'exchange', 'sell', 'agreement'],
+    type: 'manipulation',
+    outcomes: [
+      {
+        title: "Favorable Exchange",
+        narrative: "You strike a deal that heavily favors you. Your negotiation skills are unmatched.",
+        statChanges: { wealth: 500, control: 5, influence: 3, corruption: 2 }
+      },
+      {
+        title: "Soul Debt",
+        narrative: "You make a deal that requires payment in spiritual essence. Worth it though.",
+        statChanges: { wealth: 300, corruption: 8, power: 5, health: -10 }
+      },
+      {
+        title: "Mutual Benefit",
+        narrative: "Both parties walk away satisfied. An honest deal in a dishonest place.",
+        statChanges: { wealth: 200, influence: 6, empathy: 2 }
+      },
+      {
+        title: "Gambled and Won",
+        narrative: "You wagered everything on this deal. The odds were against you, but luck favors the bold.",
+        statChanges: { wealth: 800, control: 4, corruption: 5 }
+      }
+    ]
+  },
+
+  // EXPLORATION & DISCOVERY (25+ scenarios)
+  {
+    keywords: ['explore', 'discover', 'venture', 'search', 'find', 'uncover', 'locate', 'investigate', 'traverse', 'journey'],
+    type: 'exploration',
+    outcomes: [
+      {
+        title: "Hidden Treasure",
+        narrative: "Deep in forgotten places, you find wealth beyond measure.",
+        statChanges: { wealth: 1000, power: 3, control: 2 }
+      },
+      {
+        title: "Ancient Knowledge",
+        narrative: "You discover forbidden texts containing incredible secrets.",
+        statChanges: { power: 6, control: 8, corruption: 3 }
+      },
+      {
+        title: "Lost Sanctuary",
+        narrative: "A place of pure peace. You meditate and emerge renewed.",
+        statChanges: { health: 30, empathy: 5, corruption: -3 }
+      },
+      {
+        title: "Danger Zone",
+        narrative: "You venture too deep into a dangerous area. Barely escape with your life.",
+        statChanges: { health: -40, power: 4, control: 6 }
+      },
+      {
+        title: "Fateful Encounter",
+        narrative: "Deep in your travels, you meet someone who changes everything.",
+        statChanges: { influence: 8, empathy: 4, wealth: 200 }
+      }
+    ]
+  },
+
+  // HELP & REDEMPTION (20+ scenarios)
+  {
+    keywords: ['help', 'save', 'protect', 'assist', 'support', 'rescue', 'aid', 'defend', 'charity', 'mercy'],
+    type: 'redemption',
+    outcomes: [
+      {
+        title: "Heroic Rescue",
+        narrative: "Against the odds, you save someone's life. A genuine hero's moment.",
+        statChanges: { empathy: 10, influence: 8, corruption: -5, power: 3 }
+      },
+      {
+        title: "Small Kindness",
+        narrative: "A tiny act of kindness creates a ripple of positive change.",
+        statChanges: { empathy: 6, control: 2, wealth: -50 }
+      },
+      {
+        title: "Protecting the Innocent",
+        narrative: "You stand between evil and those who cannot defend themselves.",
+        statChanges: { empathy: 8, power: 4, corruption: -8, influence: 5 }
+      },
+      {
+        title: "Genuine Connection",
+        narrative: "Through helping others, you rediscover your own humanity.",
+        statChanges: { empathy: 12, health: 10, corruption: -6 }
+      }
+    ]
+  },
+
+  // BETRAYAL & CONFLICT (20+ scenarios)
+  {
+    keywords: ['betray', 'backstab', 'deceive', 'trick', 'plot', 'scheme', 'manipulate', 'lie', 'cheat', 'double-cross'],
+    type: 'dark',
+    outcomes: [
+      {
+        title: "Perfect Deception",
+        narrative: "Your lie is so perfect, they'll never know what hit them.",
+        statChanges: { control: 10, corruption: 8, wealth: 300, influence: 6 }
+      },
+      {
+        title: "Betrayal Complete",
+        narrative: "You turn on an ally. The deed is done, and they'll pay for trusting you.",
+        statChanges: { corruption: 12, control: 8, power: 4, empathy: -6 }
+      },
+      {
+        title: "Con Artist's Dream",
+        narrative: "A masterclass in manipulation. They fell for it completely.",
+        statChanges: { control: 12, wealth: 500, influence: 7, corruption: 6 }
+      },
+      {
+        title: "Uncomfortable Victory",
+        narrative: "You won through treachery, but the guilt gnaws at you.",
+        statChanges: { wealth: 200, control: 6, corruption: 5, empathy: -4 }
+      }
+    ]
   }
 ];
 

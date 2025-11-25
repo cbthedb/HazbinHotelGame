@@ -12,6 +12,7 @@ import TraitsStep from "@/components/character-creation/traits-step";
 import PowersStep from "@/components/character-creation/powers-step";
 import SummaryStep from "@/components/character-creation/summary-step";
 import { saveGame, createNewGameState } from "@/lib/game-state";
+import allPowers from "@/data/powers.json";
 import type { Origin, Character } from "@shared/schema";
 
 export type CharacterData = {
@@ -66,6 +67,11 @@ export default function CharacterCreation() {
           return;
         }
 
+        // Start with common powers only (free powers)
+        const commonPowers = (allPowers as any[])
+          .filter(p => p.rarity === "common" && !p.isPassive)
+          .map(p => p.id);
+
         const newCharacter: Character = {
           firstName: characterData.firstName,
           lastName: characterData.lastName,
@@ -77,10 +83,10 @@ export default function CharacterCreation() {
           corruption: characterData.origin.startingStats.corruption,
           empathy: characterData.origin.startingStats.empathy,
           health: characterData.origin.startingStats.health,
-          wealth: characterData.origin.startingStats.wealth,
+          wealth: 1000, // Starting wealth to buy powers
           appearance: characterData.appearance,
           traits: characterData.selectedTraits,
-          powers: characterData.selectedPowers,
+          powers: commonPowers,
           rank: "street-demon"
         };
 

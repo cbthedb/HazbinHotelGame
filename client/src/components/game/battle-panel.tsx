@@ -104,11 +104,13 @@ export default function BattlePanel({
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
     if (newOpponentHealth <= 0) {
+      const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       onBattleEnd(true, {
         power: 2,
         influence: 1,
         wealth: 50,
-        powerReward: ultimatePower
+        powerReward: ultimatePower,
+        overlordPower: overlordPower
       });
       return;
     }
@@ -160,11 +162,13 @@ export default function BattlePanel({
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
     if (newOpponentHealth <= 0) {
+      const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       onBattleEnd(true, {
         power: 3,
         influence: 2,
         wealth: 75,
-        powerReward: ultimatePower
+        powerReward: ultimatePower,
+        overlordPower: overlordPower
       });
       return;
     }
@@ -213,11 +217,13 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));
+      const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       onBattleEnd(true, {
         power: powerReward,
         influence: 5,
         wealth: 200,
-        powerReward: ultimatePower
+        powerReward: ultimatePower,
+        overlordPower: overlordPower
       });
       return;
     }

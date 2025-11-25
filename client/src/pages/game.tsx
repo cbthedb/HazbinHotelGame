@@ -14,6 +14,7 @@ import LocationPanel from "@/components/game/location-panel";
 import ActivitiesPanel from "@/components/game/activities-panel";
 import BattlePanel from "@/components/game/battle-panel";
 import ProgressionPanel from "@/components/game/progression-panel";
+import ShopPanel from "@/components/game/shop-panel";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -110,12 +111,22 @@ export default function GamePage() {
 
   const handleBattleEnd = async (won: boolean, rewards: any) => {
     if (gameState) {
+      let newPowers = [...(gameState.character.powers || [])];
+      let victoryMsg = "You won the battle!";
+      
+      // Add overlord power if reward includes it
+      if (won && rewards.overlordPower && !newPowers.includes(rewards.overlordPower)) {
+        newPowers.push(rewards.overlordPower);
+        victoryMsg += ` You learned a new power!`;
+      }
+
       const updatedCharacter = {
         ...gameState.character,
         power: Math.max(0, Math.min(100, (gameState.character.power || 0) + (rewards.power || 0))),
         influence: Math.max(0, (gameState.character.influence || 0) + (rewards.influence || 0)),
         wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
-        health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0)))
+        health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0))),
+        powers: newPowers
       };
 
       const updatedState: GameState = {
@@ -130,10 +141,27 @@ export default function GamePage() {
       
       toast({
         title: won ? "Victory!" : "Defeat!",
-        description: won ? "You won the battle!" : "You were defeated.",
+        description: victoryMsg,
         variant: won ? "default" : "destructive"
       });
     }
+  };
+
+  const handlePurchasePower = async (powerIds: string[]) => {
+    if (!gameState) return;
+
+    const updatedCharacter = {
+      ...gameState.character,
+      powers: [...(gameState.character.powers || []), ...powerIds]
+    };
+
+    const updatedState: GameState = {
+      ...gameState,
+      character: updatedCharacter
+    };
+
+    setGameState(updatedState);
+    await saveGame(updatedState);
   };
 
   const { character } = gameState;
@@ -195,10 +223,11 @@ export default function GamePage() {
 
       {/* Main Game Layout */}
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Left Column - Stats & Powers & Ranking & Progression */}
+        {/* Left Column - Stats & Powers & Ranking & Progression & Shop */}
         <div className="space-y-4">
           <StatsPanel character={character} />
           <PowersPanel gameState={gameState} />
+          <ShopPanel gameState={gameState} onPurchasePower={handlePurchasePower} />
           <RankingPanel gameState={gameState} />
           <ProgressionPanel gameState={gameState} />
         </div>

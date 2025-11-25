@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowUp, Heart, Zap, Users, Sparkles, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowUp, Heart, Zap, Users, Sparkles, Shield, ChevronDown, ChevronUp } from "lucide-react";
 import type { GameState } from "@/lib/game-state";
 
 interface ProgressionPanelProps {
@@ -9,6 +11,7 @@ interface ProgressionPanelProps {
 }
 
 export default function ProgressionPanel({ gameState }: ProgressionPanelProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const { character } = gameState;
   const power = character.power || 0;
   const empathy = character.empathy || 0;
@@ -77,15 +80,42 @@ export default function ProgressionPanel({ gameState }: ProgressionPanelProps) {
     },
   ];
 
+  if (!isExpanded) {
+    return (
+      <Card>
+        <Button
+          onClick={() => setIsExpanded(true)}
+          variant="outline"
+          className="w-full justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <ArrowUp className="w-4 h-4" />
+            Progression Paths
+          </div>
+          <ChevronDown className="w-4 h-4" />
+        </Button>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <Card className="border-2 border-card-border" data-testid="card-progression">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ArrowUp className="w-5 h-5 text-primary" />
-            Progression & Strength
-          </CardTitle>
-          <CardDescription>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <ArrowUp className="w-5 h-5 text-primary" />
+              Progression & Strength
+            </CardTitle>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setIsExpanded(false)}
+            >
+              <ChevronUp className="w-4 h-4" />
+            </Button>
+          </div>
+          <CardDescription className="mt-2">
             Multiple paths to power - choose your fate wisely
           </CardDescription>
         </CardHeader>

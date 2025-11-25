@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Gem, Sparkles } from "lucide-react";
+import { Gem, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import powersData from "@/data/powers.json";
 import type { GameState } from "@/lib/game-state";
@@ -14,6 +15,7 @@ interface MythicalShardShopProps {
 
 export default function MythicalShardShop({ gameState, onPurchaseMythical }: MythicalShardShopProps) {
   const { toast } = useToast();
+  const [isExpanded, setIsExpanded] = useState(false);
   const powers = powersData as any[];
   const ownedPowerIds = new Set(gameState.character.powers || []);
   
@@ -42,15 +44,41 @@ export default function MythicalShardShop({ gameState, onPurchaseMythical }: Myt
     });
   };
 
+  if (!isExpanded) {
+    return (
+      <Card>
+        <Button
+          onClick={() => setIsExpanded(true)}
+          variant="outline"
+          className="w-full justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <Gem className="w-4 h-4" />
+            Mythical Shards ({mythicalPowers.length})
+          </div>
+          <ChevronDown className="w-4 h-4" />
+        </Button>
+      </Card>
+    );
+  }
+
   if (mythicalPowers.length === 0) {
     return (
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Gem className="w-5 h-5 text-amber-500" />
-            Mythical Shard Shop
-          </CardTitle>
-          <CardDescription>Trade mythical shards for legendary powers</CardDescription>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Gem className="w-5 h-5 text-amber-500" />
+              <CardTitle>Mythical Shard Shop</CardTitle>
+            </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setIsExpanded(false)}
+            >
+              <ChevronUp className="w-4 h-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6 text-muted-foreground">
@@ -62,24 +90,33 @@ export default function MythicalShardShop({ gameState, onPurchaseMythical }: Myt
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-500" />
-            <div>
-              <CardTitle>Mythical Shard Shop</CardTitle>
-              <CardDescription>Exchange shards for exclusive powers</CardDescription>
-            </div>
+            <CardTitle>Mythical Shard Shop</CardTitle>
           </div>
-          <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-2 rounded-md">
-            <Gem className="w-5 h-5 text-amber-500" />
-            <span className="font-semibold text-amber-300">{gameState.character.mythicalShards || 0}</span>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setIsExpanded(false)}
+          >
+            <ChevronUp className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <div className="flex items-center justify-between mt-2">
+            <span>Exchange shards for exclusive powers</span>
+            <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-2 rounded-md">
+              <Gem className="w-4 h-4 text-amber-500" />
+              <span className="font-semibold text-amber-300">{gameState.character.mythicalShards || 0}</span>
+            </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-96">
+      <CardContent className="flex-1 overflow-hidden flex flex-col">
+        <ScrollArea className="h-80">
           <div className="space-y-2 pr-4">
             {mythicalPowers.map(power => {
               const canAfford = (gameState.character.mythicalShards || 0) >= MYTHICAL_SHARD_COST;

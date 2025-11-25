@@ -11,7 +11,7 @@ import NPCPanel from "@/components/game/npc-panel";
 import MapPanel from "@/components/game/map-panel";
 import RankingPanel from "@/components/game/ranking-panel";
 import AnimatedLoading from "@/components/game/animated-loading";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
 import { initAudio, playLocationMusic } from "@/lib/audio";
 import type { GameState } from "@/lib/game-state";
@@ -79,6 +79,12 @@ export default function GamePage() {
     setLocation("/");
   };
 
+  const handleSaveGame = async () => {
+    if (!gameState) return;
+    await saveGame(gameState);
+    toast({ title: "Game Saved!", description: "Your progress has been saved to browser storage." });
+  };
+
   if (isLoading) {
     return <AnimatedLoading />;
   }
@@ -112,6 +118,16 @@ export default function GamePage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSaveGame}
+              className="gap-2"
+              data-testid="button-save"
+            >
+              <Save className="w-4 h-4" />
+              Save
+            </Button>
             <Button
               variant="ghost"
               size="icon"

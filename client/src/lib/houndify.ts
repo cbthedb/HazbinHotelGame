@@ -1,6 +1,6 @@
 import type { GameState } from "./game-state";
 
-// Fallback AI-powered scenarios without direct Houndify dependency
+// Fallback templates in case Houndify API fails
 const scenarioTemplates = [
   {
     titles: ["A Bold Gambit", "Unconventional Tactics", "Creative Chaos", "Risky Maneuver"],
@@ -46,38 +46,21 @@ const scenarioTemplates = [
       { power: 6, health: -20, influence: 2 },
       { power: 3, influence: 2, control: 2 }
     ]
-  },
-  {
-    titles: ["Found Common Ground", "Made a Deal", "Reached Agreement", "Formed Alliance"],
-    narratives: [
-      "Mutual interests align perfectly. You've made a valuable ally.",
-      "The terms are favorable, and both parties walk away satisfied.",
-      "An unexpected friendship blooms from this shared goal.",
-      "Respect grows between you as you recognize kindred spirits."
-    ],
-    statOptions: [
-      { influence: 4, empathy: 2 },
-      { wealth: 150, influence: 2 },
-      { control: 2, empathy: 3, influence: 1 },
-      { influence: 5, wealth: 75 }
-    ]
-  },
-  {
-    titles: ["Showed Mercy", "Spared Them", "Chose Compassion", "The Right Thing"],
-    narratives: [
-      "Your opponent was defeated, but you choose not to finish them.",
-      "An act of kindness in Hell itself. How unusual.",
-      "You let them live. Perhaps redemption is possible after all.",
-      "You show them that strength isn't always about destruction."
-    ],
-    statOptions: [
-      { empathy: 4, control: 2 },
-      { empathy: 5, corruption: -3, influence: 1 },
-      { empathy: 3, control: 1, wealth: -75 },
-      { control: 3, empathy: 2 }
-    ]
   }
 ];
+
+function getFallbackOutcome() {
+  const template = scenarioTemplates[Math.floor(Math.random() * scenarioTemplates.length)];
+  const titleIdx = Math.floor(Math.random() * template.titles.length);
+  const narrativeIdx = Math.floor(Math.random() * template.narratives.length);
+  const statsIdx = Math.floor(Math.random() * template.statOptions.length);
+
+  return {
+    title: template.titles[titleIdx],
+    narrative: template.narratives[narrativeIdx],
+    statChanges: template.statOptions[statsIdx]
+  };
+}
 
 export async function generateCustomOutcome(
   userInput: string,
@@ -88,34 +71,69 @@ export async function generateCustomOutcome(
   statChanges: Record<string, number>;
 } | null> {
   try {
-    // Select a random scenario template
-    const template = scenarioTemplates[Math.floor(Math.random() * scenarioTemplates.length)];
-    const titleIdx = Math.floor(Math.random() * template.titles.length);
-    const narrativeIdx = Math.floor(Math.random() * template.narratives.length);
-    const statsIdx = Math.floor(Math.random() * template.statOptions.length);
+    // Create a game-specific prompt for Houndify
+    const prompt = `You are a Hazbin Hotel life simulation game AI narrator. The player character "${gameState.character.firstName} ${gameState.character.lastName}" (Power level: ${gameState.character.power}) just chose to: "${userInput}"
 
-    const title = template.titles[titleIdx];
-    const narrative = template.narratives[narrativeIdx];
-    const statChanges = template.statOptions[statsIdx];
+Generate a brief narrative outcome (1-2 sentences) and a short title (2-4 words). Format EXACTLY like this:
+TITLE: [title here]
+NARRATIVE: [narrative here]
+STATS: power:+1, influence:+2, corruption:-1
 
-    // Contextual adjustments based on user input
-    if (userInput.toLowerCase().includes("sneak") || userInput.toLowerCase().includes("hide")) {
-      statChanges.control = (statChanges.control || 0) + 2;
-      statChanges.influence = Math.max(-2, (statChanges.influence || 0) - 1);
+Keep stat changes small (+/- 1 to 5). Use realistic stat keywords only.`;
+
+    // Call server-side Houndify proxy
+    const response = await fetch("/api/houndify-query", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: prompt,
+        userId: gameState.character.firstName.toLowerCase()
+      })
+    });
+
+    if (!response.ok) {
+      console.warn(`Houndify API error: ${response.status}`);
+      return getFallbackOutcome();
     }
-    if (userInput.toLowerCase().includes("seduce") || userInput.toLowerCase().includes("charm")) {
-      statChanges.influence = (statChanges.influence || 0) + 3;
-      statChanges.control = Math.max(-1, (statChanges.control || 0) - 1);
+
+    const data = await response.json();
+    
+    // Extract response from Houndify API
+    const responseText = data.result?.message || data.result?.WrittenResponseLong || "";
+    
+    if (!responseText) {
+      return getFallbackOutcome();
     }
-    if (userInput.toLowerCase().includes("destroy") || userInput.toLowerCase().includes("attack")) {
-      statChanges.power = (statChanges.power || 0) + 2;
-      statChanges.health = (statChanges.health || 0) - 10;
+
+    // Parse the formatted response
+    const titleMatch = responseText.match(/TITLE:\s*([^\n]+)/i);
+    const narrativeMatch = responseText.match(/NARRATIVE:\s*([^\n]+)/i);
+    const statsMatch = responseText.match(/STATS:\s*([^\n]+)/i);
+
+    if (!titleMatch || !narrativeMatch) {
+      return getFallbackOutcome();
+    }
+
+    const title = titleMatch[1].trim();
+    const narrative = narrativeMatch[1].trim();
+    
+    // Parse stats string like "power:+1, influence:+2"
+    const statChanges: Record<string, number> = {};
+    if (statsMatch) {
+      const statString = statsMatch[1];
+      const statPairs = statString.split(",");
+      statPairs.forEach(pair => {
+        const [key, value] = pair.split(":").map(s => s.trim());
+        if (key && value) {
+          statChanges[key] = parseInt(value) || 0;
+        }
+      });
     }
 
     return { title, narrative, statChanges };
   } catch (error) {
     console.error("Error generating custom outcome:", error);
-    return null;
+    return getFallbackOutcome();
   }
 }
 

@@ -14,7 +14,7 @@ interface ShopStepProps {
 }
 
 const SOULCOIN_PRICES: Record<string, number> = {
-  common: 0,
+  common: 10,
   uncommon: 25,
   rare: 50,
   epic: 100,
@@ -26,14 +26,8 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
   const powers = powersData as Power[];
   const selectedSet = new Set(data.selectedPowers);
   
-  // Available powers - all except common passive (common active are free)
-  const availablePowers = powers.filter(p => {
-    // Free: common non-passive
-    if (p.rarity === "common" && !p.isPassive) return true;
-    // Buyable: uncommon and up
-    if (["uncommon", "rare", "epic", "legendary", "mythical"].includes(p.rarity)) return true;
-    return false;
-  }).sort((a, b) => {
+  // All powers available (including passive)
+  const availablePowers = (powers as any[]).sort((a, b) => {
     const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4, mythical: 5 };
     const aRarity = rarityOrder[a.rarity as keyof typeof rarityOrder] ?? 6;
     const bRarity = rarityOrder[b.rarity as keyof typeof rarityOrder] ?? 6;

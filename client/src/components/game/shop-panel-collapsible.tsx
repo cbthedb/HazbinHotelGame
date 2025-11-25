@@ -45,7 +45,7 @@ export default function ShopPanel({ gameState, onPurchasePower }: ShopPanelProps
   const [selectedRarity, setSelectedRarity] = useState<string | null>(null);
 
   const POWER_PRICES: Record<string, number> = {
-    common: 0,
+    common: 50,
     uncommon: 500,
     rare: 1500,
     epic: 3500,
@@ -82,7 +82,7 @@ export default function ShopPanel({ gameState, onPurchasePower }: ShopPanelProps
     onPurchasePower([power.id], price);
     toast({
       title: "Power Acquired!",
-      description: `${power.name}!${price > 0 ? ` (-${price} wealth)` : " (Free)"}`
+      description: `${power.name}! (-${price} wealth)`
     });
   };
 
@@ -214,11 +214,11 @@ export default function ShopPanel({ gameState, onPurchasePower }: ShopPanelProps
                       <Button
                         size="sm"
                         onClick={() => handlePurchase(power)}
-                        disabled={!canAfford && price > 0}
-                        variant={canAfford || price === 0 ? "default" : "outline"}
+                        disabled={!canAfford}
+                        variant={canAfford ? "default" : "outline"}
                         className="whitespace-nowrap"
                       >
-                        {price === 0 ? "Free" : `${price}`}
+                        {`${price}`}
                       </Button>
                     </div>
                   </div>

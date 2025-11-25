@@ -5,6 +5,22 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 
 ## Latest Updates
 
+### Age-Based Health Scaling (COMPLETED)
+- **Out-of-Battle Health**: Capped at 100 (with passive +5 health/turn regen)
+- **In-Battle Health**: Scales dramatically with age (+2 per age point)
+- **Battle Formula**: Base Health + (Age × 2) + (Power × 0.25)
+- **Example Progression**:
+  - Age 50: +100 bonus health in battle
+  - Age 100: +200 bonus health in battle
+  - Age 114: +228 bonus health in battle (aligns with user's example of ~300 total)
+- **UI**: Stats panel shows both overworld health and battle health alongside each other
+- **Design**: Encourages long-term play as characters become exponentially more durable with age
+
+### Rest Action & Health Regeneration (COMPLETED)
+- **Passive Recovery**: +5 health per turn automatically
+- **Rest Action**: Immediate +30 health recovery with no cooldown
+- **Leveling Bonuses**: Every 5 age = 1 level, grants +5 health + 1-2 random stat gains
+
 ### Power Shop System (COMPLETED)
 - **Shop Panel**: Integrated shopping UI in left column below progression panel
 - **Power Pricing**: 
@@ -46,7 +62,7 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 - Cursed Energy: 15 per turn max, powers cost 3× their base cost
 - Ultimate Gauge: Builds over 7 turns at 100 points/turn, unleash for 2.5x damage burst
 - Damage Scaling: 3% more per power level stat
-- Health Scaling: +0.25 per power level
+- Health Scaling: +0.25 per power level + **+2 per age point** (significant durability scaling)
 
 ### Difficulty Tuning
 - Battle rewards reduced 3x for balance

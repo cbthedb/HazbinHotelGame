@@ -21,6 +21,8 @@ interface StatsPanelProps {
 
 export default function StatsPanel({ character }: StatsPanelProps) {
   const level = Math.floor(character.age / 5);
+  // Calculate battle health (scales with age)
+  const battleHealth = character.health + Math.floor(character.age * 2);
   
   const stats = [
     { name: "Power", value: character.power, max: 100, icon: Zap, color: "text-red-500" },
@@ -57,8 +59,8 @@ export default function StatsPanel({ character }: StatsPanelProps) {
             <Heart className="w-4 h-4 text-green-500" />
             <span className="text-sm font-semibold">Health</span>
           </div>
-          <Progress value={character.health} className="h-2" />
-          <p className="text-xs text-muted-foreground mt-1">{character.health} / 100</p>
+          <Progress value={Math.min(character.health, 100)} className="h-2" />
+          <p className="text-xs text-muted-foreground mt-1">{character.health} / 100 <span className="text-amber-400">(⚔️ Battle: {battleHealth})</span></p>
         </div>
 
         {character.soulcoins !== undefined && (

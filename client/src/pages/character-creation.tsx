@@ -34,6 +34,28 @@ function getInitialOwnedPowers(): string[] {
   }
 }
 
+// Load globally-owned origins from all previous saves
+function getInitialOwnedOrigins(): string[] {
+  try {
+    const saves = getAllSaves();
+    const globalOwnedOrigins = new Set<string>();
+    
+    // Always include free origin
+    globalOwnedOrigins.add("sinner-weak");
+    
+    saves.forEach(save => {
+      if (save && save.gameState && save.gameState.character.origin) {
+        globalOwnedOrigins.add(save.gameState.character.origin);
+      }
+    });
+    
+    return Array.from(globalOwnedOrigins);
+  } catch (error) {
+    console.error("Error loading owned origins:", error);
+    return ["sinner-weak"];
+  }
+}
+
 // Load total accumulated soulcoins from all previous saves (global shared pool)
 // This works like a hivemind currency - if you spent soulcoins buying powers,
 // every new character sees the reduced amount
@@ -100,6 +122,7 @@ export type CharacterData = {
   selectedTraits: string[];
   ownedPowers: string[]; // Powers player has bought
   equippedPowers: string[]; // Powers player is actively using (max 5)
+  ownedOrigins: string[]; // Origins player has bought
   soulcoins: number;
   mythicalShards?: number;
 };
@@ -120,6 +143,7 @@ export default function CharacterCreation() {
     selectedTraits: [],
     ownedPowers: getInitialOwnedPowers(),
     equippedPowers: [],
+    ownedOrigins: getInitialOwnedOrigins(),
     soulcoins: getInitialSoulcoins(),
     mythicalShards: 0
   }));

@@ -34,23 +34,10 @@ function getInitialOwnedPowers(): string[] {
   }
 }
 
-// Load accumulated soulcoins from all previous saves
+// Each new character starts with 100 soulcoins
+// (Soulcoins stay with that character when saved/loaded, not accumulated globally)
 function getInitialSoulcoins(): number {
-  try {
-    const saves = getAllSaves();
-    let totalSoulcoins = 100; // Base starting amount
-    
-    saves.forEach(save => {
-      if (save && save.gameState && save.gameState.character.soulcoins) {
-        totalSoulcoins += save.gameState.character.soulcoins;
-      }
-    });
-    
-    return totalSoulcoins;
-  } catch (error) {
-    console.error("Error loading soulcoins:", error);
-    return 100;
-  }
+  return 100;
 }
 
 export type CharacterData = {

@@ -229,7 +229,8 @@ export default function GamePage() {
     };
 
     setGameState(updatedState);
-    await saveGame(updatedState);
+    // NOTE: NOT saving to localStorage - wealth shop purchases are session-only, not persistent
+    // Only mythical shard purchases (handlePurchaseMythical) persist globally
   };
 
   const handlePurchaseMythical = async (powerId: string, shardsSpent: number) => {

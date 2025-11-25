@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, Users, Briefcase, Music, Swords, Heart, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { canClaimTerritory, claimTerritory } from "@/lib/territorySystem";
 import type { GameState } from "@/lib/game-state";
 
 interface ActionsPanelProps {
@@ -66,16 +67,26 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Swords,
       description: "Expand your domain",
       action: () => {
-        if (character.power < 20) {
+        const randomDistrict = Object.keys(gameState.territory)[Math.floor(Math.random() * Object.keys(gameState.territory).length)];
+        const check = canClaimTerritory(gameState, randomDistrict);
+        
+        if (!check.can) {
           toast({
             title: "Territory Claim Failed",
-            description: "You need at least 20 Power to claim territory!",
+            description: check.reason || "You cannot claim this territory",
             variant: "destructive"
           });
           return;
         }
-        onUpdateCharacter({ influence: character.influence + 5, corruption: character.corruption + 2 });
-        toast({ title: "Territory Claimed!", description: "You've expanded your domain!" });
+        
+        const update = claimTerritory(gameState, randomDistrict);
+        if (update.character && update.territory) {
+          onUpdateCharacter(update.character);
+          toast({ 
+            title: "Territory Claimed!", 
+            description: `You've claimed a new district! Difficulty: ${check.difficultyRating}` 
+          });
+        }
       }
     },
     {

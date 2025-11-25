@@ -9,8 +9,10 @@ import EventCard from "@/components/game/event-card";
 import ActionsPanel from "@/components/game/actions-panel";
 import NPCPanel from "@/components/game/npc-panel";
 import MapPanel from "@/components/game/map-panel";
+import RankingPanel from "@/components/game/ranking-panel";
 import { Menu, X, LogOut } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
+import { initAudio, playLocationMusic } from "@/lib/audio";
 import type { GameState } from "@/lib/game-state";
 
 export default function GamePage() {
@@ -20,8 +22,11 @@ export default function GamePage() {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load game on mount
+  // Load game on mount and initialize audio
   useEffect(() => {
+    initAudio();
+    playLocationMusic("hotel-lobby");
+    
     const saved = loadGame();
     if (!saved) {
       toast({ title: "Error", description: "No game found. Returning to menu.", variant: "destructive" });
@@ -126,10 +131,11 @@ export default function GamePage() {
 
       {/* Main Game Layout */}
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Left Column - Stats & Powers */}
+        {/* Left Column - Stats & Powers & Ranking */}
         <div className="space-y-4">
           <StatsPanel character={character} />
-          <PowersPanel />
+          <PowersPanel gameState={gameState} />
+          <RankingPanel gameState={gameState} />
         </div>
 
         {/* Center Column - Events & Actions */}

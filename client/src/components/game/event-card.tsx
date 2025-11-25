@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import eventsData from "@/data/events.json";
+import { applyNpcAffects } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 import type { GameEvent } from "@shared/schema";
 
@@ -45,25 +46,25 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
       Object.entries(outcomes.statChanges).forEach(([stat, value]) => {
         const currentValue = updated[stat as keyof typeof updated] as number;
         if (typeof currentValue === "number") {
-          updated[stat as keyof typeof updated] = Math.max(0, currentValue + value) as any;
+          updated[stat as keyof typeof updated] = Math.max(0, Math.min(1000, currentValue + value)) as any;
         }
       });
       onUpdateCharacter(updated);
     }
 
-    // Apply NPC affinity changes
-    if (outcomes.npcAffinityChanges) {
-      const newRelationships = { ...gameState.relationships };
-      Object.entries(outcomes.npcAffinityChanges).forEach(([npcId, change]) => {
-        newRelationships[npcId] = (newRelationships[npcId] || 0) + change;
-      });
-      // Note: This should update relationships in game state
+    // Show outcome with stat changes summary
+    let statSummary = "";
+    if (outcomes.statChanges) {
+      const changes = Object.entries(outcomes.statChanges)
+        .filter(([_, v]) => v !== 0)
+        .map(([stat, value]) => `${value > 0 ? "+" : ""}${value} ${stat}`)
+        .join(", ");
+      if (changes) statSummary = `\n\n${changes}`;
     }
 
-    // Show outcome
     toast({
       title: choice.text,
-      description: outcomes.narrativeText,
+      description: outcomes.narrativeText + statSummary,
       duration: 5000
     });
 

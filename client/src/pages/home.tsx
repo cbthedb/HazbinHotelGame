@@ -1,19 +1,38 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Play, Save, Info } from "lucide-react";
 import SplashScreen from "@/components/splash-screen";
+import { loadGame } from "@/lib/game-state";
 
 export default function Home() {
+  const [, setLocation] = useLocation();
   const [showSplash, setShowSplash] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
+  const [hasSave, setHasSave] = useState(false);
 
   useEffect(() => {
     if (!showSplash) {
       setFadeIn(true);
     }
   }, [showSplash]);
+
+  // Check for saved game on mount
+  useEffect(() => {
+    const checkSave = async () => {
+      const saved = await loadGame();
+      setHasSave(!!saved);
+    };
+    checkSave();
+  }, []);
+
+  const handleContinue = async () => {
+    const saved = await loadGame();
+    if (saved) {
+      setLocation("/game");
+    }
+  };
 
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
@@ -52,18 +71,20 @@ export default function Home() {
             variant="secondary"
             className="w-full gap-2 min-h-12 text-lg"
             size="lg"
-            disabled
+            disabled={!hasSave}
+            onClick={handleContinue}
             data-testid="button-continue"
           >
             <Save className="w-5 h-5" />
-            Continue
+            {hasSave ? "Continue" : "No Save Available"}
           </Button>
 
           <Button 
             variant="outline"
             className="w-full gap-2 min-h-12"
             size="lg"
-            disabled
+            disabled={!hasSave}
+            onClick={handleContinue}
             data-testid="button-load-game"
           >
             Load Game

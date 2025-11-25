@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +50,27 @@ export default function CharacterCreation() {
     soulcoins: 100,
     mythicalShards: 0
   });
+
+  // Load all globally-owned powers from previous saves on mount
+  useEffect(() => {
+    const saves = getAllSaves();
+    const globalOwnedPowers = new Set<string>();
+    
+    saves.forEach(save => {
+      if (save && save.gameState) {
+        // Get powers from this save's character
+        const charPowers = save.gameState.character.powers || [];
+        charPowers.forEach(p => globalOwnedPowers.add(p));
+      }
+    });
+    
+    if (globalOwnedPowers.size > 0) {
+      setCharacterData(prev => ({
+        ...prev,
+        ownedPowers: Array.from(globalOwnedPowers)
+      }));
+    }
+  }, []);
 
   const steps = [
     { title: "Name", description: "Choose your demon identity" },

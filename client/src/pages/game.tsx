@@ -79,6 +79,7 @@ export default function GamePage() {
       actionUseCounts: actionUseCounts || gameState.actionUseCounts
     };
 
+    console.log(`[GameUpdate] Slot: ${gameState.slot}, Old SC: ${gameState.character.soulcoins}, New SC: ${updatedState.character.soulcoins}`);
     setGameState(updatedState);
     await saveGame(updatedState, gameState.slot);
   };

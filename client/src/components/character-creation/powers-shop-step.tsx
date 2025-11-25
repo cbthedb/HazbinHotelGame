@@ -16,10 +16,10 @@ interface ShopStepProps {
 
 const SOULCOIN_PRICES: Record<string, number> = {
   common: 0,
-  uncommon: 25,
-  rare: 50,
-  epic: 100,
-  legendary: 200,
+  uncommon: 100,
+  rare: 250,
+  epic: 500,
+  legendary: 1000,
   mythical: 0 // Mythicals need 10 shards instead
 };
 

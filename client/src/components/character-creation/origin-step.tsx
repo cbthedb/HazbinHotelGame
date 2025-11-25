@@ -11,10 +11,10 @@ interface OriginStepProps {
 
 const ORIGIN_COSTS: Record<string, number> = {
   "sinner-weak": 0,
-  "hellborn": 15,
-  "deal-immigrant": 20,
-  "royal-born": 35,
-  "accidental": 50 // Fallen Angel - most expensive
+  "hellborn": 50,
+  "deal-immigrant": 75,
+  "royal-born": 150,
+  "accidental": 250 // Fallen Angel - most expensive
 };
 
 function getOriginCost(originId: string): number {

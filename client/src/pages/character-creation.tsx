@@ -34,6 +34,25 @@ function getInitialOwnedPowers(): string[] {
   }
 }
 
+// Load accumulated soulcoins from all previous saves
+function getInitialSoulcoins(): number {
+  try {
+    const saves = getAllSaves();
+    let totalSoulcoins = 100; // Base starting amount
+    
+    saves.forEach(save => {
+      if (save && save.gameState && save.gameState.character.soulcoins) {
+        totalSoulcoins += save.gameState.character.soulcoins;
+      }
+    });
+    
+    return totalSoulcoins;
+  } catch (error) {
+    console.error("Error loading soulcoins:", error);
+    return 100;
+  }
+}
+
 export type CharacterData = {
   firstName: string;
   lastName: string;
@@ -66,7 +85,7 @@ export default function CharacterCreation() {
     selectedTraits: [],
     ownedPowers: getInitialOwnedPowers(),
     equippedPowers: [],
-    soulcoins: 100,
+    soulcoins: getInitialSoulcoins(),
     mythicalShards: 0
   }));
 

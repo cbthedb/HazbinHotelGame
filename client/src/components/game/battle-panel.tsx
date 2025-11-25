@@ -113,7 +113,7 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 1.0 : 0; // 100% from overlords (testing)
+      const mythicalChance = isOverlord ? 0.10 : 0; // 10% from overlords
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
@@ -180,7 +180,7 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 1.0 : 0; // 100% from overlords (testing)
+      const mythicalChance = isOverlord ? 0.10 : 0; // 10% from overlords
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
@@ -244,7 +244,7 @@ export default function BattlePanel({
     if (newOpponentHealth <= 0) {
       const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 1.0 : 0; // 100% from overlords (testing)
+      const mythicalChance = isOverlord ? 0.10 : 0; // 10% from overlords
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;

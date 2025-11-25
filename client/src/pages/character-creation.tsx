@@ -119,9 +119,11 @@ export default function CharacterCreation() {
           return;
         }
 
-        // Build final powers list: equipped powers + fallback to commons if none selected
-        const finalPowers = characterData.equippedPowers.length > 0 
-          ? characterData.equippedPowers
+        // Build final powers list: all owned powers (both globally owned and newly bought)
+        // Use equipped powers for active use, but save ALL owned powers to the character
+        const allOwnedPowers = characterData.ownedPowers;
+        const finalPowers = allOwnedPowers.length > 0 
+          ? allOwnedPowers
           : (allPowers as any[])
               .filter(p => p.rarity === "common")
               .map(p => p.id)

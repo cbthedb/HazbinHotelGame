@@ -105,10 +105,10 @@ export default function CharacterCreation() {
           updatedAt: new Date()
         };
 
-        const gameState = createNewGameState(newCharacter);
-        // Use first available save slot
+        // Calculate next available slot
         const saves = getAllSaves();
         const nextSlot = Math.min(saves.length + 1, 5);
+        const gameState = createNewGameState(newCharacter, nextSlot);
         await saveGame(gameState, nextSlot);
 
         toast({ title: "Welcome to Hell!", description: `Your life as ${characterData.firstName} ${characterData.lastName} begins...` });

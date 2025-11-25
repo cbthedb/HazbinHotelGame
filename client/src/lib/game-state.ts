@@ -3,6 +3,7 @@ import type { Character } from "@shared/schema";
 export interface GameState {
   character: Character;
   turn: number;
+  slot: number; // Track which save slot this game is in
   eventLog: Array<{ turn: number; title: string; choices: string[] }>;
   relationships: Record<string, number>;
   territory: Record<string, boolean>;
@@ -75,13 +76,13 @@ export async function loadGame(slot: number = 1): Promise<GameState | null> {
 /**
  * Load the most recent save
  */
-export async function loadLatestSave(): Promise<GameState | null> {
+export async function loadLatestSave(): Promise<(GameState & { slot: number }) | null> {
   try {
     const saves = getAllSaves().filter(s => s);
     if (saves.length === 0) return null;
     const latest = saves.reduce((a, b) => (a.timestamp > b.timestamp ? a : b));
     console.log(`✓ Game loaded from slot ${latest.slot}`);
-    return latest.gameState;
+    return { ...latest.gameState, slot: latest.slot };
   } catch (error) {
     console.error("Error loading latest game:", error);
     return null;
@@ -105,10 +106,11 @@ export async function deleteGame(slot: number = 1): Promise<void> {
 /**
  * Create new game state from character
  */
-export function createNewGameState(character: Character): GameState {
+export function createNewGameState(character: Character, slot: number = 1): GameState {
   return {
     character,
     turn: 1,
+    slot,
     eventLog: [],
     relationships: {},
     territory: {},

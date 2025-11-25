@@ -63,7 +63,7 @@ export default function GamePage() {
     };
     
     setGameState(updatedState);
-    await saveGame(updatedState);
+    await saveGame(updatedState, gameState.slot);
     toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn}` });
   };
 
@@ -80,7 +80,7 @@ export default function GamePage() {
     };
 
     setGameState(updatedState);
-    await saveGame(updatedState);
+    await saveGame(updatedState, gameState.slot);
   };
 
   const handleQuitGame = () => {
@@ -89,7 +89,7 @@ export default function GamePage() {
 
   const handleSaveGame = async () => {
     if (!gameState) return;
-    await saveGame(gameState);
+    await saveGame(gameState, gameState.slot);
     toast({ title: "Game Saved!", description: "Your progress has been saved to browser storage." });
   };
 

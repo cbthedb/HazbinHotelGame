@@ -32,18 +32,38 @@ export default function BattlePanel({
   onBattleEnd
 }: BattlePanelProps) {
   const { toast } = useToast();
-  const [battle, setBattle] = useState<BattleState>({
-    playerHealth: gameState.character.health,
-    opponentHealth: 100,
-    cursedEnergy: 0,
-    ultimateGauge: 0,
-    turn: 0,
-    battleLog: ["Battle started!"]
-  });
-
+  
   const powers = powersData as any[];
   const npcs = npcsData as any[];
   const opponentNpc = npcs.find(n => n.id === opponent);
+  
+  // Get opponent name with fallbacks
+  const getOpponentName = () => {
+    if (opponentNpc?.name) return opponentNpc.name;
+    if (opponent === "rival-demon") return "Rival Demon";
+    if (opponent === "unknown" || !opponent) return "Unknown Opponent";
+    try {
+      return opponent.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    } catch {
+      return "Opponent";
+    }
+  };
+  
+  // Scale difficulty based on opponent type
+  const isOverlord = opponent === "charlie" || opponent === "alastor" || opponent === "valentino" || opponent === "vox" || opponent === "carmilla" || opponent === "lucifer";
+  const isRival = opponent === "rival-demon";
+  
+  const baseOpponentHealth = isOverlord ? 300 : (isRival ? 120 : 100);
+  const baseOpponentDamage = isOverlord ? 20 : (isRival ? 12 : 8);
+  
+  const [battle, setBattle] = useState<BattleState>({
+    playerHealth: gameState.character.health,
+    opponentHealth: baseOpponentHealth,
+    cursedEnergy: 0,
+    ultimateGauge: 0,
+    turn: 0,
+    battleLog: [`Battle started! You face ${getOpponentName()}!`]
+  });
 
   // Determine base attack (most common power type)
   const playerPowers = (gameState.character.powers || [])
@@ -82,8 +102,8 @@ export default function BattlePanel({
     }
 
     // Opponent attacks back
-    const opponentDamage = 8 + Math.random() * 8;
-    newLog.push(`${opponentNpc?.name || "Opponent"} attacks! You take ${Math.floor(opponentDamage)} damage.`);
+    const opponentDamage = baseOpponentDamage + Math.random() * 12;
+    newLog.push(`${getOpponentName()} attacks! You take ${Math.floor(opponentDamage)} damage.`);
     const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
 
     if (newPlayerHealth <= 0) {
@@ -135,8 +155,8 @@ export default function BattlePanel({
     }
 
     // Opponent attacks
-    const opponentDamage = 8 + Math.random() * 8;
-    newLog.push(`${opponentNpc?.name || "Opponent"} attacks! You take ${Math.floor(opponentDamage)} damage.`);
+    const opponentDamage = baseOpponentDamage + Math.random() * 12;
+    newLog.push(`${getOpponentName()} attacks! You take ${Math.floor(opponentDamage)} damage.`);
     const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
 
     if (newPlayerHealth <= 0) {
@@ -204,7 +224,7 @@ export default function BattlePanel({
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Zap className="w-5 h-5" />
-              BATTLE
+              BATTLE vs {getOpponentName()}
             </span>
             <span className="text-sm font-normal">Turn {battle.turn}</span>
           </CardTitle>
@@ -221,10 +241,10 @@ export default function BattlePanel({
               </div>
             </div>
             <div>
-              <div className="text-sm font-semibold mb-2">{opponentNpc?.name || "Opponent"}</div>
-              <Progress value={(battle.opponentHealth / 100) * 100} className="h-4 bg-red-900" />
+              <div className="text-sm font-semibold mb-2">{getOpponentName()}</div>
+              <Progress value={(battle.opponentHealth / baseOpponentHealth) * 100} className="h-4 bg-red-900" />
               <div className="text-xs text-muted-foreground mt-1">
-                {Math.floor(battle.opponentHealth)} / 100
+                {Math.floor(battle.opponentHealth)} / {baseOpponentHealth}
               </div>
             </div>
           </div>

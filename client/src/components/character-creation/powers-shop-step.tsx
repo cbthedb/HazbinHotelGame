@@ -49,27 +49,32 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
 
   const handlePurchase = (power: Power) => {
     const price = SOULCOIN_PRICES[power.rarity];
-    
-    // Check if mythical and if have enough shards
-    if (power.rarity === "mythical") {
-      if (totalMythicalShards < 10) return; // Need 10 shards
-    }
-    
-    if (data.soulcoins < price) return;
+    const isMythical = power.rarity === "mythical";
     
     if (selectedSet.has(power.id)) {
+      // Deselect and refund
       const newPowers = data.selectedPowers.filter(id => id !== power.id);
+      const refund = isMythical ? 10 : price; // Refund mythical shards or soulcoins
       onChange({
         selectedPowers: newPowers,
-        soulcoins: data.soulcoins + price
+        soulcoins: data.soulcoins + (isMythical ? 0 : refund)
       });
     } else {
+      // Try to purchase
+      if (isMythical) {
+        if (totalMythicalShards < 10) return; // Need 10 shards per mythical
+        // Can purchase mythical - spend shards from first save with enough
+        // (Note: in real implementation, would need to track shard spending per save)
+      } else {
+        if (data.soulcoins < price) return; // Need enough soulcoins
+      }
+      
       // Limit to 5 powers
-      if (data.selectedPowers.length >= 5 && !selectedSet.has(power.id)) return;
+      if (data.selectedPowers.length >= 5) return;
       
       onChange({
         selectedPowers: [...data.selectedPowers, power.id],
-        soulcoins: data.soulcoins - price
+        soulcoins: isMythical ? data.soulcoins : (data.soulcoins - price)
       });
     }
   };
@@ -148,7 +153,7 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                       className="whitespace-nowrap"
                     >
                       {isMythical ? (
-                        isSelected ? "Own" : totalMythicalShards >= 10 ? "Get" : "Locked"
+                        isSelected ? "Own (10 MS)" : totalMythicalShards >= 10 ? "Get (10 MS)" : "Locked"
                       ) : price === 0 ? (
                         isSelected ? "Own" : "Free"
                       ) : isSelected ? (

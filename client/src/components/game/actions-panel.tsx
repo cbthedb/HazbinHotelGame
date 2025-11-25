@@ -99,15 +99,54 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       id: "perform",
       name: "Perform",
       icon: Music,
-      description: "Entertain at the Hotel",
+      description: "Entertain at the Hotel (cooldown: 8 turns)",
       action: () => {
+        if (isOnCooldown("perform")) {
+          toast({ 
+            title: "On Cooldown", 
+            description: `Available at turn ${cooldowns["perform"]}`,
+            variant: "destructive" 
+          });
+          return;
+        }
+
+        const newCooldowns = { ...cooldowns, "perform": gameState.turn + 8 };
         onUpdateCharacter({
           influence: character.influence + 1,
           wealth: character.wealth + 40,
+          soulcoins: (character.soulcoins || 0) + 1,
           empathy: character.empathy + 1,
-          health: character.health - 10
-        });
-        toast({ title: "Performance", description: "The crowd enjoys it. +1 Influence, +40 coins" });
+          health: character.health - 10,
+          actionCooldowns: newCooldowns
+        } as any);
+        toast({ title: "Performance", description: "The crowd loves it! +1 Influence, +40 wealth, +1 soulcoin" });
+      }
+    },
+    {
+      id: "scheme",
+      name: "Scheme for Power",
+      icon: Heart,
+      description: "Make deals for soulcoins (cooldown: 15 turns)",
+      action: () => {
+        if (isOnCooldown("scheme")) {
+          toast({ 
+            title: "On Cooldown", 
+            description: `Available at turn ${cooldowns["scheme"]}`,
+            variant: "destructive" 
+          });
+          return;
+        }
+
+        const soulcoinGain = Math.floor(Math.random() * 3) + 1; // 1-3 soulcoins
+        const newCooldowns = { ...cooldowns, "scheme": gameState.turn + 15 };
+        onUpdateCharacter({
+          soulcoins: (character.soulcoins || 0) + soulcoinGain,
+          influence: character.influence + 1,
+          corruption: Math.min(100, (character.corruption || 0) + 5),
+          health: character.health - 8,
+          actionCooldowns: newCooldowns
+        } as any);
+        toast({ title: "Deal Made", description: `You gained ${soulcoinGain} soulcoins through scheming!` });
       }
     },
     {

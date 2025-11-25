@@ -58,9 +58,9 @@ export default function BattlePanel({
   
   // POWER SCALING: Higher power = more health, more CE output, more damage
   const playerPowerLevel = gameState.character.power || 0;
-  const scaledPlayerHealth = gameState.character.health + Math.floor(playerPowerLevel * 0.5); // +0.5 health per power
-  const ceOutputMultiplier = 1 + (playerPowerLevel * 0.05); // 5% more CE per power level
-  const playerDamageMultiplier = 1 + (playerPowerLevel * 0.08); // 8% more damage per power level
+  const scaledPlayerHealth = gameState.character.health + Math.floor(playerPowerLevel * 0.25); // +0.25 health per power
+  const ceOutputMultiplier = 1 + (playerPowerLevel * 0.02); // 2% more CE per power level
+  const playerDamageMultiplier = 1 + (playerPowerLevel * 0.03); // 3% more damage per power level
   
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,
@@ -105,9 +105,9 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       onBattleEnd(true, {
-        power: 20,
-        influence: 15,
-        wealth: 500,
+        power: 2,
+        influence: 1,
+        wealth: 50,
         powerReward: ultimatePower
       });
       return;
@@ -161,9 +161,9 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       onBattleEnd(true, {
-        power: 20,
-        influence: 15,
-        wealth: 500,
+        power: 3,
+        influence: 2,
+        wealth: 75,
         powerReward: ultimatePower
       });
       return;
@@ -212,11 +212,11 @@ export default function BattlePanel({
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
     if (newOpponentHealth <= 0) {
-      const powerReward = Math.round(30 * (1 + playerPowerLevel * 0.05));
+      const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));
       onBattleEnd(true, {
         power: powerReward,
-        influence: 25,
-        wealth: 800,
+        influence: 5,
+        wealth: 200,
         powerReward: ultimatePower
       });
       return;

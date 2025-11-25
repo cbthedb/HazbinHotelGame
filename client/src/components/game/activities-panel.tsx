@@ -46,9 +46,9 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
     {
       id: "challenge-overlord",
       name: "Challenge the Overlord",
-      description: `Face off against ${districtRuler}. You need ~100 power to win this fight.`,
+      description: `Face off against ${districtRuler}. You need ~250+ power to realistically win.`,
       icon: <Trophy className="w-5 h-5" />,
-      minPower: 80,
+      minPower: 200,
       action: "challenge-overlord",
       riskLevel: "extreme"
     },

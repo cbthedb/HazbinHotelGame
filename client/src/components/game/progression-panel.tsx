@@ -24,10 +24,10 @@ export default function ProgressionPanel({ gameState }: ProgressionPanelProps) {
       icon: Zap,
       color: "text-red-500",
       milestones: [
-        { level: 20, reward: "Access Rival Duels", current: power >= 20 },
-        { level: 50, reward: "Challenge Weak Overlords", current: power >= 50 },
-        { level: 80, reward: "Challenge Strong Overlords", current: power >= 80 },
-        { level: 100, reward: "Become an Overlord", current: power >= 100 },
+        { level: 50, reward: "Access Rival Duels", current: power >= 50 },
+        { level: 150, reward: "Challenge Weak Overlords", current: power >= 150 },
+        { level: 250, reward: "Challenge Strong Overlords", current: power >= 250 },
+        { level: 500, reward: "Become an Overlord", current: power >= 500 },
       ],
       tips: [
         "✦ Win battles against rivals and overlords",
@@ -43,10 +43,10 @@ export default function ProgressionPanel({ gameState }: ProgressionPanelProps) {
       icon: Heart,
       color: "text-pink-500",
       milestones: [
-        { level: 20, reward: "Unlock Romance Options", current: empathy >= 20 },
-        { level: 40, reward: "Form Genuine Bonds", current: empathy >= 40 },
-        { level: 60, reward: "Inspire Redemption", current: empathy >= 60 },
-        { level: 80, reward: "True Transformation", current: empathy >= 80 },
+        { level: 50, reward: "Unlock Romance Options", current: empathy >= 50 },
+        { level: 80, reward: "Form Genuine Bonds", current: empathy >= 80 },
+        { level: 120, reward: "Inspire Redemption", current: empathy >= 120 },
+        { level: 150, reward: "True Transformation", current: empathy >= 150 },
       ],
       tips: [
         "✦ Help others in events",
@@ -63,10 +63,10 @@ export default function ProgressionPanel({ gameState }: ProgressionPanelProps) {
       icon: Sparkles,
       color: "text-purple-900",
       milestones: [
-        { level: 25, reward: "Unlock Dark Powers", current: corruption >= 25 },
-        { level: 50, reward: "Become Feared", current: corruption >= 50 },
-        { level: 75, reward: "Command Respect Through Fear", current: corruption >= 75 },
-        { level: 100, reward: "Ultimate Corruption", current: corruption >= 100 },
+        { level: 60, reward: "Unlock Dark Powers", current: corruption >= 60 },
+        { level: 120, reward: "Become Feared", current: corruption >= 120 },
+        { level: 180, reward: "Command Respect Through Fear", current: corruption >= 180 },
+        { level: 250, reward: "Ultimate Corruption", current: corruption >= 250 },
       ],
       tips: [
         "✦ Make corrupt choices in events",

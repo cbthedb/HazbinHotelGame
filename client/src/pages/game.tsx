@@ -18,7 +18,7 @@ import ShopPanel from "@/components/game/shop-panel-collapsible";
 import MythicalShardShop from "@/components/game/mythical-shard-shop";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
-import { loadGame, saveGame } from "@/lib/game-state";
+import { loadLatestSave, saveGame } from "@/lib/game-state";
 import { initAudio, playLocationMusic } from "@/lib/audio";
 import type { GameState } from "@/lib/game-state";
 
@@ -37,7 +37,7 @@ export default function GamePage() {
       initAudio();
       playLocationMusic("hotel-lobby");
       
-      const saved = await loadGame();
+      const saved = await loadLatestSave();
       if (!saved) {
         toast({ title: "Error", description: "No game found. Returning to menu.", variant: "destructive" });
         setLocation("/");

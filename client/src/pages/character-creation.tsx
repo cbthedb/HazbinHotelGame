@@ -93,7 +93,7 @@ export default function CharacterCreation() {
           empathy: characterData.origin.startingStats.empathy,
           health: characterData.origin.startingStats.health,
           wealth: 1000,
-          soulcoins: Math.max(0, 100 - characterData.soulcoins),
+          soulcoins: characterData.soulcoins,
           mythicalShards: characterData.mythicalShards || 0,
           powers: finalPowers,
           traits: characterData.selectedTraits,

@@ -9,6 +9,7 @@ import eventsData from "@/data/events.json";
 import { generateAIEvent } from "@/lib/aiEventClient";
 import { generateEventWithUserInput } from "@/lib/smart-ai";
 import { applyNpcAffects } from "@/lib/relationshipSystem";
+import PowerSelector from "@/components/game/power-selector";
 import type { GameState } from "@/lib/game-state";
 import type { GameEvent } from "@shared/schema";
 
@@ -29,16 +30,20 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
 
   const events = eventsData as GameEvent[];
   
+  const [selectedPowers, setSelectedPowers] = useState<string[]>([]);
+  const [showPowerSelector, setShowPowerSelector] = useState(false);
+
   const handleCustomSubmit = async () => {
     if (!customInput.trim()) return;
     
     setIsSubmittingCustom(true);
-    const customEvent = await generateEventWithUserInput(customInput, gameState);
+    const customEvent = await generateEventWithUserInput(customInput, gameState, selectedPowers);
     
     if (customEvent) {
       setCurrentEvent(customEvent);
       setShowCustomBox(false);
       setCustomInput("");
+      setSelectedPowers([]);
       setIsAIGenerated(true);
       toast({ title: "Custom Action", description: "Your unique approach unfolds..." });
     } else {
@@ -196,6 +201,20 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
           </div>
         ) : (
           <>
+            {showPowerSelector && (
+              <PowerSelector
+                gameState={gameState}
+                selectedPowerIds={selectedPowers}
+                onTogglePower={(powerId) => {
+                  setSelectedPowers(prev =>
+                    prev.includes(powerId)
+                      ? prev.filter(p => p !== powerId)
+                      : [...prev, powerId]
+                  );
+                }}
+                onClose={() => setShowPowerSelector(false)}
+              />
+            )}
             {currentEvent.choices.map((choice) => (
               <Card
                 key={choice.id}
@@ -214,14 +233,27 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
               </Card>
             ))}
             {!selectedChoice && (
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setShowCustomBox(true)}
-                data-testid="button-custom-action"
-              >
-                🎲 Create Your Own Path
-              </Button>
+              <div className="space-y-2">
+                {showCustomBox && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => setShowPowerSelector(!showPowerSelector)}
+                    data-testid="button-toggle-powers"
+                  >
+                    ⚡ {showPowerSelector ? "Hide Powers" : "Select Powers"}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowCustomBox(true)}
+                  data-testid="button-custom-action"
+                >
+                  🎲 Create Your Own Path
+                </Button>
+              </div>
             )}
           </>
         )}

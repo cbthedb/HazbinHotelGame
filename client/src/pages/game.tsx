@@ -10,6 +10,8 @@ import ActionsPanel from "@/components/game/actions-panel";
 import NPCPanel from "@/components/game/npc-panel";
 import MapPanel from "@/components/game/map-panel";
 import RankingPanel from "@/components/game/ranking-panel";
+import LocationPanel from "@/components/game/location-panel";
+import ActivitiesPanel from "@/components/game/activities-panel";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -22,6 +24,7 @@ export default function GamePage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentEvent, setCurrentEvent] = useState<any | null>(null);
 
   // Load game on mount and initialize audio
   useEffect(() => {
@@ -149,7 +152,7 @@ export default function GamePage() {
       </header>
 
       {/* Main Game Layout */}
-      <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Left Column - Stats & Powers & Ranking */}
         <div className="space-y-4">
           <StatsPanel character={character} />
@@ -159,9 +162,29 @@ export default function GamePage() {
 
         {/* Center Column - Events & Actions */}
         <div className="lg:col-span-2 space-y-4">
-          <EventCard gameState={gameState} onUpdateCharacter={handleUpdateCharacter} />
-          <ActionsPanel onNextTurn={handleNextTurn} gameState={gameState} onUpdateCharacter={handleUpdateCharacter} />
+          <EventCard 
+            gameState={gameState} 
+            onUpdateCharacter={handleUpdateCharacter}
+          />
+          <ActionsPanel 
+            onNextTurn={handleNextTurn} 
+            gameState={gameState} 
+            onUpdateCharacter={handleUpdateCharacter} 
+          />
           <MapPanel territories={gameState.territory} />
+        </div>
+
+        {/* Right Column - Location & Activities */}
+        <div className="space-y-4">
+          <LocationPanel 
+            gameState={gameState}
+            onUpdateCharacter={handleUpdateCharacter}
+          />
+          <ActivitiesPanel 
+            gameState={gameState}
+            onUpdateCharacter={handleUpdateCharacter}
+            onEventGenerated={setCurrentEvent}
+          />
         </div>
       </div>
 

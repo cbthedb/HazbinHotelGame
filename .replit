@@ -44,3 +44,9 @@ waitForPort = 5000
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0"]
+
+[userenv]
+
+[userenv.shared]
+VITE_HOUNDIFY_CLIENT_ID = "DPvloGdepGICkEpYKA-p8Q=="
+HOUNDIFY_CLIENT_KEY = "VwJFy9HTVJEjjM67gypBviPRy78Pq1kLFrmXptM0gKG65nfu07FF_8e7WWigfjhL_iL6bZJgZ7PUHUwoh9sFrw=="

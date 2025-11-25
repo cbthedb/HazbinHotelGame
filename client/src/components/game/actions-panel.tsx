@@ -52,8 +52,8 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
   
   const getTrainPowerGain = () => {
     const trainCount = useCounts["train-power"] || 0;
-    const baseGain = trainCount >= 5 ? 0.5 : trainCount >= 3 ? 1 : 2;
-    return Math.round(baseGain * powerBonus * 10) / 10; // Apply power bonus multiplier
+    const baseGain = trainCount >= 5 ? 0.25 : trainCount >= 3 ? 0.5 : 1;
+    return Math.round(baseGain * powerBonus * 10) / 10; // Apply power bonus multiplier, reduced 50%
   };
 
   const actions = [
@@ -107,7 +107,7 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Users,
       description: "Build relationships and influence",
       action: () => {
-        const influenceGain = Math.round(1 * powerBonus);
+        const influenceGain = Math.round(0.5 * powerBonus);
         onUpdateCharacter({ influence: character.influence + influenceGain, wealth: character.wealth - 15, health: character.health - 2 });
         toast({ title: "Socialization", description: `You made a connection. +${influenceGain} Influence` });
       }
@@ -155,17 +155,17 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
         }
 
         const newCooldowns = { ...cooldowns, "perform": gameState.turn + 8 };
-        const influenceGain = Math.round(1 * powerBonus);
-        const empathyGain = Math.round(1 * powerBonus);
+        const influenceGain = Math.round(0.5 * powerBonus);
+        const empathyGain = Math.round(0.5 * powerBonus);
         onUpdateCharacter({
           influence: character.influence + influenceGain,
-          wealth: character.wealth + 40,
+          wealth: character.wealth + 20,
           soulcoins: (character.soulcoins || 0) + 1,
           empathy: character.empathy + empathyGain,
           health: character.health - 10,
           actionCooldowns: newCooldowns
         } as any);
-        toast({ title: "Performance", description: `The crowd loves it! +${influenceGain} Influence, +40 wealth, +1 soulcoin, +${empathyGain} Empathy` });
+        toast({ title: "Performance", description: `The crowd loves it! +${influenceGain} Influence, +20 wealth, +1 soulcoin, +${empathyGain} Empathy` });
       }
     },
     {
@@ -183,13 +183,13 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
           return;
         }
 
-        const soulcoinGain = Math.floor(Math.random() * 3) + 1; // 1-3 soulcoins
-        const influenceGain = Math.round(1 * powerBonus);
+        const soulcoinGain = Math.floor(Math.random() * 2) + 1; // 1-2 soulcoins
+        const influenceGain = Math.round(0.5 * powerBonus);
         const newCooldowns = { ...cooldowns, "scheme": gameState.turn + 15 };
         onUpdateCharacter({
           soulcoins: (character.soulcoins || 0) + soulcoinGain,
           influence: character.influence + influenceGain,
-          corruption: (character.corruption || 0) + 5,
+          corruption: (character.corruption || 0) + 3,
           health: character.health - 8,
           actionCooldowns: newCooldowns
         } as any);

@@ -54,8 +54,8 @@ export default function BattlePanel({
   const isOverlord = opponent === "charlie" || opponent === "alastor" || opponent === "valentino" || opponent === "vox" || opponent === "carmilla" || opponent === "lucifer";
   const isRival = opponent === "rival-demon";
   
-  const baseOpponentHealth = isOverlord ? 2500 : (isRival ? 120 : 100);
-  const baseOpponentDamage = isOverlord ? 28 : (isRival ? 12 : 8);
+  const baseOpponentHealth = isOverlord ? 3500 : (isRival ? 120 : 100);
+  const baseOpponentDamage = isOverlord ? 40 : (isRival ? 12 : 8);
   
   // POWER & AGE SCALING: Higher power = more health, more CE output, more damage. Age significantly increases max health
   const playerPowerLevel = gameState.character.power || 0;
@@ -119,10 +119,10 @@ export default function BattlePanel({
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
       onBattleEnd(true, {
-        power: 2,
-        influence: 1,
-        wealth: 50,
-        soulcoins: 10,
+        power: 1,
+        influence: 0,
+        wealth: 25,
+        soulcoins: 5,
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,
@@ -186,10 +186,10 @@ export default function BattlePanel({
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
       onBattleEnd(true, {
-        power: 3,
-        influence: 2,
-        wealth: 75,
-        soulcoins: 15,
+        power: 1,
+        influence: 1,
+        wealth: 40,
+        soulcoins: 8,
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,
@@ -254,9 +254,9 @@ export default function BattlePanel({
       const soulcoinReward = Math.random() < soulcoinChance ? Math.floor(Math.random() * 5) + 1 : 0;
       
       onBattleEnd(true, {
-        power: powerReward,
-        influence: 5,
-        wealth: 200,
+        power: Math.round(powerReward * 0.5),
+        influence: 2,
+        wealth: 100,
         soulcoins: soulcoinReward,
         powerReward: ultimatePower,
         overlordPower: overlordPower,

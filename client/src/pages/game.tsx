@@ -30,6 +30,7 @@ export default function GamePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentEvent, setCurrentEvent] = useState<any | null>(null);
   const [inBattle, setInBattle] = useState<{ opponent: string; district: string } | null>(null);
+  const VERSION = "V0.1";
 
   // Load game on mount and initialize audio
   useEffect(() => {
@@ -74,12 +75,13 @@ export default function GamePage() {
     };
     
     if (newLevel > previousLevel) {
-      // Level up! Gain +5 health and +1-2 to random stats
-      levelUpBonus.health = 5;
+      // Level up! Gain +2 health and +0-1 to random stats (much grindier)
+      levelUpBonus.health = 2;
       const statChoices = ['power', 'control', 'influence'];
-      for (let i = 0; i < 2; i++) {
+      const shouldGainStat = Math.random() < 0.3; // 30% chance for random stat
+      if (shouldGainStat) {
         const stat = statChoices[Math.floor(Math.random() * statChoices.length)] as keyof typeof levelUpBonus;
-        levelUpBonus[stat] = (levelUpBonus[stat] || 0) + 1;
+        levelUpBonus[stat] = 1;
       }
     }
 
@@ -264,6 +266,12 @@ export default function GamePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-card">
+      {/* Version Indicator */}
+      <div className="fixed top-4 right-4 z-40 text-sm font-bold text-primary animate-pulse" 
+           style={{textShadow: '0 0 10px rgba(239, 68, 68, 0.8)', letterSpacing: '2px'}}>
+        {VERSION}
+      </div>
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card border-b border-card-border p-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

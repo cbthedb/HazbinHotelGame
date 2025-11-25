@@ -170,7 +170,7 @@ export default function GamePage() {
 
       const updatedCharacter = {
         ...gameState.character,
-        power: Math.max(0, Math.min(100, (gameState.character.power || 0) + (rewards.power || 0))),
+        power: Math.max(0, (gameState.character.power || 0) + (rewards.power || 0)),
         influence: Math.max(0, (gameState.character.influence || 0) + (rewards.influence || 0)),
         wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
         soulcoins: Math.max(0, (gameState.character.soulcoins || 0) + (rewards.soulcoins || 0)),

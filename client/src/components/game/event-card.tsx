@@ -103,7 +103,13 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
       Object.entries(outcomes.statChanges).forEach(([stat, value]) => {
         const currentValue = updated[stat as keyof typeof updated] as number;
         if (typeof currentValue === "number") {
-          updated[stat as keyof typeof updated] = Math.max(0, Math.min(1000, currentValue + value)) as any;
+          // Cap health at 100, other stats grow infinitely
+          const newValue = currentValue + value;
+          if (stat === "health") {
+            updated[stat as keyof typeof updated] = Math.max(0, Math.min(100, newValue)) as any;
+          } else {
+            updated[stat as keyof typeof updated] = Math.max(0, newValue) as any;
+          }
         }
       });
       onUpdateCharacter(updated);

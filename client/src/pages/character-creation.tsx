@@ -27,6 +27,7 @@ export type CharacterData = {
   selectedTraits: string[];
   selectedPowers: string[];
   soulcoins: number;
+  mythicalShards?: number;
 };
 
 export default function CharacterCreation() {
@@ -44,7 +45,8 @@ export default function CharacterCreation() {
     origin: null,
     selectedTraits: [],
     selectedPowers: [],
-    soulcoins: 100
+    soulcoins: 100,
+    mythicalShards: 0
   });
 
   const steps = [
@@ -87,6 +89,7 @@ export default function CharacterCreation() {
           health: characterData.origin.startingStats.health,
           wealth: 1000,
           soulcoins: Math.max(0, 100 - characterData.soulcoins),
+          mythicalShards: characterData.mythicalShards || 0,
           appearance: characterData.appearance,
           traits: characterData.selectedTraits,
           powers: characterData.selectedPowers.length > 0 ? characterData.selectedPowers : commonPowers,

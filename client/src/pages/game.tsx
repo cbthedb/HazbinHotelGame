@@ -15,6 +15,7 @@ import ActivitiesPanel from "@/components/game/activities-panel";
 import BattlePanel from "@/components/game/battle-panel";
 import ProgressionPanel from "@/components/game/progression-panel";
 import ShopPanel from "@/components/game/shop-panel-collapsible";
+import MythicalShardShop from "@/components/game/mythical-shard-shop";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -174,6 +175,25 @@ export default function GamePage() {
     await saveGame(updatedState);
   };
 
+  const handlePurchaseMythical = async (powerId: string, shardsSpent: number) => {
+    if (!gameState) return;
+
+    const updatedCharacter = {
+      ...gameState.character,
+      powers: [...(gameState.character.powers || []), powerId],
+      mythicalShards: Math.max(0, (gameState.character.mythicalShards || 0) - shardsSpent)
+    };
+
+    const updatedState: GameState = {
+      ...gameState,
+      character: updatedCharacter
+    };
+
+    setGameState(updatedState);
+    await saveGame(updatedState);
+    toast({ title: "Mythical Power Acquired!", description: "Your power has been unlocked!" });
+  };
+
   const { character } = gameState;
 
   if (inBattle) {
@@ -233,11 +253,12 @@ export default function GamePage() {
 
       {/* Main Game Layout */}
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Left Column - Stats & Powers & Ranking & Progression & Shop */}
+        {/* Left Column - Stats & Powers & Ranking & Progression & Shop & Mythical Shop */}
         <div className="space-y-4">
           <StatsPanel character={character} />
           <PowersPanel gameState={gameState} />
           <ShopPanel gameState={gameState} onPurchasePower={handlePurchasePower} />
+          <MythicalShardShop gameState={gameState} onPurchaseMythical={handlePurchaseMythical} />
           <RankingPanel gameState={gameState} />
           <ProgressionPanel gameState={gameState} />
         </div>

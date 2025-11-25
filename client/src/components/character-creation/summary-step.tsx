@@ -16,7 +16,7 @@ export default function SummaryStep({ data }: SummaryStepProps) {
   const powers = powersData as Power[];
 
   const selectedTraits = traits.filter(t => data.selectedTraits.includes(t.id));
-  const selectedPowers = powers.filter(p => data.selectedPowers.includes(p.id));
+  const selectedPowers = powers.filter(p => data.equippedPowers.includes(p.id));
 
   return (
     <div className="space-y-6">

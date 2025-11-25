@@ -50,22 +50,22 @@ export default function ShopPanel({ gameState, onPurchasePower }: ShopPanelProps
     rare: 1500,
     epic: 3500,
     legendary: 7500,
-    mythical: 25000
+    mythical: 99999 // Not available in shop
   };
 
   const ownedPowerIds = new Set(gameState.character.powers || []);
   
   const availablePowers = (powers as any[]).filter(
-    p => !ownedPowerIds.has(p.id)
+    p => !ownedPowerIds.has(p.id) && p.rarity !== "mythical" // Exclude mythicals from shop
   ).sort((a, b) => {
-    const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4, mythical: 5 };
+    const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
     const aRarity = rarityOrder[a.rarity as keyof typeof rarityOrder] ?? 6;
     const bRarity = rarityOrder[b.rarity as keyof typeof rarityOrder] ?? 6;
     if (aRarity !== bRarity) return aRarity - bRarity;
     return a.name.localeCompare(b.name);
   });
 
-  const rarities = ["common", "uncommon", "rare", "epic", "legendary", "mythical"];
+  const rarities = ["common", "uncommon", "rare", "epic", "legendary"];
   
   const handlePurchase = (power: any) => {
     const price = POWER_PRICES[power.rarity];

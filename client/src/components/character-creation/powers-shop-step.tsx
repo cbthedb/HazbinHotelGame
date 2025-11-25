@@ -14,29 +14,34 @@ interface ShopStepProps {
 }
 
 const SOULCOIN_PRICES: Record<string, number> = {
-  common: 10,
+  common: 0,
   uncommon: 25,
   rare: 50,
   epic: 100,
   legendary: 200,
-  mythical: 500
+  mythical: 9999 // Not available in character creation
 };
 
 export default function ShopStep({ data, onChange }: ShopStepProps) {
   const powers = powersData as Power[];
   const selectedSet = new Set(data.selectedPowers);
   
-  // All powers available (including passive)
-  const availablePowers = (powers as any[]).sort((a, b) => {
-    const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4, mythical: 5 };
-    const aRarity = rarityOrder[a.rarity as keyof typeof rarityOrder] ?? 6;
-    const bRarity = rarityOrder[b.rarity as keyof typeof rarityOrder] ?? 6;
-    if (aRarity !== bRarity) return aRarity - bRarity;
-    return a.name.localeCompare(b.name);
-  });
+  // All powers available except mythicals (including passive)
+  const availablePowers = (powers as any[])
+    .filter(p => p.rarity !== "mythical") // Exclude mythicals from character creation
+    .sort((a, b) => {
+      const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
+      const aRarity = rarityOrder[a.rarity as keyof typeof rarityOrder] ?? 6;
+      const bRarity = rarityOrder[b.rarity as keyof typeof rarityOrder] ?? 6;
+      if (aRarity !== bRarity) return aRarity - bRarity;
+      return a.name.localeCompare(b.name);
+    });
 
   const handlePurchase = (power: Power) => {
     const price = SOULCOIN_PRICES[power.rarity];
+    
+    // Don't allow purchasing mythicals
+    if (power.rarity === "mythical") return;
     
     if (data.soulcoins < price) return;
     
@@ -47,6 +52,9 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
         soulcoins: data.soulcoins + price
       });
     } else {
+      // Limit to 5 powers
+      if (data.selectedPowers.length >= 5 && !selectedSet.has(power.id)) return;
+      
       onChange({
         selectedPowers: [...data.selectedPowers, power.id],
         soulcoins: data.soulcoins - price
@@ -110,12 +118,12 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                     <Button
                       size="sm"
                       onClick={() => handlePurchase(power)}
-                      disabled={!canAfford && price > 0 && !isSelected}
-                      variant={isSelected ? "default" : canAfford || price === 0 ? "outline" : "ghost"}
+                      disabled={!canAfford || (data.selectedPowers.length >= 5 && !isSelected)}
+                      variant={isSelected ? "default" : canAfford ? "outline" : "ghost"}
                       className="whitespace-nowrap"
                     >
                       {price === 0 ? (
-                        "Free"
+                        isSelected ? "Own" : "Free"
                       ) : isSelected ? (
                         `Own (${price})`
                       ) : (
@@ -130,10 +138,10 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
         </ScrollArea>
         <div className="mt-4 p-3 bg-muted rounded-md">
           <p className="text-sm">
-            <span className="font-semibold">Selected Powers:</span> {data.selectedPowers.length}
+            <span className="font-semibold">Selected Powers:</span> {data.selectedPowers.length}/5
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            Common powers are free. Use soulcoins to buy rarer powers!
+            Common powers are free. Max 5 powers in character creation. Mythical powers are earned in-game!
           </p>
         </div>
       </CardContent>

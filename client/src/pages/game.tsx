@@ -113,6 +113,7 @@ export default function GamePage() {
     if (gameState) {
       let newPowers = [...(gameState.character.powers || [])];
       let victoryMsg = "You won the battle!";
+      let mythicalShardsGained = 0;
       
       // Add overlord power if reward includes it
       if (won && rewards.overlordPower && !newPowers.includes(rewards.overlordPower)) {
@@ -120,8 +121,11 @@ export default function GamePage() {
         victoryMsg += ` You learned a new power!`;
       }
 
-      // Add mythical power for overlord defeats (low chance)
-      const isMythicalReward = won && rewards.isMythical;
+      // Get mythical shard from overlord defeats (15% chance)
+      if (won && rewards.isMythical) {
+        mythicalShardsGained = 1;
+        victoryMsg += ` You obtained a Mythical Shard!`;
+      }
 
       const updatedCharacter = {
         ...gameState.character,
@@ -130,12 +134,9 @@ export default function GamePage() {
         wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
         soulcoins: Math.max(0, (gameState.character.soulcoins || 0) + (rewards.soulcoins || 0)),
         health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0))),
-        powers: isMythicalReward && rewards.mythicalPower ? [...newPowers, rewards.mythicalPower] : newPowers
+        powers: newPowers,
+        mythicalShards: (gameState.character.mythicalShards || 0) + mythicalShardsGained
       };
-
-      if (isMythicalReward && rewards.mythicalPower) {
-        victoryMsg += ` MYTHICAL POWER ACQUIRED!`;
-      }
 
       const updatedState: GameState = {
         ...gameState,

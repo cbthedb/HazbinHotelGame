@@ -215,7 +215,7 @@ export default function GamePage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="font-display text-2xl font-bold text-primary">
-              {character.firstName} {character.lastName}
+              {character.name}
             </h1>
             <div className="text-sm text-muted-foreground">
               Turn {gameState.turn} • Age {character.age}

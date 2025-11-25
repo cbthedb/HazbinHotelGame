@@ -5,6 +5,20 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 
 ## Latest Updates
 
+### Power Shop Separation & Economy Rebalance (CURRENT)
+- **Separated Shop Systems**: Character creation and in-game shops now completely independent
+  - Character creation soulcoin shop (for starting powers)
+  - In-game wealth shop (for mid-run power purchases)
+  - Only mythical shard shop connects between them (10 shards = permanent mythical power unlock)
+- **Drastically Increased Costs**:
+  - **Soulcoins (character creation)**: 0, 300, 750, 1500, 3000 (was 0, 100, 250, 500, 1000)
+  - **Wealth (in-game)**: 200, 1500, 4500, 10000, 20000 (was 50, 500, 1500, 3500, 7500)
+- **CE Ultimate Bug Fixed**: 
+  - Power attacks now only add 20 gauge/turn (was 100+, causing instant charge)
+  - Still requires 7 turns to fully charge ultimate (700 total)
+  - Maintains intended battle pacing and player progression feel
+- **Design Philosophy**: Powers are now extremely precious - requires extensive grind to acquire anything beyond commons
+
 ### Extreme Difficulty & Grind Tuning (V0.1)
 - **Version Indicator**: Glowing "V0.1" display in top right corner with pulse animation
 - **Overlord Buffing**: 3500 health, 40 damage (significantly harder than before)

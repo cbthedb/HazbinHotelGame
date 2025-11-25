@@ -11,7 +11,7 @@ import OriginStep from "@/components/character-creation/origin-step";
 import TraitsStep from "@/components/character-creation/traits-step";
 import PowersStep from "@/components/character-creation/powers-shop-step";
 import SummaryStep from "@/components/character-creation/summary-step";
-import { saveGame, createNewGameState } from "@/lib/game-state";
+import { saveGame, createNewGameState, getAllSaves } from "@/lib/game-state";
 import allPowers from "@/data/powers.json";
 import type { Origin, Character } from "@shared/schema";
 
@@ -106,7 +106,10 @@ export default function CharacterCreation() {
         };
 
         const gameState = createNewGameState(newCharacter);
-        await saveGame(gameState);
+        // Use first available save slot
+        const saves = getAllSaves();
+        const nextSlot = Math.min(saves.length + 1, 5);
+        await saveGame(gameState, nextSlot);
 
         toast({ title: "Welcome to Hell!", description: `Your life as ${characterData.firstName} ${characterData.lastName} begins...` });
         setLocation("/game");

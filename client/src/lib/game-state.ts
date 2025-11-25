@@ -10,33 +10,62 @@ export interface GameState {
   actionUseCounts: Record<string, number>;
 }
 
-const STORAGE_KEY = "hazbin-game-state";
+export interface SaveSlot {
+  slot: number;
+  gameState: GameState;
+  characterName: string;
+  timestamp: number;
+}
+
+const STORAGE_KEY = "hazbin-game-saves";
+const MAX_SAVES = 5;
 
 /**
- * Save game to browser localStorage
- * Simple, reliable client-side storage
+ * Save game to a specific slot (default slot 1)
  */
-export async function saveGame(state: GameState): Promise<void> {
+export async function saveGame(state: GameState, slot: number = 1): Promise<void> {
   try {
-    const serialized = JSON.stringify(state);
-    localStorage.setItem(STORAGE_KEY, serialized);
-    console.log("✓ Game saved to browser");
+    const saves = getAllSaves();
+    const slotData: SaveSlot = {
+      slot,
+      gameState: state,
+      characterName: state.character.name || "Unknown",
+      timestamp: Date.now()
+    };
+    
+    saves[slot - 1] = slotData;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
+    console.log(`✓ Game saved to slot ${slot}`);
   } catch (error) {
     console.error("Error saving game:", error);
   }
 }
 
 /**
- * Load game from browser localStorage
+ * Get all saves
  */
-export async function loadGame(): Promise<GameState | null> {
+export function getAllSaves(): SaveSlot[] {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return null;
+    if (!saved) return [];
+    const parsed = JSON.parse(saved) as SaveSlot[];
+    return parsed.slice(0, MAX_SAVES);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Load game from a specific slot (default slot 1)
+ */
+export async function loadGame(slot: number = 1): Promise<GameState | null> {
+  try {
+    const saves = getAllSaves();
+    const save = saves[slot - 1];
+    if (!save) return null;
     
-    const parsed = JSON.parse(saved) as GameState;
-    console.log("✓ Game loaded from browser");
-    return parsed;
+    console.log(`✓ Game loaded from slot ${slot}`);
+    return save.gameState;
   } catch (error) {
     console.error("Error loading game:", error);
     return null;
@@ -44,12 +73,30 @@ export async function loadGame(): Promise<GameState | null> {
 }
 
 /**
- * Delete game from browser localStorage
+ * Load the most recent save
  */
-export async function deleteGame(): Promise<void> {
+export async function loadLatestSave(): Promise<GameState | null> {
   try {
-    localStorage.removeItem(STORAGE_KEY);
-    console.log("✓ Game deleted from browser");
+    const saves = getAllSaves().filter(s => s);
+    if (saves.length === 0) return null;
+    const latest = saves.reduce((a, b) => (a.timestamp > b.timestamp ? a : b));
+    console.log(`✓ Game loaded from slot ${latest.slot}`);
+    return latest.gameState;
+  } catch (error) {
+    console.error("Error loading latest game:", error);
+    return null;
+  }
+}
+
+/**
+ * Delete game from a specific slot
+ */
+export async function deleteGame(slot: number = 1): Promise<void> {
+  try {
+    const saves = getAllSaves();
+    saves[slot - 1] = null as any;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saves.filter(s => s)));
+    console.log(`✓ Game deleted from slot ${slot}`);
   } catch (error) {
     console.error("Error deleting game:", error);
   }

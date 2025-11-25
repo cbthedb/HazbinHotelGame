@@ -74,11 +74,25 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       id: "work",
       name: "Work",
       icon: Briefcase,
-      description: "Earn soul coins",
+      description: "Earn soul coins (cooldown: 10 turns)",
       action: () => {
-        const earnings = Math.floor(Math.random() * 50) + 20;
-        onUpdateCharacter({ wealth: character.wealth + earnings, health: character.health - 8 });
-        toast({ title: "Work Complete", description: `You earned ${earnings} soul coins!` });
+        if (isOnCooldown("work")) {
+          toast({ 
+            title: "On Cooldown", 
+            description: `Available at turn ${cooldowns["work"]}`,
+            variant: "destructive" 
+          });
+          return;
+        }
+        
+        const newCooldowns = { ...cooldowns, "work": gameState.turn + 10 };
+        onUpdateCharacter({ 
+          soulcoins: (character.soulcoins || 0) + 1,
+          health: character.health - 5,
+          actionCooldowns: newCooldowns
+        } as any);
+        
+        toast({ title: "Work Complete", description: "You earned 1 soul coin!" });
       }
     },
     {

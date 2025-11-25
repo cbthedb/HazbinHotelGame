@@ -239,11 +239,15 @@ export default function BattlePanel({
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
+      // Soulcoin rewards: small chance for overlords
+      const soulcoinChance = isOverlord ? 0.15 : 0; // 15% chance for overlord fights
+      const soulcoinReward = Math.random() < soulcoinChance ? Math.floor(Math.random() * 5) + 1 : 0;
+      
       onBattleEnd(true, {
         power: powerReward,
         influence: 5,
         wealth: 200,
-        soulcoins: 25,
+        soulcoins: soulcoinReward,
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,

@@ -9,8 +9,26 @@ interface OriginStepProps {
   onChange: (data: Partial<CharacterData>) => void;
 }
 
+const ORIGIN_COSTS: Record<string, number> = {
+  "sinner-weak": 0,
+  "hellborn": 15,
+  "deal-immigrant": 20,
+  "royal-born": 35,
+  "accidental": 50 // Fallen Angel - most expensive
+};
+
+function getOriginCost(originId: string): number {
+  return ORIGIN_COSTS[originId] || 0;
+}
+
 export default function OriginStep({ data, onChange }: OriginStepProps) {
   const origins = originsData as Origin[];
+
+  const handleOriginSelect = (origin: Origin) => {
+    const cost = getOriginCost(origin.id);
+    const newSoulcoins = Math.max(0, (data.soulcoins || 100) - cost);
+    onChange({ origin, soulcoins: newSoulcoins });
+  };
 
   return (
     <div className="space-y-4">
@@ -23,7 +41,7 @@ export default function OriginStep({ data, onChange }: OriginStepProps) {
                 ? "ring-2 ring-primary border-primary"
                 : "border-card-border"
             }`}
-            onClick={() => onChange({ origin })}
+            onClick={() => handleOriginSelect(origin)}
             data-testid={`button-origin-${origin.id}`}
           >
             <CardHeader>
@@ -32,9 +50,12 @@ export default function OriginStep({ data, onChange }: OriginStepProps) {
                   <CardTitle className="font-display text-xl">{origin.name}</CardTitle>
                   <CardDescription className="mt-1">{origin.description}</CardDescription>
                 </div>
-                <Badge variant="secondary" className="shrink-0">
-                  {origin.traitPoints} TP
-                </Badge>
+                <div className="shrink-0 text-right space-y-1">
+                  <Badge variant="secondary">{origin.traitPoints} TP</Badge>
+                  <Badge variant="outline" className={origin.id === "sinner-weak" ? "bg-green-500/20 border-green-700" : ""}>
+                    {origin.id === "sinner-weak" ? "Free" : `${getOriginCost(origin.id)} SC`}
+                  </Badge>
+                </div>
               </div>
             </CardHeader>
             <CardContent>

@@ -203,6 +203,9 @@ export default function GamePage() {
 
         {/* Center Column - Events & Actions */}
         <div className="lg:col-span-2 space-y-4">
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 border-l-4 border-primary rounded p-3 text-sm font-semibold text-amber-100">
+            ⚡ CURRENT EVENT
+          </div>
           <EventCard 
             gameState={gameState} 
             onUpdateCharacter={handleUpdateCharacter}

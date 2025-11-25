@@ -1,0 +1,600 @@
+Nice — I got you. Below is a single, long, extremely-detailed **game design & implementation prompt** you can paste straight into a Replit agent (or hand to any dev) to build a BitLife-style Hazbin Hotel game. It covers everything you asked for: starting paths (born royal, sinner, deal, Hellborn), **specific power types**, a full **traits menu**, name/character creation flow, UI & progression systems, events, sample abilities with stats, balancing rules, NPCs, reputation/endings, save/generation data structures, and example event scripts. I made it thorough and implementation-friendly so the agent can start coding with minimal follow-up.
+
+---
+
+# Build Prompt — Hazbin Hotel BitLife-style Game (complete spec)
+
+**Project goal:** Create a single-player, choice-driven, life-sim game (BitLife-like) set in the Hazbin Hotel universe. The game begins in Hell (or can spawn character origin flashbacks) and lets players live a full demon-life: be born a royal, spawn as a Hellborn, arrive as a sinner via deal, or be a weak sinner. Players select powers, traits, and make life choices that shape reputation, relationships, power growth, and multiple possible endings (redemption, dominion, party chaos, obliteration, rule of Hell, etc). The tone should match Hazbin’s dark humor and melodrama but remain balanced for gameplay.
+
+Target platforms: Web (HTML5 / JS/TS), optionally exportable to desktop. Use modular code: data-driven for powers, traits, events, NPCs. Persist saves per player. Use JSON for all content data.
+
+---
+
+# High-level systems
+
+1. **Character creation & origin**
+
+   * Name selection (first + last, with randomized suggestions themed for Hazbin).
+
+   * Appearance slider (silhouette, color palette, horns/wings choices) — cosmetic only.
+
+   * Origin selection (affects starting stats, powers, social position):
+
+     * **Royal-born** — born into Hell royalty/overlord family. Starts with high Influence, high innate power, small corruption susceptibility, low empathy. Gains a unique “Title” slot and family claims.
+     * **Hellborn (native)** — born in Hell but not royal. Balanced: medium power, medium Influence, higher resilience to Hell’s corruption.
+     * **Sinner (weak)** — human-turned demon with sin-based powers tied to their mortal life. Lower starting power & Influence, higher skill growth potential via choices.
+     * **Deal Immigrant** — character who made a contract to enter Hell (e.g., Faustian bargain). Starts with a Contract resource (one or more clauses that can be exploited), variable power depending on deal.
+     * **Accidental/Other** — rare roles like 'fallen angel' or 'angelic exile' (unlockable / event).
+
+   * Starting age: choose a “life stage” to begin: Newborn / Adolescent / Adult. Default start is “Young Adult” to skip very early tutorial, but allow Newborn for challenge runs.
+
+2. **Core stats (numerical)**
+
+   * **Power**: raw magical/physical potency (affects damage + chance to activate abilities).
+   * **Control**: ability to reliably use and modulate powers (affects cost, cooldowns, side-effects).
+   * **Influence**: social standing, resources, ability to call favors and make deals.
+   * **Corruption**: susceptibility to corrupting effects; also acts as temptation currency (higher corruption unlocks darker power use but risks endings).
+   * **Empathy**: ability to care, redeem, or sway others emotionally — key for redemption endings and some social abilities.
+   * **Reputation**: faction-based reputation values (Hotel, Syndicates, Royal House, VoxCorp, etc).
+   * **Health**: generic physical durability/HP.
+   * **Wealth**: currency (SoulCoins, Promissory Notes, favors) used for purchases and bribes.
+
+3. **Power system**
+
+   * Powers are defined by **Power Type** (detailed list below). Each ability is stored as JSON with fields:
+
+     ```
+     {
+       id: "firelash",
+       name: "Hellfire Lash",
+       type: "Hellfire",
+       base_power: 12,
+       control_req: 6,
+       corruption_cost: 2,
+       cooldown: 3,
+       effect: "single-target damage + burn",
+       rarity: "common",
+       unlocks_at: { power: 5 } // or origin-specific
+     }
+     ```
+   * Players have a **Power Loadout** (3-5 active slots + passives). Active powers have cooldown, control cost, and may increase Corruption when used.
+   * **Power Growth:** use-based XP. Abilities level up individually and improve base_power, reduce control_req, lower corruption cost, and unlock modifiers.
+
+4. **Traits system**
+
+   * Traits are persistent modifiers that define personality and mechanical bonuses/penalties. Each trait has a rarity and cost (positive or negative).
+   * At character creation, players get a pool of **Trait Points** (TP) to spend. Some origins get more/fewer TP; additional TP can be earned via major story milestones.
+   * Traits are categorized: Moral, Social, Physical, Magical, Quirky.
+   * Traits can be **Locked** (must be unlocked via event) or **Purchased**.
+
+5. **Events & choices**
+
+   * Game is event-driven: each “turn” is an in-game day/week/month depending on scale. Player chooses actions each turn (Train power, Attend ball, Strike deal, Romance, Crime, Play show, Manage Hotel, etc).
+   * Events produce branching outcomes, affect stats and reputation, and may add or remove traits.
+   * There are **Major arcs**: Hotel Redemption Arc, Overlord Ambition, Syndicate War, Vox Media Control, Royal Intrigue, Dark Rituals.
+
+6. **NPCs, factions, and relationships**
+
+   * NPCs have profiles: name, faction, affinity, romance flags, secret flags, favors owed.
+   * Factions have reputation and territorial power; actions can shift balance.
+   * Relationships affect Influence and story events.
+
+7. **Endings**
+
+   * Multiple endings based on stat thresholds and narrative choices:
+
+     * **Redemption** — high Empathy, low Corruption, strong Hotel rep.
+     * **Overlord** — high Influence, high Power, high Corruption.
+     * **Syndicate King/Queen** — high Reputation with syndicate, low Hotel rep.
+     * **Vox Ascension** — tech-based takeover, high Tech/Media Influence.
+     * **Obliteration** — collapse of Hell rule (result of catastrophic choices).
+   * Each ending has a tier (good/neutral/bad) and unlocks badges/achievements.
+
+---
+
+# Specific Power Types (complete & implementable)
+
+Each Power Type should be a **category** with multiple abilities. Below are realistic, canon-inspired power types (names and mechanics suitable for Hazbin) — include both active and passive examples.
+
+> Implementation note: For each type define `theme`, `mechanic tags`, `example abilities`, and `suggested unlock conditions`.
+
+---
+
+## 1. Hellfire / Infernal Flame
+
+* **Theme:** classical hellfire, burns souls and objects.
+* **Mechanic tags:** Damage-over-time, area denial, morale debuff.
+* **Examples:**
+
+  * **Cinder Flick** (single-target nuke + burn)
+  * **Ash Curtain** (AOE that reduces enemy visibility/accuracy)
+  * **Ember Chain** (bounces between targets)
+* **Unlock:** default for many Hellborn and royal families.
+
+## 2. Voice / Broadcast Magic (Vox-style)
+
+* **Theme:** manipulate sound, screens, and broadcasts; control media.
+* **Mechanic tags:** ranged, mind-affect, mass persuasion, tech control.
+* **Examples:**
+
+  * **Static Command** (force NPCs to hear a command; chance to charm)
+  * **Signal Overload** (disable tech-based enemies)
+  * **Vox Influence** (passive that increases Influence per media event)
+* **Unlock:** Vox affiliates, tech deals, or cultural events.
+
+## 3. Shadow & Eldritch (Alastor-esque)
+
+* **Theme:** reality-warping, shadows, cosmic horror aesthetics.
+* **Mechanic tags:** control, territory domain, summon minions, reality-swap.
+* **Examples:**
+
+  * **Redstatic Domain** (creates a personal arena where player alters rules)
+  * **Whisperate** (possess items to speak commands)
+  * **Tendril Reach** (grapples & disables targets)
+* **Unlock:** high Power + rare story event.
+
+## 4. Contract Magic / Bargaining
+
+* **Theme:** binding contracts that can alter fate, borrow power for price.
+* **Mechanic tags:** resource exchange, delayed cost, narrative hooks.
+* **Examples:**
+
+  * **Promissory Pact** (gain huge power; adds a Contract clause)
+  * **Clause Revoke** (force a reset of one clause at a heavy cost)
+  * **Favor Ledger** (passive that stores favors instead of currency)
+* **Unlock:** Deal Immigrants or royal negotiators.
+
+## 5. Seduction / Charm (Succubi/Incubi)
+
+* **Theme:** emotional manipulation, charm, social control.
+* **Mechanic tags:** persuasion, relationship gain, charisma buffs.
+* **Examples:**
+
+  * **Gilded Whisper** (convert an NPC’s allegiance temporarily)
+  * **Siren Veil** (mass charisma buff in a social event)
+  * **Aftertaste** (passive: lingering influence on romanced NPCs)
+* **Unlock:** succubus origin or social training.
+
+## 6. Tech/Cyber Glamour (Velvette-style)
+
+* **Theme:** holograms, AR, cyber-augmentation.
+* **Mechanic tags:** disguise, remote control, illusions.
+* **Examples:**
+
+  * **Glam Projection** (create decoy avatars)
+  * **Netjack** (control an enemy’s device)
+  * **Circuit Sigil** (trap that electrocutes)
+* **Unlock:** Vox contact, Velvette event, tech tree.
+
+## 7. Pheromone / Scent Control (Valentino-style)
+
+* **Theme:** influence via smell and pheromones; psychological control.
+* **Mechanic tags:** area buff/debuff, charm, crowd control.
+* **Examples:**
+
+  * **Lure Mist** (draws weaker NPCs toward you)
+  * **Fumes of Obedience** (reduce resistance in a zone)
+  * **Aroma Shield** (mask presence)
+* **Unlock:** syndicate/alcohol/club-based events.
+
+## 8. Regeneration / Durability (Overlord passives)
+
+* **Theme:** extreme durability/regrowth.
+* **Mechanic tags:** passive, HP regen, revival chance.
+* **Examples:**
+
+  * **Bone Mender** (slow regen)
+  * **Second Heart** (one-time revive)
+* **Unlock:** overlord rank or high-level passive.
+
+## 9. Teleportation / Movement Magic
+
+* **Theme:** blink, spatial manipulation.
+* **Mechanic tags:** repositioning, dodge, escape mechanics.
+* **Examples:**
+
+  * **Slipstep** (short-range blink)
+  * **Gate of Fissures** (create temporary portal)
+* **Unlock:** rare training, teleportation rituals.
+
+## 10. Necromancy / Soulcraft
+
+* **Theme:** control of souls, animate corpses, harvest energy.
+* **Mechanic tags:** summon minions, harvest resource, soul drain.
+* **Examples:**
+
+  * **Soul Reap** (convert enemy HP to Corruption)
+  * **Wisp Army** (summon weak minions)
+* **Unlock:** dark ritual events, Overlord paths.
+
+## 11. Glamour & Shapeshift
+
+* **Theme:** change body appearance, morph limbs.
+* **Mechanic tags:** disguise, roleplay mechanics, physical stat buffs.
+* **Examples:**
+
+  * **Mask of Many** (temporary shapechange)
+  * **Armorize** (turn limbs to stone for defense)
+* **Unlock:** cosmetic shops or innate species traits.
+
+## 12. Musical / Performance Magic
+
+* **Theme:** magic through music/theater; collect audiences.
+* **Mechanic tags:** crowd control, morale, passive revenue generation.
+* **Examples:**
+
+  * **Ballad of Change** (reduce enemy resolve in an area)
+  * **Encore** (restore Control/Influence after a performance)
+* **Unlock:** hotel/entertainment arc.
+
+## 13. Physical (Brute) Abilities
+
+* **Theme:** raw strength, melee mastery, stomps.
+* **Mechanic tags:** close range, crowd control, AOE stomps.
+* **Examples:**
+
+  * **Titan Step** (AOE stun with knockback)
+  * **Rend** (single-target heavy)
+* **Unlock:** natural for large Hellborn and some sinners.
+
+## 14. Illusion & Mind-Bend
+
+* **Theme:** create illusions affecting perception, memory.
+* **Mechanic tags:** stun, confuse, false-quest creation.
+* **Examples:**
+
+  * **Glass Hall** (mirror maze that traps opponents)
+  * **Fog of Forgotten** (erase recent memory for NPC)
+* **Unlock:** arcane study or eldritch background.
+
+## 15. Divine / Whitefire (rare — Charlie/angelic)
+
+* **Theme:** purifying fire, genuine redemption magic.
+* **Mechanic tags:** eliminate corruption, heal, banish.
+* **Examples:**
+
+  * **Purity Flame** (remove corruption with risk)
+  * **Sanctify** (protect hotel/residents)
+* **Unlock:** special story progress or royal line.
+
+---
+
+# Traits Menu (examples — implement as JSON)
+
+Provide a balanced library of ~60 traits. Below are grouped examples; each trait has `id`, `name`, `desc`, `type`, `cost` (TP), and `mechanic` (stat modifiers).
+
+Examples:
+
+* **Moral Traits**
+
+  * `empathetic` — +Empathy + Influence, -Corruption gain. (cost 3)
+  * `callous` — +Power, +Corruption gain, -Empathy. (cost 2)
+
+* **Social Traits**
+
+  * `charismatic` — +Influence at social events. (cost 3)
+  * `sleazy` — +Charm on shady interactions, -public_reputation. (cost 2)
+
+* **Physical Traits**
+
+  * `bulky` — +Health, -Agility (cost 2)
+  * `nimble` — +Control for movement, -raw_power. (cost 2)
+
+* **Magical Traits**
+
+  * `ritualist` — unlocks certain dark rituals; slower control but high power. (cost 4)
+  * `arcane_savant` — +power gain speed for magical abilities. (cost 3)
+
+* **Quirky Traits**
+
+  * `compulsive_gambler` — random chance to double rewards; risk of losing wealth. (cost -1, i.e. starting negative trait)
+  * `signature_hat` — purely cosmetic with tiny Influence bonus. (cost 0)
+
+* **Origins-only traits**
+
+  * `royal_blood` — extra Influence & title slot (locked to Royal origin).
+  * `deal_bound` — starts with a Contract clause (Deal Immigrants).
+
+Design note: allow players to take negative traits for extra TP (risk/reward).
+
+---
+
+# Name selection & personality generator
+
+* Provide randomized name lists tuned to Hazbin aesthetic (dark pun names, 'Sin' themes, Old French/Victorian touches, show-accurate names).
+* Offer 3 suggested names based on chosen origin and traits.
+* Offer “auto-generate backstory” button that sets starting trait/talent suggestions.
+
+---
+
+# UI & UX Flow (player-facing)
+
+1. **Start Screen** -> New Game / Continue / Load
+2. **Character Creation**
+
+   * Name + randomize
+   * Appearance (cosmetic sliders)
+   * Origin selection (shows starting stat bonuses)
+   * Trait point assignment (TP rules shown)
+   * Starter power selection: Choose 1 active + 1 passive from origin suggestions OR randomize.
+3. **Tutorial (optional depending on start age)**
+4. **Main Game Loop**
+
+   * Each turn = 1 week (or user-selectable: 1 month/1 week fast mode).
+   * Options per turn: Train (Power/Control), Socialize (Influence/Relationships), Work (Wealth), Party/Club (Reputation), Ritual/Research, Romance, Crime, Manage Hotel (if owner), Undertake Deal/Job.
+   * Random event queue (small/medium/major).
+5. **Character Sheet** (shows full stats, active powers, trait list, contracts, reputation per faction).
+6. **Power Menu** (equip/unequip; shows cooldowns).
+7. **Journal / Story Log** — keeps key choices & consequences.
+8. **Endscreen** (after death/ending) — show endpoint stats, achievements, timelines, and 'New Game+' unlocks.
+
+---
+
+# Economy / Resources
+
+* **SoulCoins** — primary currency.
+* **Favor Points** — favors owed or received (tradeable with NPCs).
+* **Contract Clauses** — special resources for powerful contract magic.
+* **Corruption** — both resource and risk meter. Some actions cost corruption to use, others increase it.
+
+Design rules:
+
+* Make SoulCoins moderately scarce: high-cost items should require planning.
+* Favors are easier to obtain via relationships & Influence.
+
+---
+
+# Event types & examples (for coding)
+
+1. **Daily/Weekly Encounters** — short events that modify small stats.
+
+   * Example: "A minor demon heckles you. Do you: A) Punch (Power +1, Reputation -1), B) Charm (Influence +1), C) Ignore (Control +1)."
+
+2. **Career/Arc Events** — longer event chains (hotel management, syndicate rise).
+
+   * Example: "Hotel Kitchen Fire" — choose how to handle, affects Reputation and Empathy.
+
+3. **Contract/Bargain Events** — present moral choices & long-term consequences.
+
+   * Example: "A stranger offers to double your Power for a personal memory. Accept? Outcome: immediate +Power but lose Empathy and gain a Contract clause."
+
+4. **Romance & Rivalry** — NPCs woo or fight you. Romance can unlock unique powers if matched.
+
+5. **Large-scale War / Faction Events** — choices here tilt endings.
+
+6. **Random Misfortune** — player can be targeted by Eldritch or Royal events.
+
+---
+
+# Mechanics: Combat & Social Resolution
+
+* Use a **dual-system**: physical/magical actions as "Power checks" vs "Resistance checks".
+* Calculations:
+
+  * `success_chance = clamp( (attacker_power + attacker_control*0.5 + random(-10,10)) - (defender_power*0.3 + defender.control*0.7 + defender.corruption*0.2), 5, 95 )`
+  * Damage formula: `damage = base_power * (1 + power_level*0.05) * random(0.9,1.1)`
+* Social interactions (charm/persuade): `influence_check = (player_influence + charm + control*0.2) vs (target_will + target_emp + random)`
+
+Make these parameterizable in data files.
+
+---
+
+# Balancing & Progression rules
+
+* Early game: Encourage roleplay and small events; give players choice diversity.
+* Mid game: Introduce faction arcs and powerful contracts that change playstyle.
+* Late game: Powerful domain powers that can break rules but create catastrophic risks (high Corruption).
+* Soft caps for stats (Power/Control ~100). After cap, unlock unique growth via story arcs.
+* Power scaling: every ability has `rarity` tiers; rarer powers require more Control & create bigger Corruption spikes.
+
+---
+
+# Example JSON snippets (for powers, traits, NPCs)
+
+**Power example**
+
+```json
+{
+  "id": "emberlash",
+  "name": "Ember Lash",
+  "type": "Hellfire",
+  "base_power": 10,
+  "control_req": 3,
+  "corruption_cost": 1,
+  "cooldown": 2,
+  "effect": "single_target:burn",
+  "description": "A quick lash of hellfire that leaves smoldering embers.",
+  "rarity": "common",
+  "unlock": {"origin":"hellborn","min_power":0}
+}
+```
+
+**Trait example**
+
+```json
+{
+  "id": "empathetic",
+  "name": "Empathetic",
+  "desc": "You care for souls. +Empathy, -Corruption gain.",
+  "type": "moral",
+  "cost": 3,
+  "mechanics": {"Empathy": 10, "CorruptionGainMultiplier": 0.9}
+}
+```
+
+**NPC example**
+
+```json
+{
+  "id": "alastor_copy",
+  "name": "Red Radiant Radio Host",
+  "faction": "overlords",
+  "base_power": 50,
+  "affinity_traits": ["manipulative","classic"],
+  "relationship_flags": {"romance": false, "rival": true}
+}
+```
+
+---
+
+# Example playable abilities (50 concise entries)
+
+(You can turn each into JSON as shown above. I’ll list 20 to keep this prompt manageable — expand later.)
+
+1. Ember Lash — Hellfire single-target (common)
+2. Ash Curtain — AoE visibility debuff (uncommon)
+3. Static Command — Broadcast mind nudge (rare)
+4. Redstatic Domain — personal arena (legendary)
+5. Promissory Pact — borrow power, create contract clause (epic)
+6. Gilded Whisper — charm an NPC temporarily (common)
+7. Glam Projection — create decoy (uncommon)
+8. Lure Mist — pheromone area pull (uncommon)
+9. Bone Mender — passive regen (common)
+10. Slipstep — short teleport (common)
+11. Soul Reap — drain to restore own Corruption (rare)
+12. Mask of Many — shapeshift disguise (rare)
+13. Ballad of Change — performance-based morale control (common)
+14. Titan Step — heavy AOE stomp (rare)
+15. Glass Hall — illusion trap (uncommon)
+16. Purity Flame — remove corruption (legendary, story-linked)
+17. Signal Overload — disable tech (uncommon)
+18. Tendril Reach — grab and immobilize (common)
+19. Circuit Sigil — trap electrocution (uncommon)
+20. Second Heart — one-time revival (epic)
+
+(Expand list to 50+ in game JSON pack; include passive variants like +HP, +Control regen.)
+
+---
+
+# Example events & scripting (short, copy-paste-ready)
+
+**Event: The Promissory Stranger**
+
+* Trigger: low Influence, desperation, or random major event.
+* Text: "A slick stranger with clockwork teeth offers a Promissory Pact: gain +20 Power for 6 turns but gain 1 Contract Clause and +5 Corruption immediately. Sign?"
+* Choices:
+
+  * Sign (grant `Promissory Pact` power for 6 turns, apply corruption, add clause)
+  * Bargain (attempt to renegotiate — Control check; success reduces corruption cost)
+  * Refuse (small Influence gain)
+
+**Event scripting pseudo-code**
+
+```js
+if (player.wealth < 50 && randomChance(0.15)) {
+  showEvent(promissoryStranger)
+}
+onChoice("sign") {
+  player.addTemporaryPower("promissory_pact", duration=6)
+  player.corruption += 5
+  player.contractClauses += 1
+}
+onChoice("bargain") {
+  if (rollCheck("control", difficulty=12)) {
+    player.addTemporaryPower("promissory_pact", duration=6)
+    player.corruption += 3
+  } else { player.corruption += 6; player.reputation -= 5 }
+}
+```
+
+---
+
+# Achievements, Badges & New Game+ content
+
+* Achievements for rare endings (Redemption, Overlord, Vox Ascension).
+* Unlockables: unique cosmetics, new origins (fallen angel), new powers.
+* New Game+: start with one powerful trait or a free passive power.
+
+---
+
+# Saving & Data structures
+
+* Use JSON saves per player; store:
+
+  * Timestamp
+  * Character profile (name, appearance, origin)
+  * Stats
+  * Powers with levels
+  * Traits
+  * Inventory (SoulCoins, favors)
+  * Active contracts/clauses
+  * Event log and relationship states
+* Provide autosave per major event + manual save slots.
+
+---
+
+# AI / Dialogue & Writing guidelines for Replit agent
+
+* Maintain Hazbin Hotel’s blend of dark comedy, sarcasm, and heartfelt beats.
+* NPC voice examples:
+
+  * **Alastor-like**: hyper-formal, radio puns, sinister charm.
+  * **Vox-like**: curt, tech-slang, broadcast metaphors.
+  * **Valentino-type**: sleazy, manipulative, persuasive.
+* Provide dynamic dialogue templating with variables (player name, reputation) for branching outcomes.
+
+---
+
+# Balancing notes for Replit agent
+
+* Keep early game forgiving: let players test choices.
+* Corruption must be a true risk — powerful choices should tangibly shift endings.
+* Make social checks meaningful — influence and charm should unlock options that brute power cannot.
+* Make RNG present but mitigated by player stats and trait investments.
+
+---
+
+# Example starting build suggestions for players (for tutorials)
+
+* **Redemption Run (recommended beginner):**
+
+  * Origin: Sinner (weak)
+  * Traits: Empathetic, Charismatic
+  * Starter Power: Ballad of Change (performance)
+  * Strategy: Focus on Empathy & Influence, avoid Corruption.
+
+* **Overlord Run (power-heavy challenge):**
+
+  * Origin: Royal-born
+  * Traits: Callous, Bulky
+  * Starter Power: Titan Step
+  * Strategy: Use brute force, form alliances with Syndicates.
+
+* **Tech Takeover (Vox run):**
+
+  * Origin: Deal Immigrant (contract for tech)
+  * Traits: Tech-Savvy, Sleazy
+  * Starter Power: Signal Overload
+  * Strategy: Acquire media assets, use Influence to control factions.
+
+---
+
+# Deliverables for the Replit agent (checklist)
+
+1. Game scaffolding (Node/TS or Python+Flask + client JS) with modular data-driven content loader (JSON).
+2. UI: Character Creation, Main Loop, Character Sheet, Journal, Power/Traits panels.
+3. Save system with multiple slots and autosave.
+4. Event engine that reads event JSON and presents choices (with stat checks).
+5. Combat & social resolution engine (tunable formulas).
+6. Power & trait JSON files (seed with the above examples).
+7. 25–50 seed events and 20+ NPC profiles to start.
+8. Achievements & endings logic.
+9. Optional: audio cues (radio static, glam chimes), but keep optional for first pass.
+10. Documentation: developer README with data format details and how to add new powers/traits/events.
+
+---
+
+# Final notes, style, and legal
+
+* Keep everything fan-made, non-commercial friendly. If you plan to publish commercially, ensure licensing compliance and reach out to original IP holders if needed.
+* Tone: keep the game irreverent, witty, and true to Hazbin’s themes — but avoid copying show scripts verbatim. Use inspired archetypes and mechanics.
+
+---
+
+If you want, I can now:
+
+* Export the complete **JSON pack** for powers + traits + 30 events + 10 NPCs ready to import.
+* Draft 10 sample event scripts in full (with branching outcomes).
+* Produce a minimal playable prototype flow in JavaScript (client-only) that runs in Replit with a demo character and a small event tree.
+
+Tell me which of those to generate next and I’ll output it immediately.

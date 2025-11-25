@@ -64,12 +64,22 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 - Damage Scaling: 3% more per power level stat
 - Health Scaling: +0.25 per power level + **+2 per age point** (significant durability scaling)
 
-### Difficulty Tuning
+### Difficulty Tuning & Overlord Buffing
 - Battle rewards reduced 3x for balance
 - Stat gains from activities reduced 3x
 - Progression milestones significantly increased
-- Overlord battles give 300 base health (was 240)
+- **Overlord Stats**: 2500 health, 28 damage (epic endurance for strategic battles)
 - Rival demon battles give 120 health
+
+### Dynamic Audio System (COMPLETED)
+- **Background Music Rotation**: Alternates between "Stayed Gone" and "Hear My Hope" for variety
+- **Overlord Battle Themes** (unique themes for each overlord):
+  - Alastor: Insane
+  - Vox & Valentino: Vox Dei
+  - Rosie: Don't You Forget
+  - Carmilla: Out For Love
+  - Charlie & Lucifer: Ready For This
+- **Audio System**: Located in `client/src/lib/audio.ts` with playBattleMusic function for opponent-specific themes
 
 ## Architecture
 - **Frontend**: React + TypeScript with Wouter routing

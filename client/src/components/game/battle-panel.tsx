@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Zap, Shield, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { playBattleMusic } from "@/lib/audio";
 import powersData from "@/data/powers.json";
 import npcsData from "@/data/npcs.json";
 import type { GameState } from "@/lib/game-state";
@@ -72,6 +73,11 @@ export default function BattlePanel({
     turn: 0,
     battleLog: [`Battle started! You face ${getOpponentName()}!`]
   });
+
+  // Play battle music based on opponent
+  useEffect(() => {
+    playBattleMusic(opponent);
+  }, [opponent]);
 
   // Determine base attack (lowest rarity - most common) and ultimate (strongest)
   const playerPowers = (gameState.character.powers || [])

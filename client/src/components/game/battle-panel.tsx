@@ -65,21 +65,25 @@ export default function BattlePanel({
     battleLog: [`Battle started! You face ${getOpponentName()}!`]
   });
 
-  // Determine base attack (most common power type)
+  // Determine base attack (lowest rarity - most common) and ultimate (strongest)
   const playerPowers = (gameState.character.powers || [])
     .map(id => powers.find(p => p.id === id))
     .filter(Boolean) as any[];
 
-  const powerTypeCounts: Record<string, number> = {};
-  playerPowers.forEach(p => {
-    powerTypeCounts[p.type] = (powerTypeCounts[p.type] || 0) + 1;
+  // Rarity order: common (0) < uncommon (1) < rare (2) < epic (3) < legendary (4)
+  const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
+  
+  // Find lowest rarity (most common) non-passive power for base attack
+  const nonPassivePowers = playerPowers.filter(p => !p.isPassive);
+  const baseAttackPower = nonPassivePowers.reduce((best, p) => {
+    const pRarity = rarityOrder[p.rarity as keyof typeof rarityOrder] ?? 5;
+    const bestRarity = rarityOrder[best.rarity as keyof typeof rarityOrder] ?? 5;
+    return pRarity < bestRarity ? p : best;
   });
 
-  const mostCommonType = Object.entries(powerTypeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
-  const baseAttackPower = playerPowers.find(p => p.type === mostCommonType && !p.isPassive);
-  const ultimatePower = playerPowers.reduce((best, p) => {
-    if (!p.isPassive && p.basePower > (best?.basePower || 0)) return p;
-    return best;
+  // Find strongest non-passive power for ultimate
+  const ultimatePower = nonPassivePowers.reduce((best, p) => {
+    return p.basePower > (best?.basePower || 0) ? p : best;
   });
 
   const handleBaseAttack = () => {
@@ -260,6 +264,23 @@ export default function BattlePanel({
               <Progress value={(battle.ultimateGauge / 700) * 100} className="h-2" />
             </div>
           </div>
+
+          {/* Opponent Skills */}
+          {opponentNpc?.powers && (
+            <div className="bg-black/20 rounded-lg p-3 space-y-2">
+              <div className="text-sm font-semibold text-amber-100">Enemy Skills</div>
+              <div className="flex flex-wrap gap-1">
+                {(opponentNpc.powers as string[]).map(powerId => {
+                  const power = powers.find(p => p.id === powerId);
+                  return power ? (
+                    <Badge key={powerId} variant="outline" className="text-xs bg-red-950/50 border-red-700">
+                      {power.name}
+                    </Badge>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Battle Log */}
           <div className="bg-black/20 rounded-lg p-4 h-32 overflow-y-auto text-sm space-y-1">

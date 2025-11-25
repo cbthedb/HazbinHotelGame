@@ -5,6 +5,27 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 
 ## Latest Updates
 
+### Extreme Difficulty & Grind Tuning (V0.1)
+- **Version Indicator**: Glowing "V0.1" display in top right corner with pulse animation
+- **Overlord Buffing**: 3500 health, 40 damage (significantly harder than before)
+- **Battle Rewards Halved**: 
+  - Regular win: Power 1, Influence 0, Wealth 25, Soulcoins 5
+  - Rival win: Power 1, Influence 1, Wealth 40, Soulcoins 8
+  - Overlord win: Power (50% of base), Influence 2, Wealth 100, Soulcoins variable
+- **Level-up Nerfs**: 
+  - Health: 5→2 per level
+  - Stat gains: 2 guaranteed→0-1 random stats (30% chance)
+- **Action Stat Gains Reduced 50%**:
+  - Train Power: 2→1 base gain (continues diminishing)
+  - Socialize: 1→0.5 influence
+  - Perform: 1→0.5 influence/empathy (wealth 40→20)
+  - Scheme: 1→0.5 influence, corruption 5→3, soulcoins 1-3→1-2
+- **Progression Milestones 50%+ Harder**:
+  - Power: 50→75, 150→250, 250→400, 500→750
+  - Empathy: 50→80, 80→150, 120→200, 150→280
+  - Corruption: 60→100, 120→200, 180→300, 250→400
+- **Design Philosophy**: Game now significantly grindier - rewards minimal stat progression to encourage extended play sessions
+
 ### Age-Based Health Scaling (COMPLETED)
 - **Out-of-Battle Health**: Capped at 100 (with passive +5 health/turn regen)
 - **In-Battle Health**: Scales dramatically with age (+2 per age point)
@@ -19,7 +40,7 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 ### Rest Action & Health Regeneration (COMPLETED)
 - **Passive Recovery**: +5 health per turn automatically
 - **Rest Action**: Immediate +30 health recovery with no cooldown
-- **Leveling Bonuses**: Every 5 age = 1 level, grants +5 health + 1-2 random stat gains
+- **Leveling Bonuses**: Every 5 age = 1 level, grants +2 health + 0-1 random stat gains (30% chance)
 
 ### Power Shop System (COMPLETED)
 - **Shop Panel**: Integrated shopping UI in left column below progression panel
@@ -63,13 +84,6 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 - Ultimate Gauge: Builds over 7 turns at 100 points/turn, unleash for 2.5x damage burst
 - Damage Scaling: 3% more per power level stat
 - Health Scaling: +0.25 per power level + **+2 per age point** (significant durability scaling)
-
-### Difficulty Tuning & Overlord Buffing
-- Battle rewards reduced 3x for balance
-- Stat gains from activities reduced 3x
-- Progression milestones significantly increased
-- **Overlord Stats**: 2500 health, 28 damage (epic endurance for strategic battles)
-- Rival demon battles give 120 health
 
 ### Dynamic Audio System (COMPLETED)
 - **Background Music Rotation**: Alternates between "Stayed Gone" and "Hear My Hope" for variety
@@ -141,6 +155,8 @@ A comprehensive BitLife-style life simulation game set in the Hazbin Hotel unive
 - ✅ Battle system with cursed energy mechanics
 - ✅ Shop system with wealth-based purchases
 - ✅ Overlord power rewards
+- ✅ Extreme difficulty tuning & grind mechanics
+- ✅ Version indicator display
 - ⏳ NPC relationships and romance
 - ⏳ Faction reputation system
 - ⏳ Territory control mechanics

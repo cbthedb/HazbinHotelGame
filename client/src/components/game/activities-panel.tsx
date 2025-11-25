@@ -24,6 +24,7 @@ interface Activity {
   minControl?: number;
   action: string;
   riskLevel: "low" | "medium" | "high" | "extreme";
+  cooldown?: number; // Cooldown in turns (0 or undefined = no cooldown)
 }
 
 export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventGenerated, onBattleStart }: ActivitiesPanelProps) {
@@ -50,7 +51,8 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       icon: <Trophy className="w-5 h-5" />,
       minPower: 200,
       action: "challenge-overlord",
-      riskLevel: "extreme"
+      riskLevel: "extreme",
+      cooldown: 0 // No cooldown for overlord challenges
     },
     {
       id: "duel-rival",
@@ -60,7 +62,8 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       minPower: 10,
       minControl: 8,
       action: "duel-rival",
-      riskLevel: "high"
+      riskLevel: "high",
+      cooldown: 5
     },
     {
       id: "seize-territory",
@@ -70,7 +73,8 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       minPower: 15,
       minControl: 12,
       action: "seize-territory",
-      riskLevel: "extreme"
+      riskLevel: "extreme",
+      cooldown: 8
     },
     {
       id: "gather-allies",
@@ -79,7 +83,8 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       icon: <Users className="w-5 h-5" />,
       minControl: 10,
       action: "gather-allies",
-      riskLevel: "medium"
+      riskLevel: "medium",
+      cooldown: 4
     },
     {
       id: "undercover-plot",
@@ -88,7 +93,8 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       icon: <Zap className="w-5 h-5" />,
       minControl: 15,
       action: "undercover-plot",
-      riskLevel: "high"
+      riskLevel: "high",
+      cooldown: 6
     },
     {
       id: "corrupt-locals",
@@ -97,13 +103,21 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       icon: <Zap className="w-5 h-5" />,
       minPower: 12,
       action: "corrupt-locals",
-      riskLevel: "high"
+      riskLevel: "high",
+      cooldown: 5
     }
   ];
+
+  const isActivityOnCooldown = (activityId: string): boolean => {
+    const cooldowns = gameState.actionCooldowns || {};
+    const availableTurn = cooldowns[activityId];
+    return availableTurn ? availableTurn > gameState.turn : false;
+  };
 
   const canPerformActivity = (activity: Activity): boolean => {
     if (activity.minPower && gameState.character.power < activity.minPower) return false;
     if (activity.minControl && gameState.character.control < activity.minControl) return false;
+    if (isActivityOnCooldown(activity.id)) return false;
     return true;
   };
 
@@ -118,6 +132,18 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
   };
 
   const handleActivity = async (activity: Activity) => {
+    // Check cooldown first
+    if (isActivityOnCooldown(activity.id)) {
+      const cooldowns = gameState.actionCooldowns || {};
+      const availableTurn = cooldowns[activity.id] || gameState.turn;
+      toast({
+        title: "On Cooldown",
+        description: `Available at turn ${availableTurn}`,
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (!canPerformActivity(activity)) {
       toast({
         title: "Not Ready",
@@ -146,7 +172,14 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
           updated[stat as keyof typeof updated] = Math.max(0, Math.min(1000, currentValue + value)) as any;
         }
       });
-      onUpdateCharacter(updated);
+
+      // Set cooldown if activity has one
+      const cooldowns = gameState.actionCooldowns || {};
+      if (activity.cooldown && activity.cooldown > 0) {
+        cooldowns[activity.id] = gameState.turn + activity.cooldown;
+      }
+
+      onUpdateCharacter({ ...updated, actionCooldowns: cooldowns });
 
       toast({
         title: activity.name,
@@ -178,6 +211,10 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       <CardContent className="space-y-2">
         {activities.map((activity) => {
           const canPerform = canPerformActivity(activity);
+          const isOnCooldown = isActivityOnCooldown(activity.id);
+          const cooldowns = gameState.actionCooldowns || {};
+          const availableTurn = cooldowns[activity.id];
+
           return (
             <div
               key={activity.id}
@@ -207,6 +244,11 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
                       <Badge variant="secondary" className={`text-xs ${getRiskColor(activity.riskLevel)}`}>
                         Risk: {activity.riskLevel.toUpperCase()}
                       </Badge>
+                      {isOnCooldown && (
+                        <Badge variant="destructive" className="text-xs">
+                          Cooldown: {availableTurn} turns
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -218,7 +260,7 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
                 disabled={!canPerform || isGenerating}
                 data-testid={`button-activity-${activity.id}`}
               >
-                {isGenerating ? "Processing..." : "Initiate"}
+                {isOnCooldown ? `Cooldown (${availableTurn} turns)` : isGenerating ? "Processing..." : "Initiate"}
               </Button>
             </div>
           );

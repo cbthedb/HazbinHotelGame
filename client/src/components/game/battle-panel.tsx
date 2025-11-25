@@ -118,7 +118,8 @@ export default function BattlePanel({
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,
-        mythicalPower: mythicalReward
+        mythicalPower: mythicalReward,
+        isRivalDuel: isRival
       });
       return;
     }
@@ -184,7 +185,8 @@ export default function BattlePanel({
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,
-        mythicalPower: mythicalReward
+        mythicalPower: mythicalReward,
+        isRivalDuel: isRival
       });
       return;
     }
@@ -251,7 +253,8 @@ export default function BattlePanel({
         powerReward: ultimatePower,
         overlordPower: overlordPower,
         isMythical: isMythical,
-        mythicalPower: mythicalReward
+        mythicalPower: mythicalReward,
+        isRivalDuel: isRival
       });
       return;
     }

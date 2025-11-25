@@ -140,9 +140,16 @@ export default function GamePage() {
         mythicalShards: (gameState.character.mythicalShards || 0) + mythicalShardsGained
       };
 
+      // Add cooldown for duel-rival (challenge-overlord has no cooldown)
+      const newCooldowns = { ...gameState.actionCooldowns };
+      if (rewards.isRivalDuel) {
+        newCooldowns["duel-rival"] = gameState.turn + 1 + 5; // 5 turn cooldown after duel
+      }
+
       const updatedState: GameState = {
         ...gameState,
         character: updatedCharacter,
+        actionCooldowns: newCooldowns,
         turn: gameState.turn + 1
       };
 

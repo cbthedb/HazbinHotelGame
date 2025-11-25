@@ -252,9 +252,9 @@ export default function GamePage() {
       </header>
 
       {/* Main Game Layout */}
-      <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-4 lg:h-[calc(100vh-120px)]">
         {/* Left Column - Stats & Powers & Ranking & Progression & Shop & Mythical Shop */}
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto">
           <StatsPanel character={character} />
           <PowersPanel gameState={gameState} />
           <ShopPanel gameState={gameState} onPurchasePower={handlePurchasePower} />
@@ -264,7 +264,7 @@ export default function GamePage() {
         </div>
 
         {/* Center Column - Events & Actions */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-4 overflow-y-auto">
           <div className="bg-gradient-to-r from-primary/20 to-primary/10 border-l-4 border-primary rounded p-3 text-sm font-semibold text-amber-100">
             ⚡ CURRENT EVENT
           </div>
@@ -281,7 +281,7 @@ export default function GamePage() {
         </div>
 
         {/* Right Column - Location & Activities */}
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto">
           <LocationPanel 
             gameState={gameState}
             onUpdateCharacter={handleUpdateCharacter}

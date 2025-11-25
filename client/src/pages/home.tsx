@@ -1,11 +1,26 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Play, Save, Info } from "lucide-react";
+import SplashScreen from "@/components/splash-screen";
 
 export default function Home() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [fadeIn, setFadeIn] = useState(false);
+
+  useEffect(() => {
+    if (!showSplash) {
+      setFadeIn(true);
+    }
+  }, [showSplash]);
+
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-card to-background flex items-center justify-center p-4">
+    <div className={`min-h-screen bg-gradient-to-b from-background via-card to-background flex items-center justify-center p-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}>
       <div className="w-full max-w-2xl space-y-8">
         {/* Title */}
         <div className="text-center space-y-2">

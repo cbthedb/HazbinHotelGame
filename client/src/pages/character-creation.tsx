@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import NameStep from "@/components/character-creation/name-step";
 import AppearanceStep from "@/components/character-creation/appearance-step";
 import OriginStep from "@/components/character-creation/origin-step";
 import TraitsStep from "@/components/character-creation/traits-step";
 import PowersStep from "@/components/character-creation/powers-step";
 import SummaryStep from "@/components/character-creation/summary-step";
-import type { Origin } from "@shared/schema";
+import { saveGame, createNewGameState } from "@/lib/game-state";
+import type { Origin, Character } from "@shared/schema";
 
 export type CharacterData = {
   firstName: string;
@@ -27,6 +29,7 @@ export type CharacterData = {
 
 export default function CharacterCreation() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [characterData, setCharacterData] = useState<CharacterData>({
     firstName: "",
@@ -57,7 +60,39 @@ export default function CharacterCreation() {
       setStep(step + 1);
     } else {
       // Create character and start game
-      setLocation("/game");
+      try {
+        if (!characterData.origin) {
+          toast({ title: "Error", description: "Please select an origin", variant: "destructive" });
+          return;
+        }
+
+        const newCharacter: Character = {
+          firstName: characterData.firstName,
+          lastName: characterData.lastName,
+          origin: characterData.origin.id,
+          age: 25,
+          power: characterData.origin.startingStats.power,
+          control: characterData.origin.startingStats.control,
+          influence: characterData.origin.startingStats.influence,
+          corruption: characterData.origin.startingStats.corruption,
+          empathy: characterData.origin.startingStats.empathy,
+          health: characterData.origin.startingStats.health,
+          wealth: characterData.origin.startingStats.wealth,
+          appearance: characterData.appearance,
+          traits: characterData.selectedTraits,
+          powers: characterData.selectedPowers,
+          rank: "street-demon"
+        };
+
+        const gameState = createNewGameState(newCharacter);
+        saveGame(gameState);
+
+        toast({ title: "Welcome to Hell!", description: `Your life as ${newCharacter.firstName} ${newCharacter.lastName} begins...` });
+        setLocation("/game");
+      } catch (error) {
+        console.error("Character creation error:", error);
+        toast({ title: "Error", description: "Failed to create character", variant: "destructive" });
+      }
     }
   };
 

@@ -1,37 +1,94 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import StatsPanel from "@/components/game/stats-panel";
 import PowersPanel from "@/components/game/powers-panel";
 import EventCard from "@/components/game/event-card";
 import ActionsPanel from "@/components/game/actions-panel";
 import NPCPanel from "@/components/game/npc-panel";
 import MapPanel from "@/components/game/map-panel";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
+import { loadGame, saveGame } from "@/lib/game-state";
+import type { GameState } from "@/lib/game-state";
 
 export default function GamePage() {
-  const [turn, setTurn] = useState(1);
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [gameState, setGameState] = useState<GameState | null>(null);
   const [showMenu, setShowMenu] = useState(false);
-  
-  // Mock character data - will be replaced with actual game state
-  const mockCharacter = {
-    firstName: "Crimson",
-    lastName: "Nightshade",
-    origin: "royal-born",
-    age: 25,
-    rank: "street-demon",
-    power: 15,
-    control: 10,
-    influence: 12,
-    corruption: 5,
-    empathy: 8,
-    health: 100,
-    wealth: 250
-  };
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load game on mount
+  useEffect(() => {
+    const saved = loadGame();
+    if (!saved) {
+      toast({ title: "Error", description: "No game found. Returning to menu.", variant: "destructive" });
+      setLocation("/");
+      return;
+    }
+    setGameState(saved);
+    setIsLoading(false);
+  }, [setLocation, toast]);
 
   const handleNextTurn = () => {
-    setTurn(turn + 1);
+    if (!gameState) return;
+
+    const updatedState: GameState = {
+      ...gameState,
+      turn: gameState.turn + 1,
+      character: {
+        ...gameState.character,
+        age: Math.floor(gameState.character.age + 0.5) // Age progression
+      }
+    };
+    
+    setGameState(updatedState);
+    saveGame(updatedState);
+    toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn}` });
   };
+
+  const handleUpdateCharacter = (updates: Partial<GameState["character"]>) => {
+    if (!gameState) return;
+
+    const updatedState: GameState = {
+      ...gameState,
+      character: { ...gameState.character, ...updates }
+    };
+
+    setGameState(updatedState);
+    saveGame(updatedState);
+  };
+
+  const handleQuitGame = () => {
+    setLocation("/");
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-card flex items-center justify-center">
+        <Card className="p-8">
+          <p className="text-muted-foreground">Loading your hellish adventure...</p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!gameState) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-card flex items-center justify-center">
+        <Card className="p-8">
+          <p className="text-destructive">Game failed to load. Please start a new game.</p>
+          <Button onClick={handleQuitGame} className="mt-4">
+            Return to Home
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  const { character } = gameState;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-card">
@@ -40,20 +97,30 @@ export default function GamePage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="font-display text-2xl font-bold text-primary">
-              {mockCharacter.firstName} {mockCharacter.lastName}
+              {character.firstName} {character.lastName}
             </h1>
             <div className="text-sm text-muted-foreground">
-              Turn {turn} • Age {mockCharacter.age}
+              Turn {gameState.turn} • Age {character.age}
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowMenu(!showMenu)}
-            data-testid="button-menu"
-          >
-            {showMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowMenu(!showMenu)}
+              data-testid="button-menu"
+            >
+              {showMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleQuitGame}
+              data-testid="button-quit"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -61,22 +128,22 @@ export default function GamePage() {
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left Column - Stats & Powers */}
         <div className="space-y-4">
-          <StatsPanel character={mockCharacter} />
+          <StatsPanel character={character} />
           <PowersPanel />
         </div>
 
         {/* Center Column - Events & Actions */}
         <div className="lg:col-span-2 space-y-4">
-          <EventCard />
-          <ActionsPanel onNextTurn={handleNextTurn} />
-          <MapPanel />
+          <EventCard gameState={gameState} onUpdateCharacter={handleUpdateCharacter} />
+          <ActionsPanel onNextTurn={handleNextTurn} gameState={gameState} onUpdateCharacter={handleUpdateCharacter} />
+          <MapPanel territories={gameState.territory} />
         </div>
       </div>
 
       {/* Right Sidebar - NPCs & Info (conditional) */}
       {showMenu && (
         <div className="fixed inset-y-0 right-0 w-80 bg-card border-l border-card-border p-4 overflow-y-auto z-40">
-          <NPCPanel />
+          <NPCPanel relationships={gameState.relationships} />
         </div>
       )}
     </div>

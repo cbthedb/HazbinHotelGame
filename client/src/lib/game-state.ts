@@ -104,6 +104,18 @@ export async function deleteGame(slot: number = 1): Promise<void> {
 }
 
 /**
+ * Delete all saves completely (for fresh start)
+ */
+export async function deleteAllSaves(): Promise<void> {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    console.log(`✓ All saves deleted`);
+  } catch (error) {
+    console.error("Error deleting all saves:", error);
+  }
+}
+
+/**
  * Create new game state from character
  */
 export function createNewGameState(character: Character, slot: number = 1): GameState {

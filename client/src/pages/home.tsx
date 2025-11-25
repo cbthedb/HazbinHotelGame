@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Save, Info, Trash2 } from "lucide-react";
 import SplashScreen from "@/components/splash-screen";
-import { loadGame, getAllSaves, deleteGame, loadLatestSave } from "@/lib/game-state";
+import { loadGame, getAllSaves, deleteGame, deleteAllSaves, loadLatestSave } from "@/lib/game-state";
 import type { SaveSlot } from "@/lib/game-state";
 
 export default function Home() {
@@ -46,6 +46,14 @@ export default function Home() {
     e.stopPropagation();
     deleteGame(slot);
     setSaves(getAllSaves());
+  };
+
+  const handleClearAllSaves = async () => {
+    if (confirm("Are you sure? This will delete ALL saves and give you a fresh start.")) {
+      await deleteAllSaves();
+      setSaves([]);
+      setShowLoadDialog(false);
+    }
   };
 
   const hasSaves = saves.length > 0;
@@ -118,30 +126,40 @@ export default function Home() {
               {saves.length === 0 ? (
                 <p className="text-center text-muted-foreground">No saves available</p>
               ) : (
-                saves.map((save) => (
-                  <Card 
-                    key={save.slot}
-                    className="p-3 cursor-pointer hover-elevate"
-                    onClick={() => handleLoadGame(save.slot)}
-                    data-testid={`button-load-slot-${save.slot}`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm">{save.characterName}</p>
-                        <p className="text-xs text-muted-foreground">Slot {save.slot} • Turn {save.gameState.turn}</p>
-                        <p className="text-xs text-muted-foreground">{new Date(save.timestamp).toLocaleString()}</p>
+                <>
+                  {saves.map((save) => (
+                    <Card 
+                      key={save.slot}
+                      className="p-3 cursor-pointer hover-elevate"
+                      onClick={() => handleLoadGame(save.slot)}
+                      data-testid={`button-load-slot-${save.slot}`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm">{save.characterName}</p>
+                          <p className="text-xs text-muted-foreground">Slot {save.slot} • Turn {save.gameState.turn}</p>
+                          <p className="text-xs text-muted-foreground">{new Date(save.timestamp).toLocaleString()}</p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => handleDeleteSave(save.slot, e)}
+                          data-testid={`button-delete-slot-${save.slot}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => handleDeleteSave(save.slot, e)}
-                        data-testid={`button-delete-slot-${save.slot}`}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </Card>
-                ))
+                    </Card>
+                  ))}
+                  <Button
+                    variant="destructive"
+                    className="w-full mt-4"
+                    onClick={handleClearAllSaves}
+                    data-testid="button-clear-all-saves"
+                  >
+                    Clear All Saves
+                  </Button>
+                </>
               )}
             </div>
           </DialogContent>

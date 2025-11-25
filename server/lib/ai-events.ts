@@ -15,63 +15,88 @@ export async function generateAIEvent(
   options: AIEventGeneratorOptions = {}
 ): Promise<Partial<GameEvent> | null> {
   try {
-    // Fallback mock events for now - Houndify integration will be used via API calls
-    const mockEvents: Partial<GameEvent>[] = [
-      {
-        id: `ai-event-${Date.now()}`,
-        title: "Strange Whispers in the Dark",
-        description: "You hear mysterious voices calling your name from the shadows. They speak of power, temptation, and forbidden knowledge.",
-        type: "random",
-        triggerConditions: {},
+    const theme = options.theme || "random";
+    const power = options.characterPower || 0;
+    const corruption = options.characterCorruption || 0;
+    
+    // Unique dynamically generated scenarios
+    const eventGenerators: Record<string, () => Partial<GameEvent>> = {
+      "ultimate-power": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["The Final Temptation", "An Obsolete Challenge", "Power's Mirror", "The Crowned King's Burden"][Math.floor(Math.random() * 4)]}`,
+        description: `At your immense power level (${power}), ${["demons tremble at your presence", "reality bends to your will", "you're feared across all of Hell", "overlords acknowledge your might"][Math.floor(Math.random() * 4)]}.`,
+        type: "war",
         choices: [
-          {
-            id: "investigate",
-            text: "Investigate the whispers.",
-            outcomes: {
-              statChanges: { power: 3, corruption: 2 },
-              narrativeText: "The whispers grow louder, more insistent. You feel something ancient stir."
-            }
-          },
-          {
-            id: "ignore",
-            text: "Ignore them and move on.",
-            outcomes: {
-              statChanges: { control: 1 },
-              narrativeText: "You steel yourself against the temptation. Your resolve strengthens."
-            }
-          }
+          { id: `opt1-${Date.now()}`, text: "Seek even greater power.", outcomes: { statChanges: { power: Math.floor(Math.random() * 5) + 1, corruption: Math.floor(Math.random() * 3) + 1 }, narrativeText: "Insatiable hunger consumes you." } },
+          { id: `opt2-${Date.now()}`, text: "Consolidate your dominion.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 4) + 2, control: Math.floor(Math.random() * 3) + 1 }, narrativeText: "Your reign solidifies across Hell." } },
+          { id: `opt3-${Date.now()}`, text: "Question your path.", outcomes: { statChanges: { empathy: Math.floor(Math.random() * 2) + 1, corruption: -Math.floor(Math.random() * 2) }, narrativeText: "Doubt flickers. Is this truly what you want?" } }
         ],
         onlyOnce: false
-      },
-      {
-        id: `ai-event-${Date.now() + 1}`,
-        title: "A Mysterious Visitor",
-        description: "A cloaked figure approaches you with an enigmatic smile. 'I've been looking for someone like you. Are you interested in an opportunity?'",
+      }),
+      "corruption-themed": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["Whispers of the Abyss", "Corruption's Embrace", "The Void Calls", "Darkness Within"][Math.floor(Math.random() * 4)]}`,
+        description: `Your corruption level (${corruption}) has drawn ${["shadowy entities", "ancient evils", "the truly damned", "forgotten souls"][Math.floor(Math.random() * 4)]} to you.`,
         type: "contract",
-        triggerConditions: {},
         choices: [
-          {
-            id: "hear-them-out",
-            text: "Hear what they have to offer.",
-            outcomes: {
-              statChanges: { influence: 2, corruption: 1 },
-              narrativeText: "The stranger leans in and whispers a proposition that could change everything..."
-            }
-          },
-          {
-            id: "refuse-politely",
-            text: "Politely decline.",
-            outcomes: {
-              statChanges: { empathy: 1 },
-              narrativeText: "The figure nods and fades back into the crowds."
-            }
-          }
+          { id: `opt1-${Date.now()}`, text: "Embrace them fully.", outcomes: { statChanges: { power: Math.floor(Math.random() * 6) + 2, corruption: Math.floor(Math.random() * 5) + 3, control: -Math.floor(Math.random() * 2) }, narrativeText: "You lose yourself in darkness." } },
+          { id: `opt2-${Date.now()}`, text: "Strike a bargain.", outcomes: { statChanges: { wealth: Math.floor(Math.random() * 200) + 100, power: Math.floor(Math.random() * 3) + 1, influence: Math.floor(Math.random() * 2) + 1 }, narrativeText: "A pact is sealed in blood." } },
+          { id: `opt3-${Date.now()}`, text: "Resist the corruption.", outcomes: { statChanges: { control: Math.floor(Math.random() * 3) + 2, empathy: Math.floor(Math.random() * 2) + 1, corruption: -Math.floor(Math.random() * 3) }, narrativeText: "Your willpower burns bright against the darkness." } }
         ],
         onlyOnce: false
-      }
-    ];
+      }),
+      "redemption-themed": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["A Second Chance", "Light in Darkness", "Redemption's Path", "Hope Rekindled"][Math.floor(Math.random() * 4)]}`,
+        description: `Despite your journey, ${["Charlie approaches you", "redemption seems possible", "a path forward appears", "something inside stirs"][Math.floor(Math.random() * 4)]}.`,
+        type: "daily",
+        choices: [
+          { id: `opt1-${Date.now()}`, text: "Pursue genuine change.", outcomes: { statChanges: { empathy: Math.floor(Math.random() * 5) + 3, corruption: -Math.floor(Math.random() * 3), power: Math.floor(Math.random() * 2) }, narrativeText: "The weight lifts ever so slightly." } },
+          { id: `opt2-${Date.now()}`, text: "Pretend to change for advantage.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 3) + 1, control: Math.floor(Math.random() * 2) + 1, corruption: 1 }, narrativeText: "A convincing mask, but inside..." } },
+          { id: `opt3-${Date.now()}`, text: "Reject all redemption.", outcomes: { statChanges: { corruption: Math.floor(Math.random() * 4) + 2, empathy: -Math.floor(Math.random() * 2) }, narrativeText: "You embrace who you truly are." } }
+        ],
+        onlyOnce: false
+      }),
+      "politics": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["Political Maneuvering", "An Unlikely Alliance", "The Power Broker", "Hellish Diplomacy"][Math.floor(Math.random() * 4)]}`,
+        description: `A faction seeks ${["your support", "your influence", "partnership", "your backing"][Math.floor(Math.random() * 4)]}.`,
+        type: "war",
+        choices: [
+          { id: `opt1-${Date.now()}`, text: "Join them for mutual gain.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 4) + 2, wealth: Math.floor(Math.random() * 150) + 75, power: Math.floor(Math.random() * 2) + 1 }, narrativeText: "Your reach extends further." } },
+          { id: `opt2-${Date.now()}`, text: "Play both sides.", outcomes: { statChanges: { control: Math.floor(Math.random() * 3) + 2, wealth: Math.floor(Math.random() * 100) + 50, influence: Math.floor(Math.random() * 2) }, narrativeText: "A dangerous game of shadows." } },
+          { id: `opt3-${Date.now()}`, text: "Stay neutral.", outcomes: { statChanges: { control: 1, empathy: 1 }, narrativeText: "You remain free from entanglement." } }
+        ],
+        onlyOnce: false
+      }),
+      "wealth-based": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["Lucrative Opportunity", "A Golden Proposal", "Fortune Smiles", "Wealth Calls"][Math.floor(Math.random() * 4)]}`,
+        description: `Your wealth (${options.characterPower} coins) has made you ${["a target", "enviable", "powerful", "dangerous"][Math.floor(Math.random() * 4)]}.`,
+        type: "contract",
+        choices: [
+          { id: `opt1-${Date.now()}`, text: "Invest for more returns.", outcomes: { statChanges: { wealth: Math.floor(Math.random() * 300) + 100, influence: Math.floor(Math.random() * 2) + 1 }, narrativeText: "Your fortune multiplies." } },
+          { id: `opt2-${Date.now()}`, text: "Use it for power.", outcomes: { statChanges: { power: Math.floor(Math.random() * 5) + 2, wealth: -Math.floor(Math.random() * 100) }, narrativeText: "Gold becomes force." } },
+          { id: `opt3-${Date.now()}`, text: "Help the suffering.", outcomes: { statChanges: { empathy: Math.floor(Math.random() * 3) + 1, wealth: -Math.floor(Math.random() * 150), influence: Math.floor(Math.random() * 2) + 1 }, narrativeText: "Something awakens in you." } }
+        ],
+        onlyOnce: false
+      }),
+      "random": () => ({
+        id: `ai-${Date.now()}`,
+        title: `${["Chance Encounter", "Unexpected Turn", "A Twist of Fate", "Fortune's Wheel"][Math.floor(Math.random() * 4)]}`,
+        description: `${["A stranger appears", "Something changes", "Reality shifts", "Destiny intervenes"][Math.floor(Math.random() * 4)]}.`,
+        type: "daily",
+        choices: [
+          { id: `opt1-${Date.now()}`, text: "Take action.", outcomes: { statChanges: { power: Math.floor(Math.random() * 3) + 1, control: Math.floor(Math.random() * 2) }, narrativeText: "You seize the moment." } },
+          { id: `opt2-${Date.now()}`, text: "Observe and learn.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 2) + 1, empathy: 1 }, narrativeText: "Knowledge is power." } },
+          { id: `opt3-${Date.now()}`, text: "Ignore it.", outcomes: { statChanges: { control: 1 }, narrativeText: "You move onward unchanged." } }
+        ],
+        onlyOnce: false
+      })
+    };
 
-    return mockEvents[Math.floor(Math.random() * mockEvents.length)];
+    const generator = eventGenerators[theme] || eventGenerators["random"];
+    return generator();
   } catch (error) {
     console.error("Error generating AI event:", error);
     return null;

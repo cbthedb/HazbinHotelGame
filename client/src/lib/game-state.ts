@@ -9,6 +9,8 @@ export interface GameState {
   activePowers: string[]; // Currently equipped power IDs
   health: number;
   wealth: number;
+  actionCooldowns: Record<string, number>; // Action ID -> turn available
+  actionUseCounts: Record<string, number>; // Action ID -> total uses (for diminishing returns)
 }
 
 const STORAGE_KEY = "hazbin-game-state";
@@ -48,7 +50,9 @@ export function createNewGameState(character: Character): GameState {
     territory: {},
     activePowers: [],
     health: character.health,
-    wealth: character.wealth
+    wealth: character.wealth,
+    actionCooldowns: {},
+    actionUseCounts: {}
   };
 }
 

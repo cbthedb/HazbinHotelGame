@@ -54,12 +54,16 @@ export default function GamePage() {
     toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn}` });
   };
 
-  const handleUpdateCharacter = (updates: Partial<GameState["character"]>) => {
+  const handleUpdateCharacter = (updates: any) => {
     if (!gameState) return;
 
+    const { actionCooldowns, actionUseCounts, ...characterUpdates } = updates;
+    
     const updatedState: GameState = {
       ...gameState,
-      character: { ...gameState.character, ...updates }
+      character: { ...gameState.character, ...characterUpdates },
+      actionCooldowns: actionCooldowns || gameState.actionCooldowns,
+      actionUseCounts: actionUseCounts || gameState.actionUseCounts
     };
 
     setGameState(updatedState);

@@ -8,22 +8,56 @@ import type { GameState } from "@/lib/game-state";
 interface ActionsPanelProps {
   onNextTurn: () => void;
   gameState: GameState;
-  onUpdateCharacter: (updates: Partial<GameState["character"]>) => void;
+  onUpdateCharacter: (updates: Partial<GameState["character"]> & { actionCooldowns?: Record<string, number> }) => void;
 }
 
 export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter }: ActionsPanelProps) {
   const { toast } = useToast();
   const { character } = gameState;
+  const cooldowns = gameState.actionCooldowns || {};
+  const useCounts = gameState.actionUseCounts || {};
+  
+  const isOnCooldown = (actionId: string) => {
+    const availableTurn = cooldowns[actionId];
+    return availableTurn ? availableTurn > gameState.turn : false;
+  };
+  
+  const getTrainPowerGain = () => {
+    const trainCount = useCounts["train-power"] || 0;
+    if (trainCount >= 5) return 0.5; // Heavy diminishing returns
+    if (trainCount >= 3) return 1; // Moderate diminishing
+    return 2; // Full power
+  };
 
   const actions = [
     {
       id: "train-power",
       name: "Train Power",
       icon: Dumbbell,
-      description: "Increase your raw magical strength",
+      description: "Increase your raw magical strength (cooldown: 3 turns)",
       action: () => {
-        onUpdateCharacter({ power: character.power + 2, health: character.health - 5 });
-        toast({ title: "Power Training", description: "You've grown stronger! +2 Power" });
+        if (isOnCooldown("train-power")) {
+          toast({ 
+            title: "On Cooldown", 
+            description: `Available at turn ${cooldowns["train-power"]}`,
+            variant: "destructive" 
+          });
+          return;
+        }
+        
+        const gain = getTrainPowerGain();
+        const newCooldowns = { ...cooldowns, "train-power": gameState.turn + 3 };
+        const newUseCounts = { ...useCounts, "train-power": (useCounts["train-power"] || 0) + 1 };
+        
+        onUpdateCharacter({ 
+          power: Math.min(100, character.power + gain),
+          health: character.health - 5,
+          actionCooldowns: newCooldowns,
+          actionUseCounts: newUseCounts
+        } as any);
+        
+        const message = gain < 2 ? `+${gain} Power (diminishing!)` : `+${gain} Power`;
+        toast({ title: "Power Training", description: `You've grown stronger! ${message}` });
       }
     },
     {
@@ -120,12 +154,14 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {actions.map((action) => {
             const Icon = action.icon;
+            const onCooldown = isOnCooldown(action.id);
             return (
               <Button
                 key={action.id}
                 variant="outline"
                 onClick={action.action}
-                className="h-auto flex-col items-start p-3 hover-elevate gap-1"
+                disabled={onCooldown}
+                className={`h-auto flex-col items-start p-3 gap-1 ${onCooldown ? 'opacity-50 cursor-not-allowed' : 'hover-elevate'}`}
                 data-testid={`button-action-${action.id}`}
               >
                 <div className="flex items-center gap-2 w-full">
@@ -135,6 +171,11 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
                 <p className="text-xs text-muted-foreground text-left w-full">
                   {action.description}
                 </p>
+                {onCooldown && (
+                  <p className="text-xs text-destructive text-left w-full font-semibold">
+                    Ready turn {cooldowns[action.id]}
+                  </p>
+                )}
               </Button>
             );
           })}

@@ -98,7 +98,14 @@ export default function PowersPanel({ gameState }: PowersPanelProps) {
           })
         )}
 
-        <Button variant="outline" className="w-full mt-2" data-testid="button-manage-powers">
+        <Button 
+          variant="outline" 
+          className="w-full mt-2" 
+          data-testid="button-manage-powers"
+          onClick={() => {
+            alert(`Equipped Powers (${equippedPowers.length}/5):\n\n${equippedPowers.map(p => `• ${p.name} (${p.type})`).join('\n')}\n\nTo change powers, create a new character or unlock new abilities by gaining power!`);
+          }}
+        >
           Manage Powers
         </Button>
       </CardContent>

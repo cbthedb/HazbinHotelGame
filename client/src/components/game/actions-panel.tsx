@@ -102,7 +102,9 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Swords,
       description: "Expand your domain",
       action: () => {
-        const randomDistrict = Object.keys(gameState.territory)[Math.floor(Math.random() * Object.keys(gameState.territory).length)];
+        // Use all 7 districts instead of just territory keys
+        const districtIds = ["hotel-district", "cannibal-colony", "entertainment-district", "vox-tower-zone", "industrial-hellscape", "overlord-territories", "royal-quarter"];
+        const randomDistrict = districtIds[Math.floor(Math.random() * districtIds.length)];
         const check = canClaimTerritory(gameState, randomDistrict);
         
         if (!check.can) {
@@ -116,10 +118,14 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
         
         const update = claimTerritory(gameState, randomDistrict);
         if (update.character && update.territory) {
-          onUpdateCharacter(update.character);
+          onUpdateCharacter({ 
+            ...update.character, 
+            actionCooldowns: { ...cooldowns, "territory": gameState.turn + 5 },
+            actionUseCounts: { ...useCounts }
+          } as any);
           toast({ 
             title: "Territory Claimed!", 
-            description: `You've claimed a new district! Difficulty: ${check.difficultyRating}` 
+            description: `You've claimed ${randomDistrict}! Difficulty: ${check.difficultyRating}` 
           });
         }
       }

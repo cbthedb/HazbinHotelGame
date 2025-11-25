@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,25 @@ import SummaryStep from "@/components/character-creation/summary-step";
 import { saveGame, createNewGameState, getAllSaves } from "@/lib/game-state";
 import allPowers from "@/data/powers.json";
 import type { Origin, Character } from "@shared/schema";
+
+// Load globally-owned powers from all previous saves
+function getInitialOwnedPowers(): string[] {
+  try {
+    const saves = getAllSaves();
+    const globalOwnedPowers = new Set<string>();
+    
+    saves.forEach(save => {
+      if (save && save.gameState && save.gameState.character.powers) {
+        save.gameState.character.powers.forEach(p => globalOwnedPowers.add(p));
+      }
+    });
+    
+    return Array.from(globalOwnedPowers);
+  } catch (error) {
+    console.error("Error loading owned powers:", error);
+    return [];
+  }
+}
 
 export type CharacterData = {
   firstName: string;
@@ -45,32 +64,11 @@ export default function CharacterCreation() {
     },
     origin: null,
     selectedTraits: [],
-    ownedPowers: [],
+    ownedPowers: getInitialOwnedPowers(),
     equippedPowers: [],
     soulcoins: 100,
     mythicalShards: 0
   });
-
-  // Load all globally-owned powers from previous saves on mount
-  useEffect(() => {
-    const saves = getAllSaves();
-    const globalOwnedPowers = new Set<string>();
-    
-    saves.forEach(save => {
-      if (save && save.gameState) {
-        // Get powers from this save's character
-        const charPowers = save.gameState.character.powers || [];
-        charPowers.forEach(p => globalOwnedPowers.add(p));
-      }
-    });
-    
-    if (globalOwnedPowers.size > 0) {
-      setCharacterData(prev => ({
-        ...prev,
-        ownedPowers: Array.from(globalOwnedPowers)
-      }));
-    }
-  }, []);
 
   const steps = [
     { title: "Name", description: "Choose your demon identity" },

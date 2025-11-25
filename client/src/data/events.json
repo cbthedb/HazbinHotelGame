@@ -1,206 +1,22 @@
 [
-  {
-    "id": "first-day-hotel",
-    "title": "Welcome to the Hotel",
-    "description": "Charlie greets you at the Hazbin Hotel's entrance with her signature enthusiasm. 'Welcome! We're so glad you're here! Redemption starts today!'",
-    "type": "daily",
-    "triggerConditions": {
-      "minTurn": 1,
-      "location": ["hotel-district"]
-    },
-    "choices": [
-      {
-        "id": "enthusiastic",
-        "text": "Match her energy! This is a fresh start!",
-        "outcomes": {
-          "statChanges": { "empathy": 2, "influence": 1 },
-          "npcAffinityChanges": { "charlie": 5 },
-          "narrativeText": "Charlie beams at your enthusiasm. 'I KNEW you were perfect for this! Let me show you around!'"
-        }
-      },
-      {
-        "id": "skeptical",
-        "text": "Redemption? In Hell? You're kidding, right?",
-        "outcomes": {
-          "statChanges": { "empathy": -1 },
-          "npcAffinityChanges": { "charlie": -2, "vaggie": 3 },
-          "narrativeText": "Vaggie smirks. 'At least you're realistic.' Charlie's smile doesn't waver. 'You'll see! Just give it a chance!'"
-        }
-      },
-      {
-        "id": "polite",
-        "text": "Thank you for having me. I'll do my best.",
-        "outcomes": {
-          "statChanges": { "influence": 2 },
-          "npcAffinityChanges": { "charlie": 3, "vaggie": 2 },
-          "narrativeText": "A measured response earns nods from both Charlie and Vaggie. A good start."
-        }
-      }
-    ],
-    "onlyOnce": true
-  },
-  {
-    "id": "promissory-stranger",
-    "title": "The Promissory Pact",
-    "description": "A demon with clockwork teeth approaches in a dark alley. 'I can give you POWER beyond imagination... for a small price. Just sign here.'",
-    "type": "contract",
-    "triggerConditions": {
-      "randomChance": 0.15,
-      "statRequirements": { "wealth": 100 }
-    },
-    "choices": [
-      {
-        "id": "sign",
-        "text": "Sign the contract. You need power NOW.",
-        "outcomes": {
-          "powerGrant": ["promissory-pact"],
-          "statChanges": { "power": 15, "corruption": 8 },
-          "storyFlags": { "contract-clauses": 1 },
-          "narrativeText": "Dark energy surges through you as the contract burns into your very soul. You feel POWERFUL... but at what cost?"
-        }
-      },
-      {
-        "id": "bargain",
-        "text": "Try to negotiate better terms. (Control Check)",
-        "requirements": { "control": 12 },
-        "outcomes": {
-          "powerGrant": ["promissory-pact"],
-          "statChanges": { "power": 15, "corruption": 4 },
-          "storyFlags": { "contract-clauses": 1 },
-          "narrativeText": "Your sharp negotiation reduces the corruption cost. The demon grumbles but accepts. Smart."
-        }
-      },
-      {
-        "id": "refuse",
-        "text": "Walk away. Nothing is worth your soul.",
-        "outcomes": {
-          "statChanges": { "empathy": 2, "influence": 3 },
-          "narrativeText": "You turn your back on the offer. The demon hisses in frustration and vanishes. You kept your integrity."
-        }
-      }
-    ],
-    "onlyOnce": false
-  },
-  {
-    "id": "alastor-first-meeting",
-    "title": "The Radio Demon Arrives",
-    "description": "Static fills the air. Alastor materializes with his ever-present grin. 'Greetings! Quite the pleasure to make your acquaintance!'",
-    "type": "career",
-    "triggerConditions": {
-      "minTurn": 10,
-      "location": ["hotel-district", "overlord-territories"],
-      "statRequirements": { "influence": 15 }
-    },
-    "choices": [
-      {
-        "id": "respectful",
-        "text": "Show proper respect to the Radio Demon.",
-        "outcomes": {
-          "npcAffinityChanges": { "alastor": 5 },
-          "statChanges": { "influence": 3 },
-          "narrativeText": "Alastor's grin widens. 'Ah, manners! How delightfully rare these days!'"
-        }
-      },
-      {
-        "id": "challenge",
-        "text": "You're not that scary. (Power Check)",
-        "requirements": { "power": 25 },
-        "outcomes": {
-          "npcAffinityChanges": { "alastor": 8 },
-          "statChanges": { "power": 3, "corruption": 2 },
-          "storyFlags": { "challenged-alastor": true },
-          "narrativeText": "His eyes flash with genuine interest. 'Oh my! Someone with SPINE! How entertaining!'"
-        }
-      },
-      {
-        "id": "ignore",
-        "text": "Just nod and try to leave.",
-        "outcomes": {
-          "npcAffinityChanges": { "alastor": -3 },
-          "narrativeText": "How... disappointing. He vanishes in a crackle of static, clearly unimpressed."
-        }
-      }
-    ],
-    "onlyOnce": true
-  },
-  {
-    "id": "territory-challenge-easy",
-    "title": "Turf War: Small Claims",
-    "description": "A weak demon controls a small territory. They're vulnerable. You could take it... but should you?",
-    "type": "war",
-    "triggerConditions": {
-      "statRequirements": { "power": 20, "influence": 15 }
-    },
-    "choices": [
-      {
-        "id": "conquer",
-        "text": "Take the territory by force.",
-        "requirements": { "power": 20 },
-        "outcomes": {
-          "statChanges": { "power": 3, "corruption": 3, "empathy": -2 },
-          "reputationChanges": { "overlords": 5 },
-          "storyFlags": { "territories-claimed": 1 },
-          "narrativeText": "The weak demon flees. The territory is yours. Other demons take notice."
-        }
-      },
-      {
-        "id": "negotiate",
-        "text": "Offer a partnership instead.",
-        "requirements": { "influence": 20 },
-        "outcomes": {
-          "statChanges": { "influence": 5, "wealth": 100 },
-          "narrativeText": "They agree to pay tribute in exchange for protection. Smart business."
-        }
-      },
-      {
-        "id": "ignore",
-        "text": "Leave them alone. Focus elsewhere.",
-        "outcomes": {
-          "statChanges": { "empathy": 2 },
-          "narrativeText": "Not every battle needs fighting. You move on."
-        }
-      }
-    ],
-    "onlyOnce": false
-  },
-  {
-    "id": "charlie-performance",
-    "title": "Join Charlie's Song",
-    "description": "Charlie is rehearsing a new song about redemption. She invites you to join! Music fills the Hotel with hope.",
-    "type": "romance",
-    "triggerConditions": {
-      "location": ["hotel-district"],
-      "randomChance": 0.2
-    },
-    "choices": [
-      {
-        "id": "sing-along",
-        "text": "Sing with all your heart!",
-        "outcomes": {
-          "statChanges": { "empathy": 3, "influence": 2 },
-          "npcAffinityChanges": { "charlie": 8 },
-          "reputationChanges": { "hazbin-hotel": 5 },
-          "narrativeText": "Your voices blend beautifully. Charlie's eyes light up. 'That was AMAZING! You really do believe!'"
-        }
-      },
-      {
-        "id": "watch",
-        "text": "Watch and enjoy the performance.",
-        "outcomes": {
-          "statChanges": { "empathy": 1 },
-          "npcAffinityChanges": { "charlie": 3 },
-          "narrativeText": "You appreciate the show from the sidelines. Charlie smiles warmly at you."
-        }
-      },
-      {
-        "id": "leave",
-        "text": "Too sappy. Make an excuse and leave.",
-        "outcomes": {
-          "npcAffinityChanges": { "charlie": -2 },
-          "narrativeText": "Charlie's smile falters slightly as you slip away."
-        }
-      }
-    ],
-    "onlyOnce": false
-  }
+  {"id":"welcome","title":"Welcome to Hell","description":"Charlie greets you warmly.","type":"daily","choices":[{"id":"enthusiastic","text":"Match her energy!","outcomes":{"statChanges":{"empathy":2,"influence":1},"narrativeText":"Charlie beams with joy!"}},{"id":"polite","text":"Thank you for having me.","outcomes":{"statChanges":{"influence":2},"narrativeText":"A good start."}}],"onlyOnce":true},
+  {"id":"pact1","title":"A Dark Stranger","description":"A mysterious demon offers you power.","type":"contract","choices":[{"id":"sign","text":"Sign the contract.","outcomes":{"statChanges":{"power":10,"corruption":5},"narrativeText":"Dark energy surges through you!"}},{"id":"refuse","text":"Walk away.","outcomes":{"statChanges":{"empathy":2},"narrativeText":"You keep your integrity."}}],"onlyOnce":false},
+  {"id":"vox1","title":"Vox's Offer","description":"Vox appears on screen with a broadcasting opportunity.","type":"career","choices":[{"id":"accept","text":"Become a TV star!","outcomes":{"statChanges":{"influence":5,"wealth":200},"narrativeText":"You're an instant celebrity!"}},{"id":"decline","text":"I prefer privacy.","outcomes":{"statChanges":{"empathy":1},"narrativeText":"Vox shrugs and moves on."}}],"onlyOnce":false},
+  {"id":"angel1","title":"Angel Dust's Proposition","description":"Angel approaches with a lucrative offer.","type":"romance","choices":[{"id":"interest","text":"Tell me more.","outcomes":{"statChanges":{"wealth":150,"control":1},"narrativeText":"Angel explains the details carefully."}},{"id":"decline","text":"Not for me.","outcomes":{"statChanges":{"empathy":1},"narrativeText":"Angel nods with understanding."}}],"onlyOnce":false},
+  {"id":"husk1","title":"High Stakes Poker","description":"Husk deals cards at a shadowy table.","type":"daily","choices":[{"id":"play","text":"Go all in!","outcomes":{"statChanges":{"wealth":300},"narrativeText":"You win big!"}},{"id":"fold","text":"Play it safe.","outcomes":{"statChanges":{"wealth":100,"control":1},"narrativeText":"Steady and smart."}}],"onlyOnce":false},
+  {"id":"territory1","title":"Turf War","description":"A weak demon controls territory you want.","type":"war","choices":[{"id":"conquer","text":"Take it by force.","outcomes":{"statChanges":{"power":3,"influence":3},"narrativeText":"The territory is yours!"}},{"id":"negotiate","text":"Offer partnership.","outcomes":{"statChanges":{"influence":5,"wealth":100},"narrativeText":"They agree to pay tribute."}}],"onlyOnce":false},
+  {"id":"charlie_song","title":"Charlie's Performance","description":"Charlie invites you to sing together.","type":"romance","choices":[{"id":"sing","text":"Sing your heart out!","outcomes":{"statChanges":{"empathy":4,"influence":2},"narrativeText":"Your voices blend beautifully!"}},{"id":"watch","text":"Just watch.","outcomes":{"statChanges":{"empathy":1},"narrativeText":"Charlie smiles warmly."}}],"onlyOnce":false},
+  {"id":"vagrant","title":"Weak Sinners Arrive","description":"Lost sinners stumble into Hell.","type":"daily","choices":[{"id":"help","text":"Help them.","outcomes":{"statChanges":{"empathy":3,"influence":1},"narrativeText":"You've made new allies!"}},{"id":"exploit","text":"Rob them.","outcomes":{"statChanges":{"wealth":200,"corruption":3},"narrativeText":"Easy money earned."}}],"onlyOnce":false},
+  {"id":"curse1","title":"Ancient Curse","description":"You accidentally trigger a curse.","type":"daily","choices":[{"id":"fight","text":"Overcome it through willpower.","outcomes":{"statChanges":{"control":3,"health":-10},"narrativeText":"You break free, stronger now."}},{"id":"accept","text":"Embrace the curse power.","outcomes":{"statChanges":{"power":5,"corruption":5},"narrativeText":"More powerful but less in control."}}],"onlyOnce":false},
+  {"id":"miracle","title":"A Glimpse of Hope","description":"Something impossible happens - a flower blooms.","type":"daily","choices":[{"id":"believe","text":"Maybe redemption is real.","outcomes":{"statChanges":{"empathy":5,"corruption":-2},"narrativeText":"Hope takes root in your heart."}},{"id":"cynical","text":"Just tricks.","outcomes":{"statChanges":{"control":1},"narrativeText":"You dismiss it and move on."}}],"onlyOnce":false},
+  {"id":"hunt","title":"Hunting for Sport","description":"Demons organize a hunt for sinners.","type":"war","choices":[{"id":"join","text":"Join the hunt.","outcomes":{"statChanges":{"power":5,"corruption":8},"narrativeText":"You become a true demon."}},{"id":"refuse","text":"That's cruel.","outcomes":{"statChanges":{"empathy":3},"narrativeText":"You refuse to participate."}}],"onlyOnce":false},
+  {"id":"rival","title":"Face Your Rival","description":"Your rival challenges you directly.","type":"war","choices":[{"id":"fight","text":"Battle them!","outcomes":{"statChanges":{"power":5,"health":-15},"narrativeText":"You win - barely."}},{"id":"ally","text":"Propose alliance.","outcomes":{"statChanges":{"influence":3,"wealth":100},"narrativeText":"You become partners."}}],"onlyOnce":false},
+  {"id":"rosie","title":"Rosie's Proposition","description":"The Cannibal Queen makes an offer.","type":"contract","choices":[{"id":"accept","text":"Join her.","outcomes":{"statChanges":{"power":6,"influence":5,"wealth":300},"narrativeText":"Excellent choice, darling!"}},{"id":"decline","text":"I work alone.","outcomes":{"statChanges":{"control":1},"narrativeText":"Rosie respects your independence."}}],"onlyOnce":false},
+  {"id":"vaggie","title":"Combat Training","description":"Vaggie offers to train you.","type":"daily","choices":[{"id":"train","text":"Train intensely.","outcomes":{"statChanges":{"power":3,"control":2},"narrativeText":"You grow stronger."}},{"id":"skip","text":"Not today.","outcomes":{"statChanges":{"empathy":1},"narrativeText":"Vaggie understands."}}],"onlyOnce":false},
+  {"id":"breakthrough","title":"Power Breakthrough","description":"New power awakens within you.","type":"daily","choices":[{"id":"embrace","text":"Embrace it fully.","outcomes":{"statChanges":{"power":15,"corruption":8},"narrativeText":"Intoxicating power!"}},{"id":"control","text":"Master it carefully.","outcomes":{"statChanges":{"power":10,"control":4},"narrativeText":"Perfect mastery achieved."}}],"onlyOnce":false},
+  {"id":"street_night","title":"Pentagram City Night","description":"The streets buzz with demons and deals.","type":"daily","choices":[{"id":"gamble","text":"Try your luck gambling.","outcomes":{"statChanges":{"wealth":150},"narrativeText":"Lucky night!"}},{"id":"explore","text":"Explore and discover.","outcomes":{"statChanges":{"influence":2},"narrativeText":"You find interesting contacts."}}],"onlyOnce":false},
+  {"id":"niffty","title":"Spring Cleaning with Niffty","description":"Niffty begs for help cleaning.","type":"daily","choices":[{"id":"enthusiastic","text":"Help enthusiastically!","outcomes":{"statChanges":{"empathy":3,"wealth":50},"narrativeText":"Niffty adores you forever!"}},{"id":"decline","text":"I'm not a maid.","outcomes":{"statChanges":{"corruption":1},"narrativeText":"Niffty pouts but moves on."}}],"onlyOnce":false},
+  {"id":"overlord","title":"An Overlord Notices You","description":"A powerful Overlord acknowledges your existence.","type":"war","choices":[{"id":"bow","text":"Show respect.","outcomes":{"statChanges":{"influence":2},"narrativeText":"Good. You know your place."}},{"id":"stand_tall","text":"Stand and meet their gaze.","outcomes":{"statChanges":{"power":4,"influence":3},"narrativeText":"They're interested in you!"}}],"onlyOnce":false},
+  {"id":"ultimate","title":"The Ultimate Offer","description":"Absolute power. The price? Your very soul.","type":"contract","choices":[{"id":"refuse","text":"No power is worth that.","outcomes":{"statChanges":{"empathy":8,"control":5},"narrativeText":"You're stronger for refusing."}},{"id":"negotiate","text":"Try negotiating.","outcomes":{"statChanges":{"power":15,"control":3},"narrativeText":"You reach a compromise."}}],"onlyOnce":true},
+  {"id":"lost_soul","title":"An Ancient Lost Soul","description":"A ghost seeks redemption guidance.","type":"daily","choices":[{"id":"inspire","text":"Tell them yes.","outcomes":{"statChanges":{"empathy":5,"influence":2},"narrativeText":"Hope shines in their eyes."}},{"id":"realistic","text":"Tell them the truth.","outcomes":{"statChanges":{"control":2},"narrativeText":"They respect your honesty."}}],"onlyOnce":false}
 ]

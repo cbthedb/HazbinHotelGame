@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import eventsData from "@/data/events.json";
+import { generateAIEvent } from "@/lib/aiEventClient";
 import { applyNpcAffects } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 import type { GameEvent } from "@shared/schema";
@@ -18,19 +19,43 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
   const { toast } = useToast();
   const [currentEvent, setCurrentEvent] = useState<GameEvent | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
+  const [isAIGenerated, setIsAIGenerated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const events = eventsData as GameEvent[];
 
   // Load random event on mount or turn change
   useEffect(() => {
+    loadNewEvent();
+  }, [gameState.turn]);
+
+  const loadNewEvent = async () => {
+    setIsLoading(true);
+    setSelectedChoice(null);
+    
+    // 40% chance of AI-generated event
+    const useAI = Math.random() < 0.4;
+    
+    if (useAI) {
+      const aiEvent = await generateAIEvent(gameState);
+      if (aiEvent && aiEvent.title) {
+        setCurrentEvent(aiEvent as GameEvent);
+        setIsAIGenerated(true);
+        setIsLoading(false);
+        return;
+      }
+    }
+    
+    // Fall back to static events
     const availableEvents = events.filter(e => !e.onlyOnce || !gameState.eventLog.some(log => log.title === e.title));
     
     if (availableEvents.length > 0) {
       const randomEvent = availableEvents[Math.floor(Math.random() * availableEvents.length)];
       setCurrentEvent(randomEvent);
-      setSelectedChoice(null);
+      setIsAIGenerated(false);
     }
-  }, [gameState.turn]);
+    setIsLoading(false);
+  };
 
   const handleChoice = (choiceId: string) => {
     if (!currentEvent) return;
@@ -71,6 +96,16 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
     setSelectedChoice(choiceId);
   };
 
+  if (isLoading) {
+    return (
+      <Card className="border-2 border-card-border" data-testid="card-event">
+        <CardContent className="p-6 text-center text-muted-foreground">
+          <p>Generating scenario...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   if (!currentEvent) {
     return (
       <Card className="border-2 border-card-border" data-testid="card-event">
@@ -82,14 +117,18 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
   }
 
   return (
-    <Card className="border-2 border-primary/50 bg-gradient-to-br from-card to-primary/5" data-testid="card-event">
+    <Card className={`border-2 bg-gradient-to-br ${isAIGenerated ? "border-amber-500/50 from-card to-amber-900/5" : "border-primary/50 from-card to-primary/5"}`} data-testid="card-event">
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-primary" />
+              {isAIGenerated ? (
+                <Zap className="w-5 h-5 text-amber-500" />
+              ) : (
+                <Sparkles className="w-5 h-5 text-primary" />
+              )}
               <Badge variant="secondary" className="capitalize">
-                {(currentEvent as any).type} Event
+                {isAIGenerated ? "AI-Generated" : (currentEvent as any).type} Event
               </Badge>
             </div>
             <CardTitle className="font-display text-2xl">{currentEvent.title}</CardTitle>

@@ -1,4 +1,5 @@
 import type { Character, Power, Trait } from "@shared/schema";
+import { saveGameToBrowser, loadGameFromBrowser } from "./browserStorage";
 
 export interface GameState {
   character: Character;
@@ -15,25 +16,32 @@ export interface GameState {
 
 const STORAGE_KEY = "hazbin-game-state";
 
-export function saveGame(state: GameState): void {
+export async function saveGame(state: GameState): Promise<void> {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    // Try browser storage first (IndexedDB), fallback to localStorage
+    await saveGameToBrowser(state).catch(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    });
   } catch (error) {
     console.error("Error saving game:", error);
   }
 }
 
-export function loadGame(): GameState | null {
+export async function loadGame(): Promise<GameState | null> {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : null;
+    // Try browser storage first, fallback to localStorage
+    let saved = await loadGameFromBrowser().catch(() => null);
+    if (saved) return saved;
+    
+    const localSaved = localStorage.getItem(STORAGE_KEY);
+    return localSaved ? JSON.parse(localSaved) : null;
   } catch (error) {
     console.error("Error loading game:", error);
     return null;
   }
 }
 
-export function deleteGame(): void {
+export async function deleteGame(): Promise<void> {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {

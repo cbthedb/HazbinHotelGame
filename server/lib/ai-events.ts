@@ -83,12 +83,12 @@ export async function generateAIEvent(
       }),
       "random": () => ({
         id: `ai-${Date.now()}`,
-        title: `${["Chance Encounter", "Unexpected Turn", "A Twist of Fate", "Fortune's Wheel"][Math.floor(Math.random() * 4)]}`,
-        description: `${["A stranger appears", "Something changes", "Reality shifts", "Destiny intervenes"][Math.floor(Math.random() * 4)]}.`,
+        title: `${["Chance Encounter", "Unexpected Turn", "A Twist of Fate", "Fortune's Wheel", "Hellish Intrigue"][Math.floor(Math.random() * 5)]}`,
+        description: `${["A stranger appears", "Something changes", "Reality shifts", "Destiny intervenes", "The past catches up"][Math.floor(Math.random() * 5)]}.`,
         type: "daily",
         choices: [
-          { id: `opt1-${Date.now()}`, text: "Take action.", outcomes: { statChanges: { power: Math.floor(Math.random() * 3) + 1, control: Math.floor(Math.random() * 2) }, narrativeText: "You seize the moment." } },
-          { id: `opt2-${Date.now()}`, text: "Observe and learn.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 2) + 1, empathy: 1 }, narrativeText: "Knowledge is power." } },
+          { id: `opt1-${Date.now()}`, text: "Take action.", outcomes: { statChanges: { power: Math.floor(Math.random() * 2) + 1, control: 1 }, narrativeText: "You seize the moment." } },
+          { id: `opt2-${Date.now()}`, text: "Observe and learn.", outcomes: { statChanges: { influence: Math.floor(Math.random() * 2), empathy: 1 }, narrativeText: "Knowledge is power." } },
           { id: `opt3-${Date.now()}`, text: "Ignore it.", outcomes: { statChanges: { control: 1 }, narrativeText: "You move onward unchanged." } }
         ],
         onlyOnce: false

@@ -561,5 +561,151 @@
       "origin": ["accidental"]
     },
     "isPassive": false
+  },
+  {
+    "id": "alastor-overlord",
+    "name": "Radio Demon Pact",
+    "type": "shadow-eldritch",
+    "basePower": 30,
+    "controlReq": 25,
+    "corruptionCost": 15,
+    "cooldown": 12,
+    "effect": "reality-warp:broadcast",
+    "description": "Summon Alastor's power to broadcast through all of Hell. Terrifying and corrupting.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minPower": 60,
+      "minCorruption": 50
+    },
+    "isPassive": false
+  },
+  {
+    "id": "charlie-redemption",
+    "name": "Redemption Aura",
+    "type": "divine",
+    "basePower": 8,
+    "controlReq": 6,
+    "corruptionCost": -2,
+    "cooldown": 4,
+    "effect": "buff:empathy-boost",
+    "description": "Channel Charlie's compassion. Boosts empathy and reduces corruption over time.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minEmpathy": 50
+    },
+    "isPassive": false
+  },
+  {
+    "id": "vaggie-spear",
+    "name": "Holy Spear Strike",
+    "type": "divine-combat",
+    "basePower": 20,
+    "controlReq": 12,
+    "corruptionCost": -1,
+    "cooldown": 5,
+    "effect": "single-target:pierce-heaven",
+    "description": "Strike with Vaggie's angelic spear. Deals holy damage to demons.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 30
+    },
+    "isPassive": false
+  },
+  {
+    "id": "angel-dust-charm",
+    "name": "Angelic Charm",
+    "type": "voice-broadcast",
+    "basePower": 7,
+    "controlReq": 8,
+    "corruptionCost": 1,
+    "cooldown": 3,
+    "effect": "charm:seduce",
+    "description": "Channel Angel Dust's charisma. Charm NPCs into favorable contracts.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minInfluence": 30
+    },
+    "isPassive": false
+  },
+  {
+    "id": "vox-broadcast-override",
+    "name": "Broadcast Override",
+    "type": "voice-broadcast",
+    "basePower": 22,
+    "controlReq": 16,
+    "corruptionCost": 3,
+    "cooldown": 8,
+    "effect": "mass-hypnosis:tech",
+    "description": "Override all broadcasts in a region. Control the narrative.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minInfluence": 60,
+      "minPower": 50
+    },
+    "isPassive": false
+  },
+  {
+    "id": "rosie-feast",
+    "name": "Cannibal's Hunger",
+    "type": "physical",
+    "basePower": 25,
+    "controlReq": 10,
+    "corruptionCost": 8,
+    "cooldown": 10,
+    "effect": "life-drain:feast",
+    "description": "Consume enemies for power and sustenance. Corrupting but devastating.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minPower": 45,
+      "minCorruption": 60
+    },
+    "isPassive": false
+  },
+  {
+    "id": "husk-gamble",
+    "name": "Soul Gamble",
+    "type": "shadow-eldritch",
+    "basePower": 16,
+    "controlReq": 8,
+    "corruptionCost": 5,
+    "cooldown": 6,
+    "effect": "luck-based:risky-reward",
+    "description": "Gamble your soul for random rewards. High risk, high reward.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minWealth": 200
+    },
+    "isPassive": false
+  },
+  {
+    "id": "niffty-chaos",
+    "name": "Chaotic Cleaning",
+    "type": "physical",
+    "basePower": 6,
+    "controlReq": 4,
+    "corruptionCost": 0,
+    "cooldown": 2,
+    "effect": "aoe:debuff-confusion",
+    "description": "Summon Niffty's chaotic energy. Confuses and disorients multiple enemies.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "lucifer-golden-power",
+    "name": "Royal Decree",
+    "type": "divine",
+    "basePower": 40,
+    "controlReq": 30,
+    "corruptionCost": 10,
+    "cooldown": 15,
+    "effect": "reality-warp:absolute-command",
+    "description": "Channel Lucifer's absolute authority. Commands demons and reality itself.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minPower": 80,
+      "minInfluence": 80
+    },
+    "isPassive": false
   }
 ]

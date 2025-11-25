@@ -55,7 +55,7 @@ export default function CharacterCreation() {
 
   const progress = ((step + 1) / steps.length) * 100;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
@@ -85,7 +85,7 @@ export default function CharacterCreation() {
         };
 
         const gameState = createNewGameState(newCharacter);
-        saveGame(gameState);
+        await saveGame(gameState);
 
         toast({ title: "Welcome to Hell!", description: `Your life as ${newCharacter.firstName} ${newCharacter.lastName} begins...` });
         setLocation("/game");

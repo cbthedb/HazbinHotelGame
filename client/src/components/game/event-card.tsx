@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Zap } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Sparkles, Zap, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import eventsData from "@/data/events.json";
 import { generateAIEvent } from "@/lib/aiEventClient";
+import { generateEventWithUserInput } from "@/lib/houndify";
 import { applyNpcAffects } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 import type { GameEvent } from "@shared/schema";
@@ -21,8 +23,33 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
   const [isAIGenerated, setIsAIGenerated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [customInput, setCustomInput] = useState("");
+  const [showCustomBox, setShowCustomBox] = useState(false);
+  const [isSubmittingCustom, setIsSubmittingCustom] = useState(false);
 
   const events = eventsData as GameEvent[];
+  
+  const handleCustomSubmit = async () => {
+    if (!customInput.trim()) return;
+    
+    setIsSubmittingCustom(true);
+    const customEvent = await generateEventWithUserInput(customInput, gameState);
+    
+    if (customEvent) {
+      setCurrentEvent(customEvent);
+      setShowCustomBox(false);
+      setCustomInput("");
+      setIsAIGenerated(true);
+      toast({ title: "Custom Action", description: "Your unique approach unfolds..." });
+    } else {
+      toast({ 
+        title: "Failed", 
+        description: "Could not process your action.",
+        variant: "destructive"
+      });
+    }
+    setIsSubmittingCustom(false);
+  };
 
   // Load random event on mount or turn change
   useEffect(() => {
@@ -138,24 +165,66 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        {currentEvent.choices.map((choice) => (
-          <Card
-            key={choice.id}
-            className={`cursor-pointer hover-elevate active-elevate-2 border-card-border transition-all ${
-              selectedChoice === choice.id ? "ring-2 ring-primary" : ""
-            }`}
-            onClick={() => !selectedChoice && handleChoice(choice.id)}
-            data-testid={`button-choice-${choice.id}`}
-          >
-            <CardContent className="p-4">
-              <p className="font-semibold mb-2">{choice.text}</p>
-              {selectedChoice !== choice.id && (
-                <p className="text-xs text-muted-foreground">Click to choose</p>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+      <CardContent className="space-y-3">
+        {showCustomBox ? (
+          <div className="space-y-2">
+            <Textarea
+              placeholder="Describe your own approach to this situation..."
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+              className="min-h-24"
+              data-testid="input-custom-action"
+            />
+            <div className="flex gap-2">
+              <Button
+                onClick={handleCustomSubmit}
+                disabled={!customInput.trim() || isSubmittingCustom}
+                className="flex-1 gap-2"
+                data-testid="button-submit-custom"
+              >
+                <Send className="w-4 h-4" />
+                {isSubmittingCustom ? "Processing..." : "Take Action"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => { setShowCustomBox(false); setCustomInput(""); }}
+                data-testid="button-cancel-custom"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {currentEvent.choices.map((choice) => (
+              <Card
+                key={choice.id}
+                className={`cursor-pointer hover-elevate active-elevate-2 border-card-border transition-all ${
+                  selectedChoice === choice.id ? "ring-2 ring-primary" : ""
+                }`}
+                onClick={() => !selectedChoice && handleChoice(choice.id)}
+                data-testid={`button-choice-${choice.id}`}
+              >
+                <CardContent className="p-4">
+                  <p className="font-semibold mb-2">{choice.text}</p>
+                  {selectedChoice !== choice.id && (
+                    <p className="text-xs text-muted-foreground">Click to choose</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+            {!selectedChoice && (
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setShowCustomBox(true)}
+                data-testid="button-custom-action"
+              >
+                🎲 Create Your Own Path
+              </Button>
+            )}
+          </>
+        )}
       </CardContent>
     </Card>
   );

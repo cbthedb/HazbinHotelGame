@@ -66,8 +66,8 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Users,
       description: "Build relationships and influence",
       action: () => {
-        onUpdateCharacter({ influence: character.influence + 3, wealth: character.wealth - 10 });
-        toast({ title: "Socialization", description: "You made new connections! +3 Influence" });
+        onUpdateCharacter({ influence: character.influence + 1, wealth: character.wealth - 15, health: character.health - 2 });
+        toast({ title: "Socialization", description: "You made a connection. +1 Influence" });
       }
     },
     {
@@ -76,8 +76,8 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Briefcase,
       description: "Earn soul coins",
       action: () => {
-        const earnings = Math.floor(Math.random() * 100) + 50;
-        onUpdateCharacter({ wealth: character.wealth + earnings });
+        const earnings = Math.floor(Math.random() * 50) + 20;
+        onUpdateCharacter({ wealth: character.wealth + earnings, health: character.health - 8 });
         toast({ title: "Work Complete", description: `You earned ${earnings} soul coins!` });
       }
     },
@@ -88,11 +88,12 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       description: "Entertain at the Hotel",
       action: () => {
         onUpdateCharacter({
-          influence: character.influence + 2,
-          wealth: character.wealth + 75,
-          empathy: character.empathy + 1
+          influence: character.influence + 1,
+          wealth: character.wealth + 40,
+          empathy: character.empathy + 1,
+          health: character.health - 10
         });
-        toast({ title: "Performance", description: "Your show was a hit! +2 Influence, +75 coins" });
+        toast({ title: "Performance", description: "The crowd enjoys it. +1 Influence, +40 coins" });
       }
     },
     {
@@ -129,8 +130,8 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
       icon: Heart,
       description: "Deepen a relationship",
       action: () => {
-        onUpdateCharacter({ empathy: character.empathy + 2, control: character.control + 1 });
-        toast({ title: "Romance", description: "A connection deepens..." });
+        onUpdateCharacter({ empathy: character.empathy + 1, control: character.control + 1, health: character.health - 5 });
+        toast({ title: "Romance", description: "A delicate connection forms..." });
       }
     }
   ];

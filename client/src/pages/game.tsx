@@ -10,6 +10,7 @@ import ActionsPanel from "@/components/game/actions-panel";
 import NPCPanel from "@/components/game/npc-panel";
 import MapPanel from "@/components/game/map-panel";
 import RankingPanel from "@/components/game/ranking-panel";
+import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
 import { initAudio, playLocationMusic } from "@/lib/audio";
@@ -24,20 +25,24 @@ export default function GamePage() {
 
   // Load game on mount and initialize audio
   useEffect(() => {
-    initAudio();
-    playLocationMusic("hotel-lobby");
+    const init = async () => {
+      initAudio();
+      playLocationMusic("hotel-lobby");
+      
+      const saved = await loadGame();
+      if (!saved) {
+        toast({ title: "Error", description: "No game found. Returning to menu.", variant: "destructive" });
+        setLocation("/");
+        return;
+      }
+      setGameState(saved);
+      setIsLoading(false);
+    };
     
-    const saved = loadGame();
-    if (!saved) {
-      toast({ title: "Error", description: "No game found. Returning to menu.", variant: "destructive" });
-      setLocation("/");
-      return;
-    }
-    setGameState(saved);
-    setIsLoading(false);
+    init();
   }, [setLocation, toast]);
 
-  const handleNextTurn = () => {
+  const handleNextTurn = async () => {
     if (!gameState) return;
 
     const updatedState: GameState = {
@@ -50,11 +55,11 @@ export default function GamePage() {
     };
     
     setGameState(updatedState);
-    saveGame(updatedState);
+    await saveGame(updatedState);
     toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn}` });
   };
 
-  const handleUpdateCharacter = (updates: any) => {
+  const handleUpdateCharacter = async (updates: any) => {
     if (!gameState) return;
 
     const { actionCooldowns, actionUseCounts, ...characterUpdates } = updates;
@@ -67,7 +72,7 @@ export default function GamePage() {
     };
 
     setGameState(updatedState);
-    saveGame(updatedState);
+    await saveGame(updatedState);
   };
 
   const handleQuitGame = () => {
@@ -75,13 +80,7 @@ export default function GamePage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-card flex items-center justify-center">
-        <Card className="p-8">
-          <p className="text-muted-foreground">Loading your hellish adventure...</p>
-        </Card>
-      </div>
-    );
+    return <AnimatedLoading />;
   }
 
   if (!gameState) {

@@ -25,25 +25,26 @@ export function canClaimTerritory(gameState: GameState, districtId: string): { c
   const district = getDistrictById(districtId);
   if (!district) return { can: false, reason: "District not found" };
   
-  const alreadyOwned = gameState.territory[districtId]?.ownerId === gameState.character.firstName;
+  const territory = (gameState.territory as any)[districtId];
+  const alreadyOwned = territory?.ownerId === gameState.character.firstName;
   if (alreadyOwned) return { can: false, reason: "You already own this territory" };
   
-  const powerNeeded = 10 + (district.dangerLevel * 5);
+  const powerNeeded = 20 + (district.dangerLevel * 8);
   if (gameState.character.power < powerNeeded) {
     return { can: false, reason: `Requires ${powerNeeded} Power (you have ${gameState.character.power})` };
   }
   
-  const difficultyRatings = ["Easy", "Moderate", "Hard", "Very Hard", "Extreme"];
-  const difficulty = Math.min(district.dangerLevel, difficultyRatings.length - 1);
+  const difficultyRatings = ["Easy", "Moderate", "Hard", "Very Hard", "Extreme", "Overlord", "Supreme"];
+  const difficulty = Math.min(district.dangerLevel - 1, difficultyRatings.length - 1);
   
-  return { can: true, difficultyRating: difficultyRatings[difficulty] };
+  return { can: true, difficultyRating: difficultyRatings[Math.max(0, difficulty)] };
 }
 
 export function claimTerritory(gameState: GameState, districtId: string): Partial<GameState> {
   const district = getDistrictById(districtId);
   if (!district) return {};
   
-  const tribute = 25 + (district.dangerLevel * 10);
+  const tribute = 50 + (district.dangerLevel * 15);
   
   return {
     territory: {
@@ -56,8 +57,9 @@ export function claimTerritory(gameState: GameState, districtId: string): Partia
     },
     character: {
       ...gameState.character,
-      influence: gameState.character.influence + 5,
-      corruption: gameState.character.corruption + 2
+      influence: gameState.character.influence + 3,
+      corruption: gameState.character.corruption + 3,
+      power: Math.max(1, gameState.character.power - 5)
     }
   };
 }

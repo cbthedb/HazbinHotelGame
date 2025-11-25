@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dumbbell, Users, Briefcase, Music, Swords, Heart, ArrowRight } from "lucide-react";
+import { Dumbbell, Users, Briefcase, Music, Swords, Heart, ArrowRight, Bed } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { canClaimTerritory, claimTerritory } from "@/lib/territorySystem";
 import powersData from "@/data/powers.json";
@@ -57,6 +57,20 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
   };
 
   const actions = [
+    {
+      id: "rest",
+      name: "Rest",
+      icon: Bed,
+      description: "Recover your health and restore energy",
+      action: () => {
+        const healthRecovery = 30;
+        onUpdateCharacter({ 
+          health: Math.min(100, character.health + healthRecovery)
+        } as any);
+        
+        toast({ title: "Rest", description: `You rest and recover. +${healthRecovery} Health!` });
+      }
+    },
     {
       id: "train-power",
       name: "Train Power",

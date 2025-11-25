@@ -2,11 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { getStatBarColor, getRankTitle } from "@/lib/gameHelpers";
-import { Crown, Zap, Sparkles, Heart, Skull, Coins, Users, Gem } from "lucide-react";
+import { Crown, Zap, Sparkles, Heart, Skull, Coins, Users, Gem, Flame } from "lucide-react";
 
 interface StatsPanelProps {
   character: {
     rank: string;
+    age: number;
     power: number;
     control: number;
     influence: number;
@@ -19,6 +20,8 @@ interface StatsPanelProps {
 }
 
 export default function StatsPanel({ character }: StatsPanelProps) {
+  const level = Math.floor(character.age / 5);
+  
   const stats = [
     { name: "Power", value: character.power, max: 100, icon: Zap, color: "text-red-500" },
     { name: "Control", value: character.control, max: 100, icon: Sparkles, color: "text-purple-500" },
@@ -33,12 +36,22 @@ export default function StatsPanel({ character }: StatsPanelProps) {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-display">Character Stats</CardTitle>
-          <Badge variant="secondary" className="capitalize">
-            {getRankTitle(character.rank)}
-          </Badge>
+          <div className="flex gap-2">
+            <Badge variant="secondary" className="capitalize">
+              {getRankTitle(character.rank)}
+            </Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Flame className="w-3 h-3" />
+              Lv. {level}
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
+        <div className="text-xs text-muted-foreground text-center">
+          Age {character.age.toFixed(1)} (Progress to Lv. {level + 1}: {Math.floor((character.age % 5) / 5 * 100)}%)
+        </div>
+        
         <div className="p-3 bg-muted/50 rounded-md">
           <div className="flex items-center gap-2 mb-1">
             <Heart className="w-4 h-4 text-green-500" />

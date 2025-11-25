@@ -53,18 +53,57 @@ export default function GamePage() {
   const handleNextTurn = async () => {
     if (!gameState) return;
 
+    const newAge = gameState.character.age + 1;
+    const previousLevel = Math.floor(gameState.character.age / 5);
+    const newLevel = Math.floor(newAge / 5);
+    
+    // Calculate stat bonuses from leveling (every 5 age = +1 level)
+    let levelUpBonus = {
+      power: 0,
+      control: 0,
+      influence: 0,
+      health: 0
+    };
+    
+    if (newLevel > previousLevel) {
+      // Level up! Gain +5 health and +1-2 to random stats
+      levelUpBonus.health = 5;
+      const statChoices = ['power', 'control', 'influence'];
+      for (let i = 0; i < 2; i++) {
+        const stat = statChoices[Math.floor(Math.random() * statChoices.length)] as keyof typeof levelUpBonus;
+        levelUpBonus[stat] = (levelUpBonus[stat] || 0) + 1;
+      }
+    }
+
+    const updatedCharacter = {
+      ...gameState.character,
+      age: newAge,
+      // Passive health regeneration: restore 5 health per turn (max 100)
+      health: Math.min(100, gameState.character.health + 5 + levelUpBonus.health),
+      // Apply level-up bonuses
+      power: Math.min(100, gameState.character.power + levelUpBonus.power),
+      control: Math.min(100, gameState.character.control + levelUpBonus.control),
+      influence: Math.min(100, gameState.character.influence + levelUpBonus.influence)
+    };
+
     const updatedState: GameState = {
       ...gameState,
       turn: gameState.turn + 1,
-      character: {
-        ...gameState.character,
-        age: Math.floor(gameState.character.age + 0.5) // Age progression
-      }
+      character: updatedCharacter
     };
     
     setGameState(updatedState);
     await saveGame(updatedState, gameState.slot);
-    toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn}` });
+    
+    // Show level-up message if applicable
+    if (newLevel > previousLevel) {
+      toast({ 
+        title: "Level Up!", 
+        description: `You've reached level ${newLevel}! +${levelUpBonus.health} Health, +${levelUpBonus.power} Power, +${levelUpBonus.control} Control, +${levelUpBonus.influence} Influence` 
+      });
+    } else {
+      toast({ title: "Turn Advanced", description: `Now on turn ${updatedState.turn} (Age: ${newAge}, Level: ${newLevel})` });
+    }
   };
 
   const handleUpdateCharacter = async (updates: any) => {

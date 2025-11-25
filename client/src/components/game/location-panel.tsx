@@ -20,13 +20,17 @@ export default function LocationPanel({ gameState, onUpdateCharacter }: Location
     const newDistrict = districts.find(d => d.id === districtId);
     if (!newDistrict) return;
 
+    // Check power requirement
+    const requiredPower = newDistrict.difficultyRating * 3 + 5; // Scale by difficulty
+    if (gameState.character.power < requiredPower) {
+      return; // Toast handled below
+    }
+
     // Update character location
     onUpdateCharacter({
       ...gameState.character,
       currentLocation: districtId
     });
-
-    // Could add travel cost/consequences here
   };
 
   const getDifficultyColor = (rating: number) => {
@@ -74,6 +78,11 @@ export default function LocationPanel({ gameState, onUpdateCharacter }: Location
                   <p className="text-xs font-semibold">
                     Ruled by: <span className="text-primary capitalize">{district.currentRuler}</span>
                   </p>
+                  <div className="text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Required Power: {district.difficultyRating * 3 + 5} (yours: {gameState.character.power})
+                    </Badge>
+                  </div>
                   <div className="flex flex-wrap gap-1">
                     {district.specialEvents.map((event) => (
                       <Badge key={event} variant="secondary" className="text-xs">
@@ -85,10 +94,16 @@ export default function LocationPanel({ gameState, onUpdateCharacter }: Location
                     <Button
                       size="sm"
                       className="w-full"
-                      onClick={() => handleTravel(district.id)}
+                      disabled={gameState.character.power < district.difficultyRating * 3 + 5}
+                      onClick={() => {
+                        if (gameState.character.power < district.difficultyRating * 3 + 5) return;
+                        handleTravel(district.id);
+                      }}
                       data-testid={`button-travel-${district.id}`}
                     >
-                      Travel Here
+                      {gameState.character.power < district.difficultyRating * 3 + 5 
+                        ? "Power Too Low" 
+                        : "Travel Here"}
                     </Button>
                   )}
                 </div>

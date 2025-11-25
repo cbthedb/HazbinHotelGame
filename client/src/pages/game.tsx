@@ -12,6 +12,7 @@ import MapPanel from "@/components/game/map-panel";
 import RankingPanel from "@/components/game/ranking-panel";
 import LocationPanel from "@/components/game/location-panel";
 import ActivitiesPanel from "@/components/game/activities-panel";
+import BattlePanel from "@/components/game/battle-panel";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -25,6 +26,7 @@ export default function GamePage() {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentEvent, setCurrentEvent] = useState<any | null>(null);
+  const [inBattle, setInBattle] = useState<{ opponent: string; district: string } | null>(null);
 
   // Load game on mount and initialize audio
   useEffect(() => {
@@ -105,7 +107,46 @@ export default function GamePage() {
     );
   }
 
+  const handleBattleEnd = async (won: boolean, rewards: any) => {
+    if (gameState) {
+      const updatedCharacter = {
+        ...gameState.character,
+        power: Math.max(0, Math.min(100, (gameState.character.power || 0) + (rewards.power || 0))),
+        influence: Math.max(0, (gameState.character.influence || 0) + (rewards.influence || 0)),
+        wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
+        health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0)))
+      };
+
+      const updatedState: GameState = {
+        ...gameState,
+        character: updatedCharacter,
+        turn: gameState.turn + 1
+      };
+
+      setGameState(updatedState);
+      await saveGame(updatedState);
+      setInBattle(null);
+      
+      toast({
+        title: won ? "Victory!" : "Defeat!",
+        description: won ? "You won the battle!" : "You were defeated.",
+        variant: won ? "default" : "destructive"
+      });
+    }
+  };
+
   const { character } = gameState;
+
+  if (inBattle) {
+    return (
+      <BattlePanel
+        gameState={gameState}
+        opponent={inBattle.opponent}
+        currentDistrict={inBattle.district}
+        onBattleEnd={handleBattleEnd}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-card">
@@ -184,6 +225,7 @@ export default function GamePage() {
             gameState={gameState}
             onUpdateCharacter={handleUpdateCharacter}
             onEventGenerated={setCurrentEvent}
+            onBattleStart={(opponent, district) => setInBattle({ opponent, district })}
           />
         </div>
       </div>

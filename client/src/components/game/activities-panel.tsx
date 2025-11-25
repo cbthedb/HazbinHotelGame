@@ -12,6 +12,7 @@ interface ActivitiesPanelProps {
   gameState: GameState;
   onUpdateCharacter: (updates: any) => void;
   onEventGenerated: (event: any) => void;
+  onBattleStart?: (opponent: string, district: string) => void;
 }
 
 interface Activity {
@@ -25,12 +26,21 @@ interface Activity {
   riskLevel: "low" | "medium" | "high" | "extreme";
 }
 
-export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventGenerated }: ActivitiesPanelProps) {
+export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventGenerated, onBattleStart }: ActivitiesPanelProps) {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
 
   const currentDistrict = districts.find(d => d.id === gameState.character.currentLocation);
   const districtRuler = currentDistrict?.currentRuler || "unknown";
+  
+  const handleBattleActivity = (activityId: string) => {
+    if (!currentDistrict) return;
+    if (activityId === "challenge-overlord") {
+      onBattleStart?.(districtRuler, currentDistrict.id);
+    } else if (activityId === "duel-rival") {
+      onBattleStart?.("rival-demon", currentDistrict.id);
+    }
+  };
 
   const activities: Activity[] = [
     {
@@ -114,6 +124,12 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
         description: `You need higher stats to attempt this. Check requirements.`,
         variant: "destructive"
       });
+      return;
+    }
+
+    // Battle activities trigger battle system
+    if (activity.id === "challenge-overlord" || activity.id === "duel-rival") {
+      handleBattleActivity(activity.id);
       return;
     }
 

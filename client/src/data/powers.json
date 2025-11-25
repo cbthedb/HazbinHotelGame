@@ -48,6 +48,36 @@
     "isPassive": false
   },
   {
+    "id": "inferno-gate",
+    "name": "Inferno Gate",
+    "type": "hellfire",
+    "basePower": 22,
+    "controlReq": 14,
+    "corruptionCost": 5,
+    "cooldown": 8,
+    "effect": "aoe:massive-burn",
+    "description": "Open a gate to the hellfire realm and unleash a massive explosion.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 40
+    },
+    "isPassive": false
+  },
+  {
+    "id": "eternal-flame",
+    "name": "Eternal Flame",
+    "type": "hellfire",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:burn-aura",
+    "description": "Passive: Enemies near you take burning damage each turn.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
     "id": "static-command",
     "name": "Static Command",
     "type": "voice-broadcast",
@@ -92,6 +122,22 @@
     "rarity": "uncommon",
     "unlockConditions": {},
     "isPassive": true
+  },
+  {
+    "id": "broadcast-nova",
+    "name": "Broadcast Nova",
+    "type": "voice-broadcast",
+    "basePower": 28,
+    "controlReq": 18,
+    "corruptionCost": 6,
+    "cooldown": 10,
+    "effect": "mass-hypnosis:all",
+    "description": "Broadcast across all frequencies, stunning and confusing everyone.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minInfluence": 50
+    },
+    "isPassive": false
   },
   {
     "id": "redstatic-domain",
@@ -141,6 +187,36 @@
     "isPassive": false
   },
   {
+    "id": "void-tear",
+    "name": "Void Tear",
+    "type": "shadow-eldritch",
+    "basePower": 20,
+    "controlReq": 12,
+    "corruptionCost": 7,
+    "cooldown": 7,
+    "effect": "portal:void-damage",
+    "description": "Rip open a tear to the void, pulling enemies into oblivion.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 35
+    },
+    "isPassive": false
+  },
+  {
+    "id": "shadow-clone",
+    "name": "Shadow Clone",
+    "type": "shadow-eldritch",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:duplicate-self",
+    "description": "Passive: Summon a shadow clone that mimics your attacks.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
     "id": "promissory-pact",
     "name": "Promissory Pact",
     "type": "contract",
@@ -187,6 +263,22 @@
     "isPassive": true
   },
   {
+    "id": "soul-binding",
+    "name": "Soul Binding",
+    "type": "contract",
+    "basePower": 18,
+    "controlReq": 16,
+    "corruptionCost": 9,
+    "cooldown": 9,
+    "effect": "contract:permanent-service",
+    "description": "Bind an NPC's soul to your service permanently through contract.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minInfluence": 40
+    },
+    "isPassive": false
+  },
+  {
     "id": "gilded-whisper",
     "name": "Gilded Whisper",
     "type": "seduction",
@@ -229,6 +321,22 @@
     "rarity": "uncommon",
     "unlockConditions": {},
     "isPassive": true
+  },
+  {
+    "id": "love-struck",
+    "name": "Love Struck",
+    "type": "seduction",
+    "basePower": 12,
+    "controlReq": 9,
+    "corruptionCost": 0,
+    "cooldown": 4,
+    "effect": "romance:instant-affection",
+    "description": "Make an NPC immediately fall for you. Requires high Influence.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minInfluence": 45
+    },
+    "isPassive": false
   },
   {
     "id": "glam-projection",
@@ -277,6 +385,22 @@
     "isPassive": false
   },
   {
+    "id": "cyber-pulse",
+    "name": "Cyber Pulse",
+    "type": "tech-cyber",
+    "basePower": 24,
+    "controlReq": 14,
+    "corruptionCost": 3,
+    "cooldown": 8,
+    "effect": "aoe:emp-blast",
+    "description": "Release an EMP that disables all tech in the area.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minControl": 30
+    },
+    "isPassive": false
+  },
+  {
     "id": "lure-mist",
     "name": "Lure Mist",
     "type": "pheromone",
@@ -321,6 +445,22 @@
     "isPassive": false
   },
   {
+    "id": "aphrodisiac-cloud",
+    "name": "Aphrodisiac Cloud",
+    "type": "pheromone",
+    "basePower": 14,
+    "controlReq": 10,
+    "corruptionCost": 2,
+    "cooldown": 6,
+    "effect": "charm:mass-seduction",
+    "description": "Release seductive pheromones affecting multiple targets.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minInfluence": 35
+    },
+    "isPassive": false
+  },
+  {
     "id": "bone-mender",
     "name": "Bone Mender",
     "type": "regeneration",
@@ -351,6 +491,22 @@
     "isPassive": true
   },
   {
+    "id": "flesh-recovery",
+    "name": "Flesh Recovery",
+    "type": "regeneration",
+    "basePower": 16,
+    "controlReq": 8,
+    "corruptionCost": 3,
+    "cooldown": 6,
+    "effect": "instant-heal:massive",
+    "description": "Instantly recover significant health in critical moments.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minPower": 25
+    },
+    "isPassive": false
+  },
+  {
     "id": "slipstep",
     "name": "Slipstep",
     "type": "teleportation",
@@ -377,6 +533,22 @@
     "rarity": "rare",
     "unlockConditions": {
       "minControl": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "warp-strike",
+    "name": "Warp Strike",
+    "type": "teleportation",
+    "basePower": 18,
+    "controlReq": 11,
+    "corruptionCost": 2,
+    "cooldown": 5,
+    "effect": "teleport-attack:instant-damage",
+    "description": "Teleport to enemy and strike in one motion.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 30
     },
     "isPassive": false
   },
@@ -411,6 +583,36 @@
     "isPassive": false
   },
   {
+    "id": "bone-fortress",
+    "name": "Bone Fortress",
+    "type": "necromancy",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:defense-boost",
+    "description": "Passive: Bone armor grants +20% Defense against physical damage.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "death-mark",
+    "name": "Death Mark",
+    "type": "necromancy",
+    "basePower": 20,
+    "controlReq": 13,
+    "corruptionCost": 6,
+    "cooldown": 7,
+    "effect": "curse:instant-death",
+    "description": "Mark an enemy for death. Takes effect after 3 turns.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minCorruption": 40
+    },
+    "isPassive": false
+  },
+  {
     "id": "mask-of-many",
     "name": "Mask of Many",
     "type": "glamour",
@@ -438,6 +640,36 @@
     "description": "Turn your limbs to stone temporarily for massive defense boost.",
     "rarity": "uncommon",
     "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "prismatic-form",
+    "name": "Prismatic Form",
+    "type": "glamour",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:beauty-aura",
+    "description": "Passive: Your beauty dazzles enemies, reducing their accuracy.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "true-form",
+    "name": "True Form",
+    "type": "glamour",
+    "basePower": 26,
+    "controlReq": 16,
+    "corruptionCost": 8,
+    "cooldown": 10,
+    "effect": "transformation:ultimate-power",
+    "description": "Transform into your true demonic form for massive power.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minPower": 50
+    },
     "isPassive": false
   },
   {
@@ -469,6 +701,22 @@
     "isPassive": true
   },
   {
+    "id": "symphony-of-ruin",
+    "name": "Symphony of Ruin",
+    "type": "musical",
+    "basePower": 24,
+    "controlReq": 13,
+    "corruptionCost": 4,
+    "cooldown": 8,
+    "effect": "aoe:sonic-damage",
+    "description": "Play a catastrophic symphony that damages all enemies.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minInfluence": 40
+    },
+    "isPassive": false
+  },
+  {
     "id": "titan-step",
     "name": "Titan Step",
     "type": "physical",
@@ -496,6 +744,36 @@
     "description": "Brutal melee attack that deals heavy single-target damage.",
     "rarity": "common",
     "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "berserker-rage",
+    "name": "Berserker Rage",
+    "type": "physical",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:damage-multiplier",
+    "description": "Passive: Deal +25% more damage when at low health.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "unstoppable-force",
+    "name": "Unstoppable Force",
+    "type": "physical",
+    "basePower": 30,
+    "controlReq": 10,
+    "corruptionCost": 3,
+    "cooldown": 9,
+    "effect": "charge:break-barriers",
+    "description": "Charge forward with overwhelming force, breaking all barriers.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 45
+    },
     "isPassive": false
   },
   {
@@ -531,6 +809,36 @@
     "isPassive": false
   },
   {
+    "id": "dream-weaver",
+    "name": "Dream Weaver",
+    "type": "illusion",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:confusion-aura",
+    "description": "Passive: Enemies have reduced accuracy when fighting you.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "reality-fracture",
+    "name": "Reality Fracture",
+    "type": "illusion",
+    "basePower": 22,
+    "controlReq": 15,
+    "corruptionCost": 5,
+    "cooldown": 8,
+    "effect": "warp:mass-confusion",
+    "description": "Shatter reality around multiple targets, causing mass confusion.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minControl": 35
+    },
+    "isPassive": false
+  },
+  {
     "id": "purity-flame",
     "name": "Purity Flame",
     "type": "divine",
@@ -559,6 +867,36 @@
     "rarity": "epic",
     "unlockConditions": {
       "origin": ["accidental"]
+    },
+    "isPassive": false
+  },
+  {
+    "id": "heavens-blessing",
+    "name": "Heaven's Blessing",
+    "type": "divine",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:corruption-reduction",
+    "description": "Passive: Reduce corruption gain by 50% from all sources.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "divine-retribution",
+    "name": "Divine Retribution",
+    "type": "divine",
+    "basePower": 28,
+    "controlReq": 18,
+    "corruptionCost": -8,
+    "cooldown": 10,
+    "effect": "smite:ultimate-purge",
+    "description": "Strike with divine judgment, dealing massive damage to corrupted foes.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minEmpathy": 60
     },
     "isPassive": false
   },
@@ -706,6 +1044,412 @@
       "minPower": 80,
       "minInfluence": 80
     },
+    "isPassive": false
+  },
+  {
+    "id": "infernal-judgment",
+    "name": "Infernal Judgment",
+    "type": "hellfire",
+    "basePower": 22,
+    "controlReq": 10,
+    "corruptionCost": 4,
+    "cooldown": 6,
+    "effect": "single-target:execute",
+    "description": "Call down hellfire judgment on a marked target.",
+    "rarity": "epic",
+    "unlockConditions": { "minPower": 35 },
+    "isPassive": false
+  },
+  {
+    "id": "shadow-clone",
+    "name": "Shadow Clone",
+    "type": "shadow-eldritch",
+    "basePower": 11,
+    "controlReq": 9,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "summon:duplicate",
+    "description": "Create a shadow clone to fight alongside you.",
+    "rarity": "rare",
+    "unlockConditions": { "minControl": 16 },
+    "isPassive": false
+  },
+  {
+    "id": "midnight-veil",
+    "name": "Midnight Veil",
+    "type": "shadow-eldritch",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:stealth-boost",
+    "description": "Passive: Gain +3 stealth and +2 control during night events.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "blood-pact",
+    "name": "Blood Pact",
+    "type": "contract",
+    "basePower": 18,
+    "controlReq": 11,
+    "corruptionCost": 6,
+    "cooldown": 7,
+    "effect": "bind:permanent-allegiance",
+    "description": "Bind an NPC to you through blood contract. Permanent allegiance.",
+    "rarity": "epic",
+    "unlockConditions": { "origin": ["deal-immigrant"] },
+    "isPassive": false
+  },
+  {
+    "id": "contract-nullify",
+    "name": "Contract Nullify",
+    "type": "contract",
+    "basePower": 12,
+    "controlReq": 9,
+    "corruptionCost": 4,
+    "cooldown": 5,
+    "effect": "dispel:contracts",
+    "description": "Nullify all active contracts in an area.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "intoxicate",
+    "name": "Intoxicate",
+    "type": "seduction",
+    "basePower": 9,
+    "controlReq": 6,
+    "corruptionCost": 2,
+    "cooldown": 3,
+    "effect": "debuff:confusion-charm",
+    "description": "Intoxicate and seduce a target into weakness.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "deadly-attraction",
+    "name": "Deadly Attraction",
+    "type": "seduction",
+    "basePower": 16,
+    "controlReq": 10,
+    "corruptionCost": 3,
+    "cooldown": 6,
+    "effect": "crowd-control:charm-disable",
+    "description": "Deadly beauty that paralyzes targets with desire.",
+    "rarity": "rare",
+    "unlockConditions": { "minInfluence": 25 },
+    "isPassive": false
+  },
+  {
+    "id": "cyber-virus",
+    "name": "Cyber Virus",
+    "type": "tech-cyber",
+    "basePower": 13,
+    "controlReq": 10,
+    "corruptionCost": 2,
+    "cooldown": 5,
+    "effect": "spread:network-corruption",
+    "description": "Spread a virus through enemy networks, growing stronger each turn.",
+    "rarity": "rare",
+    "unlockConditions": { "minControl": 18 },
+    "isPassive": false
+  },
+  {
+    "id": "emp-pulse",
+    "name": "EMP Pulse",
+    "type": "tech-cyber",
+    "basePower": 15,
+    "controlReq": 8,
+    "corruptionCost": 2,
+    "cooldown": 7,
+    "effect": "aoe:disable-tech",
+    "description": "Emit electromagnetic pulse disabling all technology in area.",
+    "rarity": "rare",
+    "unlockConditions": { "minPower": 28 },
+    "isPassive": false
+  },
+  {
+    "id": "pheromone-overdrive",
+    "name": "Pheromone Overdrive",
+    "type": "pheromone",
+    "basePower": 12,
+    "controlReq": 9,
+    "corruptionCost": 2,
+    "cooldown": 6,
+    "effect": "mass-attract:uncontrollable",
+    "description": "Release overwhelming pheromones that draw all nearby demons.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "regenerate",
+    "name": "Regenerate",
+    "type": "regeneration",
+    "basePower": 8,
+    "controlReq": 6,
+    "corruptionCost": 1,
+    "cooldown": 4,
+    "effect": "heal:self-combat",
+    "description": "Rapidly regenerate health during combat.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "mass-teleport",
+    "name": "Mass Teleport",
+    "type": "teleportation",
+    "basePower": 14,
+    "controlReq": 14,
+    "corruptionCost": 3,
+    "cooldown": 8,
+    "effect": "warp:group-travel",
+    "description": "Teleport allies or enemies across great distances.",
+    "rarity": "epic",
+    "unlockConditions": { "minControl": 20 },
+    "isPassive": false
+  },
+  {
+    "id": "death-curse",
+    "name": "Death Curse",
+    "type": "necromancy",
+    "basePower": 20,
+    "controlReq": 12,
+    "corruptionCost": 6,
+    "cooldown": 10,
+    "effect": "single-target:delayed-death",
+    "description": "Curse target to gradually weaken over time.",
+    "rarity": "epic",
+    "unlockConditions": { "minPower": 40 },
+    "isPassive": false
+  },
+  {
+    "id": "beautiful-nightmare",
+    "name": "Beautiful Nightmare",
+    "type": "glamour",
+    "basePower": 13,
+    "controlReq": 11,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "vision:terror-beauty",
+    "description": "Become so beautiful and terrible that enemies cannot fight.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "symphony-of-chaos",
+    "name": "Symphony of Chaos",
+    "type": "musical",
+    "basePower": 17,
+    "controlReq": 9,
+    "corruptionCost": 2,
+    "cooldown": 7,
+    "effect": "aoe:mass-confusion",
+    "description": "Play a chaotic symphony that confuses all enemies in area.",
+    "rarity": "rare",
+    "unlockConditions": { "minInfluence": 22 },
+    "isPassive": false
+  },
+  {
+    "id": "unarmed-master",
+    "name": "Unarmed Master",
+    "type": "physical",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:melee-boost",
+    "description": "Passive: Gain +3 physical damage and +2 defense.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "whirlwind-strike",
+    "name": "Whirlwind Strike",
+    "type": "physical",
+    "basePower": 18,
+    "controlReq": 7,
+    "corruptionCost": 2,
+    "cooldown": 5,
+    "effect": "aoe:spin-attack",
+    "description": "Spin rapidly striking all nearby enemies.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "reality-fracture",
+    "name": "Reality Fracture",
+    "type": "illusion",
+    "basePower": 19,
+    "controlReq": 13,
+    "corruptionCost": 4,
+    "cooldown": 8,
+    "effect": "trap:spatial-warp",
+    "description": "Fracture reality itself, creating deadly spatial warps.",
+    "rarity": "epic",
+    "unlockConditions": { "minControl": 22 },
+    "isPassive": false
+  },
+  {
+    "id": "divine-shield",
+    "name": "Divine Shield",
+    "type": "divine",
+    "basePower": 0,
+    "controlReq": 10,
+    "corruptionCost": -2,
+    "cooldown": 0,
+    "effect": "passive:protection-aura",
+    "description": "Passive: Gain 20% damage reduction from all sources.",
+    "rarity": "epic",
+    "unlockConditions": { "minEmpathy": 40 },
+    "isPassive": true
+  },
+  {
+    "id": "heavenly-judgment",
+    "name": "Heavenly Judgment",
+    "type": "divine",
+    "basePower": 26,
+    "controlReq": 15,
+    "corruptionCost": -3,
+    "cooldown": 9,
+    "effect": "single-target:holy-strike",
+    "description": "Strike with divine fury, purifying corruption.",
+    "rarity": "epic",
+    "unlockConditions": { "minPower": 50, "minEmpathy": 60 },
+    "isPassive": false
+  },
+  {
+    "id": "mind-break",
+    "name": "Mind Break",
+    "type": "voice-broadcast",
+    "basePower": 16,
+    "controlReq": 12,
+    "corruptionCost": 4,
+    "cooldown": 8,
+    "effect": "crowd-control:psychic-damage",
+    "description": "Assault the minds of all enemies with harsh broadcasts.",
+    "rarity": "epic",
+    "unlockConditions": { "minInfluence": 35 },
+    "isPassive": false
+  },
+  {
+    "id": "shadow-merge",
+    "name": "Shadow Merge",
+    "type": "shadow-eldritch",
+    "basePower": 0,
+    "controlReq": 8,
+    "corruptionCost": 3,
+    "cooldown": 0,
+    "effect": "passive:darkness-power",
+    "description": "Passive: Gain +5 power during night events and shadows.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "soul-feast",
+    "name": "Soul Feast",
+    "type": "necromancy",
+    "basePower": 0,
+    "controlReq": 8,
+    "corruptionCost": 4,
+    "cooldown": 0,
+    "effect": "passive:healing-kills",
+    "description": "Passive: Heal for 10% of damage dealt as final blows.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "charm-master",
+    "name": "Charm Master",
+    "type": "seduction",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:affinity-boost",
+    "description": "Passive: All affinity gains are +50% higher.",
+    "rarity": "epic",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "fortress-form",
+    "name": "Fortress Form",
+    "type": "glamour",
+    "basePower": 15,
+    "controlReq": 8,
+    "corruptionCost": 2,
+    "cooldown": 6,
+    "effect": "form:defense",
+    "description": "Transform into an impenetrable fortress, gaining massive defense.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "temporal-shift",
+    "name": "Temporal Shift",
+    "type": "teleportation",
+    "basePower": 11,
+    "controlReq": 13,
+    "corruptionCost": 4,
+    "cooldown": 10,
+    "effect": "rewind:time-loop",
+    "description": "Shift through time briefly, avoiding damage or redoing an action.",
+    "rarity": "epic",
+    "unlockConditions": { "minControl": 25 },
+    "isPassive": false
+  },
+  {
+    "id": "plague-carrier",
+    "name": "Plague Carrier",
+    "type": "necromancy",
+    "basePower": 14,
+    "controlReq": 10,
+    "corruptionCost": 5,
+    "cooldown": 7,
+    "effect": "spread:contagion",
+    "description": "Spread disease that weakens all enemies gradually.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "mind-palace",
+    "name": "Mind Palace",
+    "type": "illusion",
+    "basePower": 0,
+    "controlReq": 11,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:mental-fortress",
+    "description": "Passive: Gain +4 defense against illusion and mental attacks.",
+    "rarity": "rare",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "inferno-domain",
+    "name": "Inferno Domain",
+    "type": "hellfire",
+    "basePower": 24,
+    "controlReq": 12,
+    "corruptionCost": 5,
+    "cooldown": 8,
+    "effect": "zone:continuous-burn",
+    "description": "Create a zone of continuous hellfire that damages all inside.",
+    "rarity": "epic",
+    "unlockConditions": { "minPower": 45 },
     "isPassive": false
   }
 ]

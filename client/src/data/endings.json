@@ -1,0 +1,152 @@
+[
+  {
+    "id": "redemption",
+    "name": "Redemption Achieved",
+    "description": "Against all odds, you've proven that even the damned can change. Heaven's gates open for you.",
+    "tier": "good",
+    "requirements": {
+      "minStats": { "empathy": 70, "influence": 50 },
+      "maxStats": { "corruption": 20 },
+      "requiredFactionRep": { "hazbin-hotel": 80 }
+    },
+    "narrativeText": "The golden light of redemption shines upon you. Charlie's dream wasn't just a dream—it was real, and you were the proof. As you ascend, Hell itself seems to brighten, if only for a moment. You've shown that change is possible, even in the darkest pit of existence.",
+    "unlocks": {
+      "newOrigin": "redeemed-soul",
+      "newPowers": ["purity-flame", "sanctify"],
+      "newTraits": ["angelic-grace"]
+    }
+  },
+  {
+    "id": "supreme-overlord",
+    "name": "Hell's Apex",
+    "description": "You've conquered all. Every territory bows to you. You are the strongest demon in Hell.",
+    "tier": "neutral",
+    "requirements": {
+      "minStats": { "power": 90, "influence": 80, "corruption": 60 },
+      "requiredTerritories": ["hotel-district", "cannibal-colony", "entertainment-district", "vox-tower-zone", "industrial-hellscape", "overlord-territories"]
+    },
+    "narrativeText": "The Pentagram trembles at your name. Every overlord has fallen or bent the knee. You stand atop the ruins of their ambitions, undisputed ruler of Hell's Pride Ring. Even Lucifer watches with wary interest. This is power absolute.",
+    "unlocks": {
+      "newOrigin": "supreme-demon",
+      "newPowers": ["absolute-dominion", "hell-binding"],
+      "newTraits": ["unchallengeable"]
+    }
+  },
+  {
+    "id": "syndicate-emperor",
+    "name": "Syndicate Emperor",
+    "description": "You've united or conquered the criminal underworld. Hell's economy bends to your will.",
+    "tier": "neutral",
+    "requirements": {
+      "minStats": { "influence": 85, "wealth": 5000 },
+      "requiredFactionRep": { "vees": 70 },
+      "requiredTerritories": ["entertainment-district", "vox-tower-zone"]
+    },
+    "narrativeText": "From backroom deals to broadcast takeovers, you've built an empire of vice and profit. The Vees themselves answer to you now. Every soul coin in Hell passes through your fingers. You don't rule through fear—you rule through leverage.",
+    "unlocks": {
+      "newPowers": ["economic-stranglehold", "perfect-deal"],
+      "newTraits": ["syndicate-mastermind"]
+    }
+  },
+  {
+    "id": "vox-ascension",
+    "name": "Media Dominion",
+    "description": "You control every screen, every broadcast, every whisper. Reality is what you say it is.",
+    "tier": "neutral",
+    "requirements": {
+      "minStats": { "influence": 80, "control": 70 },
+      "requiredFactionRep": { "vees": 80 },
+      "requiredTerritories": ["vox-tower-zone"]
+    },
+    "narrativeText": "Your face is on every screen. Your voice in every ear. Truth, lies—it doesn't matter anymore. You've become the narrative itself, shaping Hell's reality through pure information control. Vox himself would be proud... or terrified.",
+    "unlocks": {
+      "newPowers": ["reality-broadcast", "mass-persuasion"],
+      "newTraits": ["media-god"]
+    }
+  },
+  {
+    "id": "royal-usurper",
+    "name": "The New Crown",
+    "description": "You've challenged and overthrown Hell's royalty. The throne of the Morning Star is yours.",
+    "tier": "neutral",
+    "requirements": {
+      "minStats": { "power": 95, "influence": 90 },
+      "requiredTerritories": ["royal-quarter"],
+      "requiredFlags": ["defeated-lucifer"]
+    },
+    "narrativeText": "The impossible has happened. You've dethroned the King of Hell himself. The crown of flames rests upon your brow, and all of Hell recognizes a new sovereign. Whether through cunning, power, or sheer will, you've rewritten the hierarchy of damnation itself.",
+    "unlocks": {
+      "newOrigin": "usurper-king",
+      "newPowers": ["royal-authority", "hell-crown"],
+      "newTraits": ["kingslayer", "crowned-in-fire"]
+    }
+  },
+  {
+    "id": "obliteration",
+    "name": "Apocalypse Unchained",
+    "description": "Your corruption consumed you. Hell itself collapses into chaos as reality fractures.",
+    "tier": "bad",
+    "requirements": {
+      "minStats": { "corruption": 95 }
+    },
+    "narrativeText": "The corruption was too much. You became something beyond demon, beyond control. As your power spirals out of control, Hell's very fabric tears. Districts crumble, souls scatter, and the Pentagram burns with eldritch fire. In trying to become everything, you've destroyed it all—including yourself.",
+    "unlocks": {}
+  },
+  {
+    "id": "forgotten",
+    "name": "Faded to Nothing",
+    "description": "You never made your mark. Hell moved on without you.",
+    "tier": "bad",
+    "requirements": {
+      "maxStats": { "power": 15, "influence": 10 }
+    },
+    "narrativeText": "In the end, you were just another soul in Hell's endless sea. No territory claimed, no power gained, no legacy left behind. You fade into obscurity, forgotten even by those who once knew your name. Hell doesn't remember the weak.",
+    "unlocks": {}
+  },
+  {
+    "id": "eternal-party",
+    "name": "Forever Hedonist",
+    "description": "Why chase power when pleasure awaits? You've made Hell your eternal playground.",
+    "tier": "neutral",
+    "requirements": {
+      "minStats": { "wealth": 3000 },
+      "requiredFactionRep": { "vees": 60 },
+      "requiredTraits": ["hedonist"]
+    },
+    "narrativeText": "Power? Territory? How boring. You've spent eternity chasing every pleasure Hell has to offer. Your parties are legendary, your wealth flows endlessly, and you've never been happier. Some call it shallow—you call it enlightened. After all, if you're stuck in Hell forever, might as well enjoy it.",
+    "unlocks": {
+      "newTraits": ["eternal-reveler"],
+      "newPowers": ["party-aura"]
+    }
+  },
+  {
+    "id": "alastors-rival",
+    "name": "The Radio Demon's Equal",
+    "description": "You've matched Alastor himself in power and terror. A new legend is born.",
+    "tier": "good",
+    "requirements": {
+      "minStats": { "power": 85, "influence": 75 },
+      "requiredFlags": ["challenged-alastor", "earned-alastor-respect"]
+    },
+    "narrativeText": "The Radio Demon acknowledges you as an equal—no small feat. Your power rivals his, your influence matches his reach. Hell now has two legends to fear. Whether you'll become allies or eternal rivals remains to be seen, but one thing is certain: your name will echo through Hell forever.",
+    "unlocks": {
+      "newPowers": ["reality-domain", "broadcast-terror"],
+      "newTraits": ["legendary-status"]
+    }
+  },
+  {
+    "id": "charlies-hope",
+    "name": "The Second Believer",
+    "description": "You didn't redeem yourself, but you kept Charlie's hope alive for others.",
+    "tier": "good",
+    "requirements": {
+      "minStats": { "empathy": 60, "influence": 50 },
+      "requiredFactionRep": { "hazbin-hotel": 90 }
+    },
+    "narrativeText": "You may not have reached Heaven, but you helped others believe they could. Charlie's dream lives on stronger than ever, and you're its guardian. The Hotel thrives, souls find hope, and redemption becomes more than a fantasy. Your legacy isn't escape—it's making Hell a little less hellish.",
+    "unlocks": {
+      "newPowers": ["hope-beacon", "inspire-redemption"],
+      "newTraits": ["charlies-champion"]
+    }
+  }
+]

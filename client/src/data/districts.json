@@ -1,0 +1,93 @@
+[
+  {
+    "id": "hotel-district",
+    "name": "Hazbin Hotel District",
+    "description": "Charlie's domain. A beacon of hope in Hell, where redemption is more than a dream. Peaceful streets, bright colors, and the sound of music.",
+    "currentRuler": "charlie",
+    "difficultyRating": 3,
+    "tributeValue": 150,
+    "specialEvents": ["hotel-fire", "redemption-seminar", "charlie-duet", "vaggie-training"],
+    "aesthetic": {
+      "colorScheme": ["#FFD700", "#FF69B4", "#87CEEB"],
+      "musicTrack": "hotel-jazz"
+    }
+  },
+  {
+    "id": "cannibal-colony",
+    "name": "Cannibal Colony",
+    "description": "Rosie's sophisticated society of flesh-eaters. Victorian elegance masks primal hunger. Politeness is paramount, but so is the menu.",
+    "currentRuler": "rosie",
+    "difficultyRating": 6,
+    "tributeValue": 300,
+    "specialEvents": ["tea-with-rosie", "cannibal-cookoff", "territorial-feast", "flesh-market"],
+    "aesthetic": {
+      "colorScheme": ["#8B0000", "#2F1B1B", "#FFE4E1"],
+      "musicTrack": "victorian-waltz"
+    }
+  },
+  {
+    "id": "entertainment-district",
+    "name": "Entertainment District",
+    "description": "Valentino's pleasure palace. Neon lights, dark alleys, and darker deals. Where vice is virtue and everything has a price.",
+    "currentRuler": "valentino",
+    "difficultyRating": 7,
+    "tributeValue": 400,
+    "specialEvents": ["club-performance", "valentino-contract", "angel-encounter", "turf-war-vees"],
+    "aesthetic": {
+      "colorScheme": ["#FF1493", "#800080", "#FFD700"],
+      "musicTrack": "club-beats"
+    }
+  },
+  {
+    "id": "vox-tower-zone",
+    "name": "Vox Tower Zone",
+    "description": "The media empire's heart. Screens everywhere broadcast Vox's influence. Technology and propaganda in perfect synthesis.",
+    "currentRuler": "vox",
+    "difficultyRating": 8,
+    "tributeValue": 450,
+    "specialEvents": ["broadcast-takeover", "vox-interview", "signal-war", "velvette-fashion"],
+    "aesthetic": {
+      "colorScheme": ["#00BFFF", "#1E1E1E", "#FF0000"],
+      "musicTrack": "electronic-pulse"
+    }
+  },
+  {
+    "id": "industrial-hellscape",
+    "name": "Industrial Hellscape",
+    "description": "Carmilla Carmine's weapons forge. Smoke, steel, and suffering. Where angelic steel is forged and deals are hammered out.",
+    "currentRuler": "carmilla",
+    "difficultyRating": 7,
+    "tributeValue": 350,
+    "specialEvents": ["weapons-deal", "carmilla-meeting", "extermination-prep", "steel-theft"],
+    "aesthetic": {
+      "colorScheme": ["#708090", "#2F4F4F", "#FF4500"],
+      "musicTrack": "industrial-grind"
+    }
+  },
+  {
+    "id": "overlord-territories",
+    "name": "Overlord Territories",
+    "description": "Contested lands ruled by powerful overlords. Alastor's domain borders here. Danger, opportunity, and raw power converge.",
+    "currentRuler": "alastor",
+    "difficultyRating": 9,
+    "tributeValue": 500,
+    "specialEvents": ["overlord-meeting", "alastor-deal", "territory-challenge", "power-struggle"],
+    "aesthetic": {
+      "colorScheme": ["#8B0000", "#000000", "#FFD700"],
+      "musicTrack": "radio-static"
+    }
+  },
+  {
+    "id": "royal-quarter",
+    "name": "Royal Quarter",
+    "description": "Hell's aristocracy. Lucifer's palace looms. Only the powerful dare enter. Where bloodlines and power define worth.",
+    "currentRuler": "lucifer",
+    "difficultyRating": 10,
+    "tributeValue": 600,
+    "specialEvents": ["royal-ball", "lucifer-audience", "charlie-family-drama", "coup-attempt"],
+    "aesthetic": {
+      "colorScheme": ["#FFD700", "#8B0000", "#FFFFFF"],
+      "musicTrack": "royal-fanfare"
+    }
+  }
+]

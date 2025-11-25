@@ -1,0 +1,87 @@
+[
+  {
+    "id": "royal-born",
+    "name": "Royal-Born",
+    "description": "Born into Hell's aristocracy, you command respect and fear. High starting power and influence, but low empathy and susceptibility to corruption.",
+    "startingStats": {
+      "power": 25,
+      "control": 15,
+      "influence": 30,
+      "corruption": 15,
+      "empathy": 5,
+      "health": 100,
+      "wealth": 500
+    },
+    "traitPoints": 8,
+    "lockedTraits": ["royal-blood"],
+    "suggestedPowers": ["ember-lash", "titan-step", "promissory-pact", "tendril-reach"]
+  },
+  {
+    "id": "hellborn",
+    "name": "Hellborn Native",
+    "description": "Born in Hell but not royalty. Balanced stats with strong resilience to corruption. A solid foundation for any path.",
+    "startingStats": {
+      "power": 15,
+      "control": 15,
+      "influence": 15,
+      "corruption": 5,
+      "empathy": 15,
+      "health": 120,
+      "wealth": 200
+    },
+    "traitPoints": 10,
+    "lockedTraits": [],
+    "suggestedPowers": ["ember-lash", "bone-mender", "slipstep", "ballad-of-change"]
+  },
+  {
+    "id": "sinner-weak",
+    "name": "Weak Sinner",
+    "description": "A human soul damned to Hell. Low starting stats but highest growth potential and empathy. The redemption path starts here.",
+    "startingStats": {
+      "power": 8,
+      "control": 10,
+      "influence": 5,
+      "corruption": 10,
+      "empathy": 25,
+      "health": 80,
+      "wealth": 50
+    },
+    "traitPoints": 12,
+    "lockedTraits": [],
+    "suggestedPowers": ["gilded-whisper", "ballad-of-change", "mask-of-many", "slipstep"]
+  },
+  {
+    "id": "deal-immigrant",
+    "name": "Deal Immigrant",
+    "description": "You made a Faustian bargain to enter Hell. Start with contract magic and a mysterious clause that can be exploited or backfire.",
+    "startingStats": {
+      "power": 18,
+      "control": 12,
+      "influence": 12,
+      "corruption": 20,
+      "empathy": 10,
+      "health": 90,
+      "wealth": 150
+    },
+    "traitPoints": 9,
+    "lockedTraits": ["deal-bound"],
+    "suggestedPowers": ["promissory-pact", "clause-revoke", "gilded-whisper", "static-command"]
+  },
+  {
+    "id": "accidental",
+    "name": "Fallen Angel",
+    "description": "A rare angelic exile or accidental descent. Access to divine powers but hunted by both sides. Unlockable through special events.",
+    "startingStats": {
+      "power": 20,
+      "control": 20,
+      "influence": 8,
+      "corruption": 0,
+      "empathy": 30,
+      "health": 110,
+      "wealth": 100
+    },
+    "traitPoints": 11,
+    "lockedTraits": ["angelic-heritage"],
+    "suggestedPowers": ["purity-flame", "sanctify", "redstatic-domain", "ballad-of-change"]
+  }
+]

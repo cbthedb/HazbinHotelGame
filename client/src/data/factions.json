@@ -1,0 +1,42 @@
+[
+  {
+    "id": "hazbin-hotel",
+    "name": "Hazbin Hotel",
+    "description": "Charlie's redemption project. A sanctuary for those seeking second chances in Hell.",
+    "leaderNPC": "charlie",
+    "territoryIds": ["hotel-district"],
+    "baseReputation": 0
+  },
+  {
+    "id": "overlords",
+    "name": "Overlords Council",
+    "description": "The powerful elite who rule Hell's territories through strength and cunning.",
+    "leaderNPC": "alastor",
+    "territoryIds": ["overlord-territories"],
+    "baseReputation": 0
+  },
+  {
+    "id": "vees",
+    "name": "The Vees Syndicate",
+    "description": "Vox, Valentino, and Velvette's media and entertainment empire.",
+    "leaderNPC": "vox",
+    "territoryIds": ["vox-tower-zone", "entertainment-district"],
+    "baseReputation": 0
+  },
+  {
+    "id": "cannibal-colony",
+    "name": "Cannibal Colony",
+    "description": "Rosie's sophisticated society of refined flesh-eaters.",
+    "leaderNPC": "rosie",
+    "territoryIds": ["cannibal-colony"],
+    "baseReputation": 0
+  },
+  {
+    "id": "royal-house",
+    "name": "Royal House of Lucifer",
+    "description": "Hell's ancient aristocracy, ruled by the Morning Star himself.",
+    "leaderNPC": "lucifer",
+    "territoryIds": ["royal-quarter"],
+    "baseReputation": 0
+  }
+]

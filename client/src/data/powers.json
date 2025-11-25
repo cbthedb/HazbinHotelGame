@@ -1,0 +1,565 @@
+[
+  {
+    "id": "ember-lash",
+    "name": "Ember Lash",
+    "type": "hellfire",
+    "basePower": 10,
+    "controlReq": 3,
+    "corruptionCost": 1,
+    "cooldown": 2,
+    "effect": "single-target:burn",
+    "description": "A quick lash of hellfire that leaves smoldering embers on the target.",
+    "rarity": "common",
+    "unlockConditions": {
+      "origin": ["hellborn", "royal-born"]
+    },
+    "isPassive": false
+  },
+  {
+    "id": "ash-curtain",
+    "name": "Ash Curtain",
+    "type": "hellfire",
+    "basePower": 8,
+    "controlReq": 5,
+    "corruptionCost": 2,
+    "cooldown": 4,
+    "effect": "aoe:visibility-debuff",
+    "description": "Create a thick curtain of ash that blinds and disorients enemies in an area.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minPower": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "ember-chain",
+    "name": "Ember Chain",
+    "type": "hellfire",
+    "basePower": 15,
+    "controlReq": 8,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "multi-target:bounce",
+    "description": "Hellfire that bounces between multiple targets, growing weaker with each jump.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minPower": 25
+    },
+    "isPassive": false
+  },
+  {
+    "id": "static-command",
+    "name": "Static Command",
+    "type": "voice-broadcast",
+    "basePower": 12,
+    "controlReq": 6,
+    "corruptionCost": 2,
+    "cooldown": 3,
+    "effect": "mind-nudge:charm",
+    "description": "Force NPCs to hear a broadcast command. Chance to charm or persuade based on Influence.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minInfluence": 20
+    },
+    "isPassive": false
+  },
+  {
+    "id": "signal-overload",
+    "name": "Signal Overload",
+    "type": "voice-broadcast",
+    "basePower": 10,
+    "controlReq": 7,
+    "corruptionCost": 1,
+    "cooldown": 4,
+    "effect": "tech-disable",
+    "description": "Overload technological devices and tech-based enemies with static feedback.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minControl": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "vox-influence",
+    "name": "Vox Influence",
+    "type": "voice-broadcast",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:influence-boost",
+    "description": "Passive: Gain +2 Influence per turn when in media-related events.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "redstatic-domain",
+    "name": "Redstatic Domain",
+    "type": "shadow-eldritch",
+    "basePower": 25,
+    "controlReq": 15,
+    "corruptionCost": 10,
+    "cooldown": 10,
+    "effect": "reality-warp:arena",
+    "description": "Create a personal reality where you control the rules. Extremely powerful but highly corrupting.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "minPower": 40,
+      "minControl": 20
+    },
+    "isPassive": false
+  },
+  {
+    "id": "whisperate",
+    "name": "Whisperate",
+    "type": "shadow-eldritch",
+    "basePower": 8,
+    "controlReq": 10,
+    "corruptionCost": 3,
+    "cooldown": 3,
+    "effect": "possess:object-speak",
+    "description": "Possess inanimate objects and speak through them, unsettling enemies.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minControl": 12
+    },
+    "isPassive": false
+  },
+  {
+    "id": "tendril-reach",
+    "name": "Tendril Reach",
+    "type": "shadow-eldritch",
+    "basePower": 12,
+    "controlReq": 7,
+    "corruptionCost": 2,
+    "cooldown": 3,
+    "effect": "grapple:immobilize",
+    "description": "Shadow tendrils grab and immobilize a target, preventing escape.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "promissory-pact",
+    "name": "Promissory Pact",
+    "type": "contract",
+    "basePower": 20,
+    "controlReq": 10,
+    "corruptionCost": 5,
+    "cooldown": 6,
+    "effect": "power-boost:contract-clause",
+    "description": "Gain massive power for 6 turns, but add a Contract Clause and high corruption.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "origin": ["deal-immigrant", "royal-born"]
+    },
+    "isPassive": false
+  },
+  {
+    "id": "clause-revoke",
+    "name": "Clause Revoke",
+    "type": "contract",
+    "basePower": 15,
+    "controlReq": 12,
+    "corruptionCost": 8,
+    "cooldown": 8,
+    "effect": "remove-clause:heavy-cost",
+    "description": "Force the removal of a Contract Clause, but at enormous personal cost.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "origin": ["deal-immigrant"]
+    },
+    "isPassive": false
+  },
+  {
+    "id": "favor-ledger",
+    "name": "Favor Ledger",
+    "type": "contract",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:favor-storage",
+    "description": "Passive: Store favors instead of currency. Favors can be traded for unique benefits.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "gilded-whisper",
+    "name": "Gilded Whisper",
+    "type": "seduction",
+    "basePower": 8,
+    "controlReq": 5,
+    "corruptionCost": 1,
+    "cooldown": 2,
+    "effect": "charm:temporary-allegiance",
+    "description": "Temporarily convert an NPC's allegiance with honeyed words.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "siren-veil",
+    "name": "Siren Veil",
+    "type": "seduction",
+    "basePower": 10,
+    "controlReq": 8,
+    "corruptionCost": 2,
+    "cooldown": 5,
+    "effect": "mass-charisma-buff",
+    "description": "Mass charisma buff during social events, affecting everyone in the area.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minInfluence": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "aftertaste",
+    "name": "Aftertaste",
+    "type": "seduction",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:lingering-influence",
+    "description": "Passive: Romanced NPCs retain +5 affinity even after relationship ends.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "glam-projection",
+    "name": "Glam Projection",
+    "type": "tech-cyber",
+    "basePower": 9,
+    "controlReq": 7,
+    "corruptionCost": 1,
+    "cooldown": 3,
+    "effect": "create-decoy",
+    "description": "Create holographic decoy avatars to confuse enemies.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minControl": 10
+    },
+    "isPassive": false
+  },
+  {
+    "id": "netjack",
+    "name": "Netjack",
+    "type": "tech-cyber",
+    "basePower": 11,
+    "controlReq": 9,
+    "corruptionCost": 2,
+    "cooldown": 4,
+    "effect": "device-control",
+    "description": "Hack and control an enemy's technological devices remotely.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minControl": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "circuit-sigil",
+    "name": "Circuit Sigil",
+    "type": "tech-cyber",
+    "basePower": 13,
+    "controlReq": 6,
+    "corruptionCost": 2,
+    "cooldown": 4,
+    "effect": "trap:electrocute",
+    "description": "Place an electrified trap that triggers when enemies approach.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "lure-mist",
+    "name": "Lure Mist",
+    "type": "pheromone",
+    "basePower": 7,
+    "controlReq": 5,
+    "corruptionCost": 1,
+    "cooldown": 3,
+    "effect": "area-pull:attraction",
+    "description": "Release pheromones that draw weaker NPCs toward you.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "fumes-of-obedience",
+    "name": "Fumes of Obedience",
+    "type": "pheromone",
+    "basePower": 10,
+    "controlReq": 8,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "zone:resistance-reduction",
+    "description": "Create a zone where resistance to commands is reduced drastically.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minInfluence": 18
+    },
+    "isPassive": false
+  },
+  {
+    "id": "aroma-shield",
+    "name": "Aroma Shield",
+    "type": "pheromone",
+    "basePower": 5,
+    "controlReq": 6,
+    "corruptionCost": 1,
+    "cooldown": 4,
+    "effect": "mask-presence",
+    "description": "Mask your presence with neutral scents, making detection difficult.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "bone-mender",
+    "name": "Bone Mender",
+    "type": "regeneration",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:hp-regen",
+    "description": "Passive: Regenerate +5 HP per turn automatically.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "second-heart",
+    "name": "Second Heart",
+    "type": "regeneration",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:one-time-revive",
+    "description": "Passive: Revive once if HP reaches 0. Only works once per game.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "minPower": 35
+    },
+    "isPassive": true
+  },
+  {
+    "id": "slipstep",
+    "name": "Slipstep",
+    "type": "teleportation",
+    "basePower": 6,
+    "controlReq": 8,
+    "corruptionCost": 1,
+    "cooldown": 2,
+    "effect": "short-blink",
+    "description": "Instantly blink a short distance to dodge or reposition.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "gate-of-fissures",
+    "name": "Gate of Fissures",
+    "type": "teleportation",
+    "basePower": 12,
+    "controlReq": 12,
+    "corruptionCost": 4,
+    "cooldown": 6,
+    "effect": "portal-creation",
+    "description": "Create a temporary portal to travel between districts instantly.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minControl": 15
+    },
+    "isPassive": false
+  },
+  {
+    "id": "soul-reap",
+    "name": "Soul Reap",
+    "type": "necromancy",
+    "basePower": 14,
+    "controlReq": 10,
+    "corruptionCost": 5,
+    "cooldown": 4,
+    "effect": "drain:hp-to-corruption",
+    "description": "Drain enemy HP and convert it to Corruption. Risky but powerful.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minPower": 20
+    },
+    "isPassive": false
+  },
+  {
+    "id": "wisp-army",
+    "name": "Wisp Army",
+    "type": "necromancy",
+    "basePower": 10,
+    "controlReq": 9,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "summon:minions",
+    "description": "Summon weak soul wisps to fight alongside you temporarily.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "mask-of-many",
+    "name": "Mask of Many",
+    "type": "glamour",
+    "basePower": 8,
+    "controlReq": 10,
+    "corruptionCost": 2,
+    "cooldown": 4,
+    "effect": "shapeshift:disguise",
+    "description": "Temporarily shapeshift to disguise yourself as another demon.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minControl": 12
+    },
+    "isPassive": false
+  },
+  {
+    "id": "armorize",
+    "name": "Armorize",
+    "type": "glamour",
+    "basePower": 10,
+    "controlReq": 7,
+    "corruptionCost": 2,
+    "cooldown": 5,
+    "effect": "morph:defense-boost",
+    "description": "Turn your limbs to stone temporarily for massive defense boost.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "ballad-of-change",
+    "name": "Ballad of Change",
+    "type": "musical",
+    "basePower": 9,
+    "controlReq": 6,
+    "corruptionCost": 1,
+    "cooldown": 3,
+    "effect": "performance:morale-control",
+    "description": "Perform a song that reduces enemy resolve and boosts ally morale.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "encore",
+    "name": "Encore",
+    "type": "musical",
+    "basePower": 0,
+    "controlReq": 0,
+    "corruptionCost": 0,
+    "cooldown": 0,
+    "effect": "passive:control-restore",
+    "description": "Passive: Restore +2 Control and +3 Influence after each performance event.",
+    "rarity": "uncommon",
+    "unlockConditions": {},
+    "isPassive": true
+  },
+  {
+    "id": "titan-step",
+    "name": "Titan Step",
+    "type": "physical",
+    "basePower": 16,
+    "controlReq": 5,
+    "corruptionCost": 2,
+    "cooldown": 4,
+    "effect": "aoe:stun-knockback",
+    "description": "Massive stomp that stuns and knocks back all nearby enemies.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minPower": 18
+    },
+    "isPassive": false
+  },
+  {
+    "id": "rend",
+    "name": "Rend",
+    "type": "physical",
+    "basePower": 14,
+    "controlReq": 4,
+    "corruptionCost": 1,
+    "cooldown": 2,
+    "effect": "single-target:heavy-damage",
+    "description": "Brutal melee attack that deals heavy single-target damage.",
+    "rarity": "common",
+    "unlockConditions": {},
+    "isPassive": false
+  },
+  {
+    "id": "glass-hall",
+    "name": "Glass Hall",
+    "type": "illusion",
+    "basePower": 11,
+    "controlReq": 11,
+    "corruptionCost": 3,
+    "cooldown": 5,
+    "effect": "maze:trap",
+    "description": "Create a mirror maze illusion that traps and confuses enemies.",
+    "rarity": "uncommon",
+    "unlockConditions": {
+      "minControl": 13
+    },
+    "isPassive": false
+  },
+  {
+    "id": "fog-of-forgotten",
+    "name": "Fog of Forgotten",
+    "type": "illusion",
+    "basePower": 9,
+    "controlReq": 10,
+    "corruptionCost": 2,
+    "cooldown": 6,
+    "effect": "memory-erase",
+    "description": "Erase an NPC's recent memory of events or encounters.",
+    "rarity": "rare",
+    "unlockConditions": {
+      "minControl": 14
+    },
+    "isPassive": false
+  },
+  {
+    "id": "purity-flame",
+    "name": "Purity Flame",
+    "type": "divine",
+    "basePower": 18,
+    "controlReq": 14,
+    "corruptionCost": -5,
+    "cooldown": 8,
+    "effect": "purify:remove-corruption",
+    "description": "Divine flame that removes corruption but deals damage to wielder. Risky purification.",
+    "rarity": "legendary",
+    "unlockConditions": {
+      "origin": ["accidental"]
+    },
+    "isPassive": false
+  },
+  {
+    "id": "sanctify",
+    "name": "Sanctify",
+    "type": "divine",
+    "basePower": 12,
+    "controlReq": 12,
+    "corruptionCost": -3,
+    "cooldown": 6,
+    "effect": "protect:hotel-residents",
+    "description": "Protect hotel residents from harmful effects for several turns.",
+    "rarity": "epic",
+    "unlockConditions": {
+      "origin": ["accidental"]
+    },
+    "isPassive": false
+  }
+]

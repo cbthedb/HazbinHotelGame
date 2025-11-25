@@ -1,0 +1,663 @@
+[
+  {
+    "id": "empathetic",
+    "name": "Empathetic",
+    "description": "You genuinely care for souls, even damned ones. Path to redemption.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 10 },
+      "multipliers": { "corruptionGainMultiplier": 0.85 }
+    }
+  },
+  {
+    "id": "callous",
+    "name": "Callous",
+    "description": "Heartless and cold. Power comes first.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 5, "empathy": -8 },
+      "multipliers": { "corruptionGainMultiplier": 1.2 }
+    }
+  },
+  {
+    "id": "righteous",
+    "name": "Righteous",
+    "description": "Hold onto your morals even in Hell. Rare but powerful.",
+    "category": "moral",
+    "cost": 4,
+    "mechanics": {
+      "statModifiers": { "empathy": 15, "corruption": -10 },
+      "multipliers": { "corruptionGainMultiplier": 0.7 }
+    }
+  },
+  {
+    "id": "vindictive",
+    "name": "Vindictive",
+    "description": "Never forget a slight. Rivals tremble.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 3 },
+      "specialEffects": ["bonus-damage-vs-rivals"]
+    }
+  },
+  {
+    "id": "merciful",
+    "name": "Merciful",
+    "description": "Show mercy to the defeated. Gains loyalty.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 8, "influence": 5 }
+    }
+  },
+  {
+    "id": "charismatic",
+    "name": "Charismatic",
+    "description": "Natural charm that opens doors and hearts.",
+    "category": "social",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "influence": 10 },
+      "specialEffects": ["social-event-bonus"]
+    }
+  },
+  {
+    "id": "sleazy",
+    "name": "Sleazy",
+    "description": "Shady tactics work best in dark alleys.",
+    "category": "social",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": 5 },
+      "specialEffects": ["bonus-in-criminal-events"],
+      "multipliers": { "publicReputationMultiplier": 0.8 }
+    }
+  },
+  {
+    "id": "intimidating",
+    "name": "Intimidating",
+    "description": "Your presence commands fear and respect.",
+    "category": "social",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "power": 4, "influence": 6 }
+    }
+  },
+  {
+    "id": "silver-tongued",
+    "name": "Silver-Tongued",
+    "description": "Master of persuasion and deception.",
+    "category": "social",
+    "cost": 4,
+    "mechanics": {
+      "statModifiers": { "influence": 12, "control": 3 },
+      "specialEffects": ["persuasion-success-bonus"]
+    }
+  },
+  {
+    "id": "mysterious",
+    "name": "Mysterious",
+    "description": "Your enigmatic nature draws curiosity.",
+    "category": "social",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": 4 },
+      "specialEffects": ["harder-to-read"]
+    }
+  },
+  {
+    "id": "social-butterfly",
+    "name": "Social Butterfly",
+    "description": "Thrive in social gatherings and parties.",
+    "category": "social",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "influence": 8 },
+      "specialEffects": ["party-event-bonus"]
+    }
+  },
+  {
+    "id": "reclusive",
+    "name": "Reclusive",
+    "description": "Prefer solitude. Social events drain you.",
+    "category": "social",
+    "cost": -1,
+    "mechanics": {
+      "statModifiers": { "control": 5, "influence": -5 }
+    }
+  },
+  {
+    "id": "bulky",
+    "name": "Bulky",
+    "description": "Large and durable, but less agile.",
+    "category": "physical",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "health": 30, "control": -3 }
+    }
+  },
+  {
+    "id": "nimble",
+    "name": "Nimble",
+    "description": "Quick and agile, perfect for precision.",
+    "category": "physical",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "control": 8, "power": -3 }
+    }
+  },
+  {
+    "id": "sturdy",
+    "name": "Sturdy",
+    "description": "Resilient and hard to bring down.",
+    "category": "physical",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "health": 40 }
+    }
+  },
+  {
+    "id": "fragile",
+    "name": "Fragile",
+    "description": "Weak constitution, but focused mind.",
+    "category": "physical",
+    "cost": -2,
+    "mechanics": {
+      "statModifiers": { "health": -30, "control": 8 }
+    }
+  },
+  {
+    "id": "regenerative",
+    "name": "Regenerative",
+    "description": "Naturally heal faster than most demons.",
+    "category": "physical",
+    "cost": 4,
+    "mechanics": {
+      "specialEffects": ["hp-regen-bonus"]
+    }
+  },
+  {
+    "id": "scarred",
+    "name": "Scarred",
+    "description": "Battle scars tell your story. Intimidating.",
+    "category": "physical",
+    "cost": 1,
+    "mechanics": {
+      "statModifiers": { "influence": 3 }
+    }
+  },
+  {
+    "id": "ritualist",
+    "name": "Ritualist",
+    "description": "Master of dark rituals. High power, slower control.",
+    "category": "magical",
+    "cost": 4,
+    "mechanics": {
+      "statModifiers": { "power": 8, "control": -4 },
+      "specialEffects": ["unlock-ritual-events"]
+    }
+  },
+  {
+    "id": "arcane-savant",
+    "name": "Arcane Savant",
+    "description": "Learn magical powers faster than others.",
+    "category": "magical",
+    "cost": 3,
+    "mechanics": {
+      "multipliers": { "powerXpGainMultiplier": 1.3 }
+    }
+  },
+  {
+    "id": "wild-magic",
+    "name": "Wild Magic",
+    "description": "Unpredictable power surges. High risk, high reward.",
+    "category": "magical",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 10, "control": -8 },
+      "specialEffects": ["random-power-spikes"]
+    }
+  },
+  {
+    "id": "focused",
+    "name": "Focused",
+    "description": "Exceptional control over your abilities.",
+    "category": "magical",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "control": 12 }
+    }
+  },
+  {
+    "id": "corruption-resistant",
+    "name": "Corruption Resistant",
+    "description": "Natural resistance to Hell's corrupting influence.",
+    "category": "magical",
+    "cost": 4,
+    "mechanics": {
+      "multipliers": { "corruptionGainMultiplier": 0.6 }
+    }
+  },
+  {
+    "id": "corruption-affinity",
+    "name": "Corruption Affinity",
+    "description": "Embrace corruption for greater power.",
+    "category": "magical",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 6 },
+      "multipliers": { "corruptionGainMultiplier": 1.4 }
+    }
+  },
+  {
+    "id": "soul-sensitive",
+    "name": "Soul Sensitive",
+    "description": "Feel the presence and emotions of other souls.",
+    "category": "magical",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 10, "control": 5 },
+      "specialEffects": ["detect-hidden-npcs"]
+    }
+  },
+  {
+    "id": "compulsive-gambler",
+    "name": "Compulsive Gambler",
+    "description": "Can't resist a bet. Double rewards or lose it all.",
+    "category": "quirky",
+    "cost": -1,
+    "mechanics": {
+      "specialEffects": ["gambling-events-forced", "reward-variance-high"]
+    }
+  },
+  {
+    "id": "signature-hat",
+    "name": "Signature Hat",
+    "description": "Your iconic hat is part of your identity.",
+    "category": "quirky",
+    "cost": 0,
+    "mechanics": {
+      "statModifiers": { "influence": 2 }
+    }
+  },
+  {
+    "id": "pyrophiliac",
+    "name": "Pyrophiliac",
+    "description": "Love fire a bit too much. Hellfire powers boosted.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "specialEffects": ["hellfire-power-bonus"]
+    }
+  },
+  {
+    "id": "paranoid",
+    "name": "Paranoid",
+    "description": "Always watching your back. Hard to surprise.",
+    "category": "quirky",
+    "cost": 1,
+    "mechanics": {
+      "statModifiers": { "control": 4 },
+      "specialEffects": ["avoid-ambush"]
+    }
+  },
+  {
+    "id": "hedonist",
+    "name": "Hedonist",
+    "description": "Live for pleasure. Party events yield more benefits.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "specialEffects": ["party-rewards-bonus"],
+      "multipliers": { "wealthGainMultiplier": 0.9 }
+    }
+  },
+  {
+    "id": "workaholic",
+    "name": "Workaholic",
+    "description": "Never stop grinding. More wealth, less social life.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": -3 },
+      "multipliers": { "wealthGainMultiplier": 1.4 }
+    }
+  },
+  {
+    "id": "perfectionist",
+    "name": "Perfectionist",
+    "description": "Everything must be flawless. Higher control requirements.",
+    "category": "quirky",
+    "cost": 1,
+    "mechanics": {
+      "statModifiers": { "control": 10 },
+      "multipliers": { "powerControlReqMultiplier": 1.2 }
+    }
+  },
+  {
+    "id": "impulsive",
+    "name": "Impulsive",
+    "description": "Act first, think later. More events, more chaos.",
+    "category": "quirky",
+    "cost": -1,
+    "mechanics": {
+      "specialEffects": ["increased-random-events"],
+      "statModifiers": { "control": -5 }
+    }
+  },
+  {
+    "id": "collector",
+    "name": "Collector",
+    "description": "Hoard favors and contracts obsessively.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "specialEffects": ["extra-favor-slots"]
+    }
+  },
+  {
+    "id": "showman",
+    "name": "Showman",
+    "description": "Love the spotlight. Performance powers boosted.",
+    "category": "quirky",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "influence": 6 },
+      "specialEffects": ["musical-power-bonus"]
+    }
+  },
+  {
+    "id": "royal-blood",
+    "name": "Royal Blood",
+    "description": "Born into Hell's elite. Extra influence and title slot.",
+    "category": "moral",
+    "cost": 0,
+    "mechanics": {
+      "statModifiers": { "influence": 15 },
+      "specialEffects": ["title-slot", "royal-events"]
+    },
+    "originLocked": "royal-born"
+  },
+  {
+    "id": "deal-bound",
+    "name": "Deal Bound",
+    "description": "Your contract defines you. Start with a clause.",
+    "category": "magical",
+    "cost": 0,
+    "mechanics": {
+      "specialEffects": ["starting-contract-clause"]
+    },
+    "originLocked": "deal-immigrant"
+  },
+  {
+    "id": "angelic-heritage",
+    "name": "Angelic Heritage",
+    "description": "Fallen grace grants divine powers but makes you a target.",
+    "category": "magical",
+    "cost": 0,
+    "mechanics": {
+      "statModifiers": { "empathy": 10 },
+      "specialEffects": ["divine-powers-unlocked", "hunted-by-both-sides"]
+    },
+    "originLocked": "accidental"
+  },
+  {
+    "id": "street-smart",
+    "name": "Street Smart",
+    "description": "Survived the harsh streets of Hell. Resourceful.",
+    "category": "social",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "influence": 7, "wealth": 50 },
+      "specialEffects": ["street-event-bonus"]
+    }
+  },
+  {
+    "id": "technophile",
+    "name": "Technophile",
+    "description": "Love for technology and media. Tech powers boosted.",
+    "category": "magical",
+    "cost": 3,
+    "mechanics": {
+      "specialEffects": ["tech-cyber-power-bonus"]
+    }
+  },
+  {
+    "id": "old-soul",
+    "name": "Old Soul",
+    "description": "Wisdom beyond your years. Better decision making.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "control": 6, "empathy": 6 },
+      "specialEffects": ["better-event-outcomes"]
+    }
+  },
+  {
+    "id": "hot-headed",
+    "name": "Hot-Headed",
+    "description": "Quick to anger. Powerful but risky.",
+    "category": "physical",
+    "cost": -1,
+    "mechanics": {
+      "statModifiers": { "power": 7, "control": -7 }
+    }
+  },
+  {
+    "id": "calculating",
+    "name": "Calculating",
+    "description": "Always three steps ahead. Strategic mastermind.",
+    "category": "moral",
+    "cost": 4,
+    "mechanics": {
+      "statModifiers": { "control": 10, "influence": 8 },
+      "specialEffects": ["strategic-event-bonus"]
+    }
+  },
+  {
+    "id": "loyal",
+    "name": "Loyal",
+    "description": "Fierce loyalty to allies. Bonds run deep.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 8 },
+      "specialEffects": ["ally-affinity-bonus"]
+    }
+  },
+  {
+    "id": "backstabber",
+    "name": "Backstabber",
+    "description": "Betray for profit. No honor among demons.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": 5, "empathy": -10 },
+      "specialEffects": ["betrayal-bonus", "lower-trust"]
+    }
+  },
+  {
+    "id": "quick-learner",
+    "name": "Quick Learner",
+    "description": "Master new skills rapidly.",
+    "category": "magical",
+    "cost": 4,
+    "mechanics": {
+      "multipliers": { "allXpGainMultiplier": 1.25 }
+    }
+  },
+  {
+    "id": "slow-learner",
+    "name": "Slow Learner",
+    "description": "Takes time to master skills. More trait points.",
+    "category": "magical",
+    "cost": -2,
+    "mechanics": {
+      "multipliers": { "allXpGainMultiplier": 0.75 }
+    }
+  },
+  {
+    "id": "lucky",
+    "name": "Lucky",
+    "description": "Fortune favors you in random events.",
+    "category": "quirky",
+    "cost": 4,
+    "mechanics": {
+      "specialEffects": ["luck-bonus", "better-random-outcomes"]
+    }
+  },
+  {
+    "id": "unlucky",
+    "name": "Unlucky",
+    "description": "Bad luck follows you. More trait points.",
+    "category": "quirky",
+    "cost": -2,
+    "mechanics": {
+      "specialEffects": ["worse-random-outcomes"]
+    }
+  },
+  {
+    "id": "ambitious",
+    "name": "Ambitious",
+    "description": "Hungry for power and status. Drive for greatness.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "power": 5, "influence": 5 },
+      "specialEffects": ["overlord-path-bonus"]
+    }
+  },
+  {
+    "id": "humble",
+    "name": "Humble",
+    "description": "No need for glory. Focus on inner strength.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "empathy": 12, "influence": -5 }
+    }
+  },
+  {
+    "id": "sadistic",
+    "name": "Sadistic",
+    "description": "Enjoy the suffering of others. Terrifying.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 6, "empathy": -15 },
+      "multipliers": { "corruptionGainMultiplier": 1.3 }
+    }
+  },
+  {
+    "id": "protective",
+    "name": "Protective",
+    "description": "Guard those you care about fiercely.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 8, "power": 4 },
+      "specialEffects": ["ally-defense-bonus"]
+    }
+  },
+  {
+    "id": "greedy",
+    "name": "Greedy",
+    "description": "Obsessed with wealth and possessions.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "multipliers": { "wealthGainMultiplier": 1.3 },
+      "statModifiers": { "empathy": -5 }
+    }
+  },
+  {
+    "id": "generous",
+    "name": "Generous",
+    "description": "Share your wealth freely. Builds goodwill.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": 10, "empathy": 6 },
+      "multipliers": { "wealthGainMultiplier": 0.85 }
+    }
+  },
+  {
+    "id": "tactician",
+    "name": "Tactician",
+    "description": "Excel in territorial warfare and strategy.",
+    "category": "social",
+    "cost": 4,
+    "mechanics": {
+      "specialEffects": ["territory-war-bonus", "strategic-advantage"]
+    }
+  },
+  {
+    "id": "brawler",
+    "name": "Brawler",
+    "description": "Prefer direct combat over subtlety.",
+    "category": "physical",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "power": 8 },
+      "specialEffects": ["physical-power-bonus"]
+    }
+  },
+  {
+    "id": "smooth-talker",
+    "name": "Smooth Talker",
+    "description": "Navigate negotiations with ease.",
+    "category": "social",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "influence": 10 },
+      "specialEffects": ["negotiation-bonus"]
+    }
+  },
+  {
+    "id": "vengeful",
+    "name": "Vengeful",
+    "description": "Sworn revenge drives you. Never forgive.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "power": 5 },
+      "specialEffects": ["revenge-damage-bonus"]
+    }
+  },
+  {
+    "id": "forgiving",
+    "name": "Forgiving",
+    "description": "Let grudges go. Peace over conflict.",
+    "category": "moral",
+    "cost": 3,
+    "mechanics": {
+      "statModifiers": { "empathy": 12, "influence": 5 },
+      "specialEffects": ["reduce-rival-hostility"]
+    }
+  },
+  {
+    "id": "dramatic",
+    "name": "Dramatic",
+    "description": "Everything is a performance. Theatrical flair.",
+    "category": "quirky",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "influence": 6 },
+      "specialEffects": ["dramatic-event-bonus"]
+    }
+  },
+  {
+    "id": "stoic",
+    "name": "Stoic",
+    "description": "Unmoved by emotion. Cold and controlled.",
+    "category": "moral",
+    "cost": 2,
+    "mechanics": {
+      "statModifiers": { "control": 10, "empathy": -6 },
+      "specialEffects": ["resist-emotional-manipulation"]
+    }
+  }
+]

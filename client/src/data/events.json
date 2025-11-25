@@ -1,0 +1,206 @@
+[
+  {
+    "id": "first-day-hotel",
+    "title": "Welcome to the Hotel",
+    "description": "Charlie greets you at the Hazbin Hotel's entrance with her signature enthusiasm. 'Welcome! We're so glad you're here! Redemption starts today!'",
+    "type": "daily",
+    "triggerConditions": {
+      "minTurn": 1,
+      "location": ["hotel-district"]
+    },
+    "choices": [
+      {
+        "id": "enthusiastic",
+        "text": "Match her energy! This is a fresh start!",
+        "outcomes": {
+          "statChanges": { "empathy": 2, "influence": 1 },
+          "npcAffinityChanges": { "charlie": 5 },
+          "narrativeText": "Charlie beams at your enthusiasm. 'I KNEW you were perfect for this! Let me show you around!'"
+        }
+      },
+      {
+        "id": "skeptical",
+        "text": "Redemption? In Hell? You're kidding, right?",
+        "outcomes": {
+          "statChanges": { "empathy": -1 },
+          "npcAffinityChanges": { "charlie": -2, "vaggie": 3 },
+          "narrativeText": "Vaggie smirks. 'At least you're realistic.' Charlie's smile doesn't waver. 'You'll see! Just give it a chance!'"
+        }
+      },
+      {
+        "id": "polite",
+        "text": "Thank you for having me. I'll do my best.",
+        "outcomes": {
+          "statChanges": { "influence": 2 },
+          "npcAffinityChanges": { "charlie": 3, "vaggie": 2 },
+          "narrativeText": "A measured response earns nods from both Charlie and Vaggie. A good start."
+        }
+      }
+    ],
+    "onlyOnce": true
+  },
+  {
+    "id": "promissory-stranger",
+    "title": "The Promissory Pact",
+    "description": "A demon with clockwork teeth approaches in a dark alley. 'I can give you POWER beyond imagination... for a small price. Just sign here.'",
+    "type": "contract",
+    "triggerConditions": {
+      "randomChance": 0.15,
+      "statRequirements": { "wealth": 100 }
+    },
+    "choices": [
+      {
+        "id": "sign",
+        "text": "Sign the contract. You need power NOW.",
+        "outcomes": {
+          "powerGrant": ["promissory-pact"],
+          "statChanges": { "power": 15, "corruption": 8 },
+          "storyFlags": { "contract-clauses": 1 },
+          "narrativeText": "Dark energy surges through you as the contract burns into your very soul. You feel POWERFUL... but at what cost?"
+        }
+      },
+      {
+        "id": "bargain",
+        "text": "Try to negotiate better terms. (Control Check)",
+        "requirements": { "control": 12 },
+        "outcomes": {
+          "powerGrant": ["promissory-pact"],
+          "statChanges": { "power": 15, "corruption": 4 },
+          "storyFlags": { "contract-clauses": 1 },
+          "narrativeText": "Your sharp negotiation reduces the corruption cost. The demon grumbles but accepts. Smart."
+        }
+      },
+      {
+        "id": "refuse",
+        "text": "Walk away. Nothing is worth your soul.",
+        "outcomes": {
+          "statChanges": { "empathy": 2, "influence": 3 },
+          "narrativeText": "You turn your back on the offer. The demon hisses in frustration and vanishes. You kept your integrity."
+        }
+      }
+    ],
+    "onlyOnce": false
+  },
+  {
+    "id": "alastor-first-meeting",
+    "title": "The Radio Demon Arrives",
+    "description": "Static fills the air. Alastor materializes with his ever-present grin. 'Greetings! Quite the pleasure to make your acquaintance!'",
+    "type": "career",
+    "triggerConditions": {
+      "minTurn": 10,
+      "location": ["hotel-district", "overlord-territories"],
+      "statRequirements": { "influence": 15 }
+    },
+    "choices": [
+      {
+        "id": "respectful",
+        "text": "Show proper respect to the Radio Demon.",
+        "outcomes": {
+          "npcAffinityChanges": { "alastor": 5 },
+          "statChanges": { "influence": 3 },
+          "narrativeText": "Alastor's grin widens. 'Ah, manners! How delightfully rare these days!'"
+        }
+      },
+      {
+        "id": "challenge",
+        "text": "You're not that scary. (Power Check)",
+        "requirements": { "power": 25 },
+        "outcomes": {
+          "npcAffinityChanges": { "alastor": 8 },
+          "statChanges": { "power": 3, "corruption": 2 },
+          "storyFlags": { "challenged-alastor": true },
+          "narrativeText": "His eyes flash with genuine interest. 'Oh my! Someone with SPINE! How entertaining!'"
+        }
+      },
+      {
+        "id": "ignore",
+        "text": "Just nod and try to leave.",
+        "outcomes": {
+          "npcAffinityChanges": { "alastor": -3 },
+          "narrativeText": "How... disappointing. He vanishes in a crackle of static, clearly unimpressed."
+        }
+      }
+    ],
+    "onlyOnce": true
+  },
+  {
+    "id": "territory-challenge-easy",
+    "title": "Turf War: Small Claims",
+    "description": "A weak demon controls a small territory. They're vulnerable. You could take it... but should you?",
+    "type": "war",
+    "triggerConditions": {
+      "statRequirements": { "power": 20, "influence": 15 }
+    },
+    "choices": [
+      {
+        "id": "conquer",
+        "text": "Take the territory by force.",
+        "requirements": { "power": 20 },
+        "outcomes": {
+          "statChanges": { "power": 3, "corruption": 3, "empathy": -2 },
+          "reputationChanges": { "overlords": 5 },
+          "storyFlags": { "territories-claimed": 1 },
+          "narrativeText": "The weak demon flees. The territory is yours. Other demons take notice."
+        }
+      },
+      {
+        "id": "negotiate",
+        "text": "Offer a partnership instead.",
+        "requirements": { "influence": 20 },
+        "outcomes": {
+          "statChanges": { "influence": 5, "wealth": 100 },
+          "narrativeText": "They agree to pay tribute in exchange for protection. Smart business."
+        }
+      },
+      {
+        "id": "ignore",
+        "text": "Leave them alone. Focus elsewhere.",
+        "outcomes": {
+          "statChanges": { "empathy": 2 },
+          "narrativeText": "Not every battle needs fighting. You move on."
+        }
+      }
+    ],
+    "onlyOnce": false
+  },
+  {
+    "id": "charlie-performance",
+    "title": "Join Charlie's Song",
+    "description": "Charlie is rehearsing a new song about redemption. She invites you to join! Music fills the Hotel with hope.",
+    "type": "romance",
+    "triggerConditions": {
+      "location": ["hotel-district"],
+      "randomChance": 0.2
+    },
+    "choices": [
+      {
+        "id": "sing-along",
+        "text": "Sing with all your heart!",
+        "outcomes": {
+          "statChanges": { "empathy": 3, "influence": 2 },
+          "npcAffinityChanges": { "charlie": 8 },
+          "reputationChanges": { "hazbin-hotel": 5 },
+          "narrativeText": "Your voices blend beautifully. Charlie's eyes light up. 'That was AMAZING! You really do believe!'"
+        }
+      },
+      {
+        "id": "watch",
+        "text": "Watch and enjoy the performance.",
+        "outcomes": {
+          "statChanges": { "empathy": 1 },
+          "npcAffinityChanges": { "charlie": 3 },
+          "narrativeText": "You appreciate the show from the sidelines. Charlie smiles warmly at you."
+        }
+      },
+      {
+        "id": "leave",
+        "text": "Too sappy. Make an excuse and leave.",
+        "outcomes": {
+          "npcAffinityChanges": { "charlie": -2 },
+          "narrativeText": "Charlie's smile falters slightly as you slip away."
+        }
+      }
+    ],
+    "onlyOnce": false
+  }
+]

@@ -1,0 +1,188 @@
+[
+  {
+    "id": "charlie",
+    "name": "Charlie Morningstar",
+    "faction": "hazbin-hotel",
+    "description": "Princess of Hell with a dream of redemption. Optimistic, kind, but can unleash her demonic power when pushed.",
+    "basePower": 45,
+    "affinityTraits": ["empathetic", "righteous", "optimistic", "charismatic", "forgiving"],
+    "dislikedTraits": ["sadistic", "callous", "backstabber"],
+    "romanceable": true,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["Welcome to the Hazbin Hotel! We can help you find redemption!", "I believe everyone deserves a second chance."],
+      "high-affinity": ["You really get what we're trying to do here!", "I'm so glad you're on this journey with us."],
+      "romance": ["I... I didn't expect to feel this way about anyone here.", "You make me believe redemption is possible for everyone."]
+    }
+  },
+  {
+    "id": "alastor",
+    "name": "Alastor (The Radio Demon)",
+    "faction": "overlords",
+    "description": "The Radio Demon. Charismatic, sinister, and impossibly powerful. His motives are his own, and his smile never fades.",
+    "basePower": 85,
+    "affinityTraits": ["charismatic", "calculating", "dramatic", "mysterious"],
+    "dislikedTraits": ["impulsive", "hot-headed", "humble"],
+    "romanceable": false,
+    "canBeRival": true,
+    "specialDialogue": {
+      "first-meeting": ["Greetings! Pleasure to be meeting you! Quite a pleasure!", "I haven't been active in Hell for some time..."],
+      "high-affinity": ["You're quite entertaining! Do keep up the good work.", "Perhaps we can make a deal, hm?"],
+      "rival": ["How delightfully foolish of you to challenge ME!", "Your demise will be broadcast for all of Hell to hear!"]
+    }
+  },
+  {
+    "id": "vaggie",
+    "name": "Vaggie",
+    "faction": "hazbin-hotel",
+    "description": "Charlie's girlfriend and fierce protector. Suspicious of newcomers but loyal to those who earn her trust.",
+    "basePower": 35,
+    "affinityTraits": ["loyal", "protective", "righteous"],
+    "dislikedTraits": ["sleazy", "backstabber", "sadistic"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["I'm watching you. Don't even think about hurting Charlie.", "You better be serious about this redemption thing."],
+      "high-affinity": ["Okay, maybe you're not so bad after all.", "Thanks for having Charlie's back."]
+    }
+  },
+  {
+    "id": "angel-dust",
+    "name": "Angel Dust",
+    "faction": "hazbin-hotel",
+    "description": "Adult film star under Valentino's contract. Sarcastic, flirtatious, and hiding deep pain behind a confident facade.",
+    "basePower": 28,
+    "affinityTraits": ["charismatic", "flirtatious", "hedonist", "protective"],
+    "dislikedTraits": ["judgmental", "callous"],
+    "romanceable": true,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["Hey there, hot stuff! You new around here?", "Welcome to the circus, baby!"],
+      "high-affinity": ["You're actually pretty cool, ya know?", "Maybe... maybe there's hope for people like us."],
+      "romance": ["I don't do the whole 'feelings' thing... but with you, maybe I could try.", "You make me wanna be better, and that's scary as Hell."]
+    }
+  },
+  {
+    "id": "husk",
+    "name": "Husk",
+    "faction": "hazbin-hotel",
+    "description": "Cynical bartender and former overlord. Lost his soul in a bet with Alastor. Grumpy but cares more than he admits.",
+    "basePower": 42,
+    "affinityTraits": ["stoic", "loyal", "compulsive-gambler", "protective"],
+    "dislikedTraits": ["dramatic", "optimistic"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["What do you want? I'm not here to be your therapist.", "Welcome to the Hotel. Don't get too comfortable."],
+      "high-affinity": ["You're not half bad, kid.", "Guess you earned a free drink."]
+    }
+  },
+  {
+    "id": "niffty",
+    "name": "Niffty",
+    "faction": "hazbin-hotel",
+    "description": "Hyperactive, obsessive cleaner. Unnervingly cheerful with a dark edge. Don't mess with her cleaning schedule.",
+    "basePower": 20,
+    "affinityTraits": ["workaholic", "perfectionist", "charismatic"],
+    "dislikedTraits": ["reclusive", "lazy"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["HIIII! This place is FILTHY! Let me clean!", "I love bad boys!"],
+      "high-affinity": ["You're so neat! I like you!", "Wanna help me clean?"]
+    }
+  },
+  {
+    "id": "vox",
+    "name": "Vox",
+    "faction": "vees",
+    "description": "Media mogul overlord. Controls Hell's airwaves and screens. Obsessed with image and power, especially outdoing Alastor.",
+    "basePower": 70,
+    "affinityTraits": ["technophile", "ambitious", "calculating", "charismatic"],
+    "dislikedTraits": ["mysterious", "reclusive"],
+    "romanceable": false,
+    "canBeRival": true,
+    "specialDialogue": {
+      "first-meeting": ["Welcome to the future of Hell! I'm sure we can work together.", "Everything you see and hear goes through ME."],
+      "high-affinity": ["You understand the value of media power. Impressive.", "Join me, and we'll control everything."],
+      "rival": ["You think you can challenge MY network?!", "I'll broadcast your failure across all of Hell!"]
+    }
+  },
+  {
+    "id": "valentino",
+    "name": "Valentino",
+    "faction": "vees",
+    "description": "Overlord of lust and exploitation. Owns Angel Dust's contract. Manipulative, violent, and dangerously charismatic.",
+    "basePower": 65,
+    "affinityTraits": ["sleazy", "charismatic", "hedonist", "greedy"],
+    "dislikedTraits": ["righteous", "loyal", "protective"],
+    "romanceable": false,
+    "canBeRival": true,
+    "specialDialogue": {
+      "first-meeting": ["Hola, chiquito~ Looking for work?", "Everything and everyone has a price, mi amor."],
+      "high-affinity": ["You know how to play the game. I like that.", "Perhaps we can make each other very... profitable."],
+      "rival": ["Nobody threatens my business!", "I'll make you suffer in ways you can't imagine!"]
+    }
+  },
+  {
+    "id": "velvette",
+    "name": "Velvette",
+    "faction": "vees",
+    "description": "Social media overlord and fashion maven. Youngest of the Vees. Sharp-tongued and savvy with modern Hell culture.",
+    "basePower": 55,
+    "affinityTraits": ["technophile", "charismatic", "ambitious", "dramatic"],
+    "dislikedTraits": ["old-fashioned", "reclusive"],
+    "romanceable": true,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["Ugh, another nobody? At least try to look presentable.", "You're trending... negatively. Fix that."],
+      "high-affinity": ["Okay, you've got style. I can work with that.", "Maybe you're not totally hopeless."],
+      "romance": ["I don't usually do the whole relationship thing, but you're... different.", "You're the only one who gets my vision."]
+    }
+  },
+  {
+    "id": "rosie",
+    "name": "Rosie",
+    "faction": "cannibal-colony",
+    "description": "Elegant leader of Cannibal Town. Sophisticated, friendly, and utterly ruthless when crossed. Charlie's ally and mentor.",
+    "basePower": 60,
+    "affinityTraits": ["charismatic", "sophisticated", "calculating", "loyal"],
+    "dislikedTraits": ["crude", "impulsive"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["Welcome, dear! Care for some tea? And perhaps a finger sandwich?", "Charlie speaks highly of you. That's quite the recommendation."],
+      "high-affinity": ["You have such refined taste! A pleasure to know you, darling.", "The colony is always open to you, dear."]
+    }
+  },
+  {
+    "id": "carmilla",
+    "name": "Carmilla Carmine",
+    "faction": "overlords",
+    "description": "Weapons dealer specializing in angelic steel. Powerful overlord who values family above all. Don't threaten her daughters.",
+    "basePower": 75,
+    "affinityTraits": ["calculating", "protective", "loyal", "tactical"],
+    "dislikedTraits": ["impulsive", "sadistic"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["State your business. I don't have time for games.", "You want angelic steel? It'll cost you."],
+      "high-affinity": ["You've proven yourself trustworthy. That's rare.", "My family and I remember our allies."]
+    }
+  },
+  {
+    "id": "zestial",
+    "name": "Zestial",
+    "faction": "overlords",
+    "description": "Ancient overlord who speaks in archaic English. One of the oldest and most respected powers in Hell. Mysterious and formidable.",
+    "basePower": 80,
+    "affinityTraits": ["old-soul", "mysterious", "calculating", "wise"],
+    "dislikedTraits": ["impulsive", "disrespectful"],
+    "romanceable": false,
+    "canBeRival": false,
+    "specialDialogue": {
+      "first-meeting": ["Greetings, young one. What brings thee to mine presence?", "The tides of Hell shift ever onward."],
+      "high-affinity": ["Thou hast proven thyself worthy of mine regard.", "Few earn mine respect. Thou art among them."]
+    }
+  }
+]

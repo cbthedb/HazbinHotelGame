@@ -52,11 +52,10 @@ export default function GamePage() {
 
   // Switch music based on battle state
   useEffect(() => {
-    if (inBattle) {
-      playLocationMusic("battle"); // Play Insane during battles
-    } else {
-      playLocationMusic("background"); // Back to Stayed Gone
+    if (!inBattle) {
+      playLocationMusic("background"); // Back to background music after battle
     }
+    // Don't call playLocationMusic("battle") here - let BattlePanel handle battle themes
   }, [inBattle]);
 
   const handleNextTurn = async () => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,7 +54,7 @@ export default function CharacterCreation() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [step, setStep] = useState(0);
-  const [characterData, setCharacterData] = useState<CharacterData>({
+  const [characterData, setCharacterData] = useState<CharacterData>(() => ({
     firstName: "",
     lastName: "",
     appearance: {
@@ -68,7 +68,7 @@ export default function CharacterCreation() {
     equippedPowers: [],
     soulcoins: 100,
     mythicalShards: 0
-  });
+  }));
 
   const steps = [
     { title: "Name", description: "Choose your demon identity" },

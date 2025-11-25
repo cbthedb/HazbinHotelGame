@@ -1,5 +1,6 @@
-// Audio system using Web Audio API
-// Note: Actual audio files would be loaded from assets/audio/
+// Audio tracks with actual file paths
+import stayedGoneUrl from "@assets/Hazbin Hotel - Stayed Gone Instrumental high quality audio_1764062747147.mp3";
+import insaneUrl from "@assets/Insane Hazbin Hotel Original Song - Instrumental_1764062734894.mp3";
 
 export interface AudioTrack {
   name: string;
@@ -8,13 +9,12 @@ export interface AudioTrack {
 }
 
 const tracks: Record<string, AudioTrack> = {
-  "hotel-lobby": { name: "Hazbin Hotel Lobby Theme", location: "lobby", volume: 0.5 },
-  "streets": { name: "Pentagram City Streets", location: "streets", volume: 0.6 },
-  "battle": { name: "Combat Theme", location: "battle", volume: 0.7 },
-  "club": { name: "Club Atmosphere", location: "club", volume: 0.4 }
+  "background": { name: "Stayed Gone", location: "background", volume: 0.5 },
+  "battle": { name: "Insane", location: "battle", volume: 0.7 }
 };
 
 let currentTrack: string | null = null;
+let audioElement: HTMLAudioElement | null = null;
 let audioContext: AudioContext | null = null;
 
 export function initAudio(): void {
@@ -31,12 +31,37 @@ export function playLocationMusic(location: string): void {
   const track = tracks[location];
   if (track) {
     currentTrack = location;
-    // In a real implementation, would load and play audio file here
-    console.log(`Playing: ${track.name}`);
+    
+    // Determine which file to play
+    let fileUrl = stayedGoneUrl;
+    if (location === "battle") {
+      fileUrl = insaneUrl;
+    }
+    
+    // Stop existing audio
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    }
+    
+    // Create and play new audio
+    try {
+      audioElement = new Audio(fileUrl);
+      audioElement.volume = track.volume;
+      audioElement.loop = true;
+      audioElement.play().catch(e => console.warn("Could not play audio:", e));
+      console.log(`Playing: ${track.name}`);
+    } catch (e) {
+      console.warn("Error playing audio:", e);
+    }
   }
 }
 
 export function stopMusic(): void {
+  if (audioElement) {
+    audioElement.pause();
+    audioElement.currentTime = 0;
+  }
   if (audioContext) {
     audioContext.suspend();
   }
@@ -44,6 +69,9 @@ export function stopMusic(): void {
 }
 
 export function setVolume(level: number): void {
+  if (audioElement) {
+    audioElement.volume = level;
+  }
   if (audioContext) {
     // Volume would be applied to actual audio nodes
   }

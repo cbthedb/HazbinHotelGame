@@ -35,7 +35,7 @@ export default function GamePage() {
   useEffect(() => {
     const init = async () => {
       initAudio();
-      playLocationMusic("hotel-lobby");
+      playLocationMusic("background"); // Play Stayed Gone as background music
       
       const saved = await loadLatestSave();
       if (!saved) {
@@ -49,6 +49,15 @@ export default function GamePage() {
     
     init();
   }, [setLocation, toast]);
+
+  // Switch music based on battle state
+  useEffect(() => {
+    if (inBattle) {
+      playLocationMusic("battle"); // Play Insane during battles
+    } else {
+      playLocationMusic("background"); // Back to Stayed Gone
+    }
+  }, [inBattle]);
 
   const handleNextTurn = async () => {
     if (!gameState) return;

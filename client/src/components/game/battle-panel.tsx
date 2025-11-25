@@ -53,8 +53,8 @@ export default function BattlePanel({
   const isOverlord = opponent === "charlie" || opponent === "alastor" || opponent === "valentino" || opponent === "vox" || opponent === "carmilla" || opponent === "lucifer";
   const isRival = opponent === "rival-demon";
   
-  const baseOpponentHealth = isOverlord ? 300 : (isRival ? 120 : 100);
-  const baseOpponentDamage = isOverlord ? 20 : (isRival ? 12 : 8);
+  const baseOpponentHealth = isOverlord ? 600 : (isRival ? 120 : 100);
+  const baseOpponentDamage = isOverlord ? 35 : (isRival ? 12 : 8);
   
   // POWER & AGE SCALING: Higher power = more health, more CE output, more damage. Age significantly increases max health
   const playerPowerLevel = gameState.character.power || 0;
@@ -107,7 +107,7 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 0.15 : 0; // 15% from overlords
+      const mythicalChance = isOverlord ? 0.05 : 0; // 5% from overlords (reduced from 15%)
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
@@ -174,7 +174,7 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 0.15 : 0;
+      const mythicalChance = isOverlord ? 0.05 : 0; // 5% from overlords (reduced from 15%)
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
@@ -238,7 +238,7 @@ export default function BattlePanel({
     if (newOpponentHealth <= 0) {
       const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
-      const mythicalChance = isOverlord ? 0.15 : 0;
+      const mythicalChance = isOverlord ? 0.05 : 0; // 5% from overlords (reduced from 15%)
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;

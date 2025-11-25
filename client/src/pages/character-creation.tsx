@@ -34,10 +34,31 @@ function getInitialOwnedPowers(): string[] {
   }
 }
 
-// Each new character starts with 100 soulcoins
-// (Soulcoins stay with that character when saved/loaded, not accumulated globally)
+// Load total accumulated soulcoins from all previous saves (global shared pool)
+// This works like a hivemind currency - if you spent soulcoins buying powers,
+// every new character sees the reduced amount
 function getInitialSoulcoins(): number {
-  return 100;
+  try {
+    const saves = getAllSaves();
+    
+    // First character gets 100 base soulcoins
+    if (saves.length === 0) {
+      return 100;
+    }
+    
+    // Subsequent characters get total from all previous saves (no additional 100)
+    let totalSoulcoins = 0;
+    saves.forEach(save => {
+      if (save && save.gameState && save.gameState.character.soulcoins !== undefined) {
+        totalSoulcoins += save.gameState.character.soulcoins;
+      }
+    });
+    
+    return totalSoulcoins;
+  } catch (error) {
+    console.error("Error loading soulcoins:", error);
+    return 100;
+  }
 }
 
 export type CharacterData = {

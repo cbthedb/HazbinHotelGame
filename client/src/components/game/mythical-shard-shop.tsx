@@ -24,7 +24,7 @@ export default function MythicalShardShop({ gameState, onPurchaseMythical }: Myt
     .filter(p => p.rarity === "mythical" && !ownedPowerIds.has(p.id))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const MYTHICAL_SHARD_COST = 3; // Cost in shards per mythical power
+  const MYTHICAL_SHARD_COST = 10; // Cost in shards per mythical power
 
   const handlePurchase = (power: any) => {
     const shardsNeeded = MYTHICAL_SHARD_COST;

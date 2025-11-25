@@ -7,7 +7,7 @@ import { Sparkles, Zap, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import eventsData from "@/data/events.json";
 import { generateAIEvent } from "@/lib/aiEventClient";
-import { generateEventWithUserInput } from "@/lib/houndify";
+import { generateEventWithUserInput } from "@/lib/smart-ai";
 import { applyNpcAffects } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 import type { GameEvent } from "@shared/schema";

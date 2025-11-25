@@ -25,6 +25,7 @@ export const characters = pgTable("characters", {
   empathy: integer("empathy").notNull().default(10),
   health: integer("health").notNull().default(100),
   wealth: integer("wealth").notNull().default(100),
+  soulcoins: integer("soulcoins").notNull().default(0),
   
   // Meta Stats
   age: integer("age").notNull().default(0),
@@ -154,7 +155,7 @@ export type Power = {
   cooldown: number; // in turns
   effect: string;
   description: string;
-  rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
+  rarity: "common" | "uncommon" | "rare" | "epic" | "legendary" | "mythical";
   unlockConditions: {
     origin?: string[];
     minPower?: number;

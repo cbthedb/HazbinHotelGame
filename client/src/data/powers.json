@@ -1661,5 +1661,61 @@
     "rarity": "uncommon",
     "unlockConditions": { "minInfluence": 10 },
     "isPassive": false
+  },
+  {
+    "id": "absolution-void",
+    "name": "Absolution Void",
+    "type": "void",
+    "basePower": 35,
+    "controlReq": 20,
+    "corruptionCost": 8,
+    "cooldown": 12,
+    "effect": "instant:reality-erasure",
+    "description": "Erase a foe from existence itself. Mythical power from overlords.",
+    "rarity": "mythical",
+    "unlockConditions": { "minPower": 100 },
+    "isPassive": false
+  },
+  {
+    "id": "eternal-nightfall",
+    "name": "Eternal Nightfall",
+    "type": "shadow-eldritch",
+    "basePower": 32,
+    "controlReq": 18,
+    "corruptionCost": 7,
+    "cooldown": 11,
+    "effect": "zone:darkness-ascendant",
+    "description": "Plunge the battlefield into eternal darkness. Mythical power from overlords.",
+    "rarity": "mythical",
+    "unlockConditions": { "minControl": 90 },
+    "isPassive": false
+  },
+  {
+    "id": "pact-absolute",
+    "name": "Pact Absolute",
+    "type": "contract",
+    "basePower": 0,
+    "controlReq": 15,
+    "corruptionCost": 10,
+    "cooldown": 0,
+    "effect": "passive:deal-perfection",
+    "description": "Passive: All deals give 3x wealth but cost 3 corruption. Mythical overlord power.",
+    "rarity": "mythical",
+    "unlockConditions": { "minInfluence": 85 },
+    "isPassive": true
+  },
+  {
+    "id": "seduction-mastery",
+    "name": "Seduction Mastery",
+    "type": "seduction",
+    "basePower": 28,
+    "controlReq": 16,
+    "corruptionCost": 5,
+    "cooldown": 9,
+    "effect": "charm:enslave-will",
+    "description": "Enslave an enemy's will to your command. Mythical power from overlords.",
+    "rarity": "mythical",
+    "unlockConditions": { "minInfluence": 80 },
+    "isPassive": false
   }
 ]

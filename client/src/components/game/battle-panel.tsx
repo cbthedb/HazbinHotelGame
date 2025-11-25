@@ -105,12 +105,20 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
+      const mythicalChance = isOverlord ? 0.15 : 0; // 15% from overlords
+      const isMythical = Math.random() < mythicalChance;
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
+      
       onBattleEnd(true, {
         power: 2,
         influence: 1,
         wealth: 50,
+        soulcoins: 10,
         powerReward: ultimatePower,
-        overlordPower: overlordPower
+        overlordPower: overlordPower,
+        isMythical: isMythical,
+        mythicalPower: mythicalReward
       });
       return;
     }
@@ -163,12 +171,20 @@ export default function BattlePanel({
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
+      const mythicalChance = isOverlord ? 0.15 : 0;
+      const isMythical = Math.random() < mythicalChance;
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
+      
       onBattleEnd(true, {
         power: 3,
         influence: 2,
         wealth: 75,
+        soulcoins: 15,
         powerReward: ultimatePower,
-        overlordPower: overlordPower
+        overlordPower: overlordPower,
+        isMythical: isMythical,
+        mythicalPower: mythicalReward
       });
       return;
     }
@@ -218,12 +234,20 @@ export default function BattlePanel({
     if (newOpponentHealth <= 0) {
       const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
+      const mythicalChance = isOverlord ? 0.15 : 0;
+      const isMythical = Math.random() < mythicalChance;
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
+      
       onBattleEnd(true, {
         power: powerReward,
         influence: 5,
         wealth: 200,
+        soulcoins: 25,
         powerReward: ultimatePower,
-        overlordPower: overlordPower
+        overlordPower: overlordPower,
+        isMythical: isMythical,
+        mythicalPower: mythicalReward
       });
       return;
     }

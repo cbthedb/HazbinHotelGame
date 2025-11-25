@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { getStatBarColor, getRankTitle } from "@/lib/gameHelpers";
-import { Crown, Zap, Sparkles, Heart, Skull, Coins, Users } from "lucide-react";
+import { Crown, Zap, Sparkles, Heart, Skull, Coins, Users, Gem } from "lucide-react";
 
 interface StatsPanelProps {
   character: {
@@ -14,6 +14,7 @@ interface StatsPanelProps {
     empathy: number;
     health: number;
     wealth: number;
+    soulcoins?: number;
   };
 }
 
@@ -46,6 +47,16 @@ export default function StatsPanel({ character }: StatsPanelProps) {
           <Progress value={character.health} className="h-2" />
           <p className="text-xs text-muted-foreground mt-1">{character.health} / 100</p>
         </div>
+
+        {character.soulcoins !== undefined && (
+          <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-md">
+            <div className="flex items-center gap-2">
+              <Gem className="w-4 h-4 text-purple-500" />
+              <span className="text-sm font-semibold">Soulcoins</span>
+              <span className="ml-auto text-sm font-bold text-purple-400">{character.soulcoins}</span>
+            </div>
+          </div>
+        )}
 
         {stats.map((stat) => {
           const Icon = stat.icon;

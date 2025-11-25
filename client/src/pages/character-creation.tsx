@@ -10,6 +10,7 @@ import AppearanceStep from "@/components/character-creation/appearance-step";
 import OriginStep from "@/components/character-creation/origin-step";
 import TraitsStep from "@/components/character-creation/traits-step";
 import PowersStep from "@/components/character-creation/powers-step";
+import ShopStep from "@/components/character-creation/shop-step";
 import SummaryStep from "@/components/character-creation/summary-step";
 import { saveGame, createNewGameState } from "@/lib/game-state";
 import allPowers from "@/data/powers.json";
@@ -26,6 +27,7 @@ export type CharacterData = {
   origin: Origin | null;
   selectedTraits: string[];
   selectedPowers: string[];
+  soulcoins: number;
 };
 
 export default function CharacterCreation() {
@@ -42,7 +44,8 @@ export default function CharacterCreation() {
     },
     origin: null,
     selectedTraits: [],
-    selectedPowers: []
+    selectedPowers: [],
+    soulcoins: 100
   });
 
   const steps = [
@@ -51,6 +54,7 @@ export default function CharacterCreation() {
     { title: "Origin", description: "Select your path in Hell" },
     { title: "Traits", description: "Define your personality" },
     { title: "Powers", description: "Choose your abilities" },
+    { title: "Shop", description: "Buy power upgrades" },
     { title: "Summary", description: "Review your character" }
   ];
 
@@ -83,10 +87,11 @@ export default function CharacterCreation() {
           corruption: characterData.origin.startingStats.corruption,
           empathy: characterData.origin.startingStats.empathy,
           health: characterData.origin.startingStats.health,
-          wealth: 1000, // Starting wealth to buy powers
+          wealth: 1000,
+          soulcoins: Math.max(0, 100 - characterData.soulcoins),
           appearance: characterData.appearance,
           traits: characterData.selectedTraits,
-          powers: commonPowers,
+          powers: characterData.selectedPowers.length > 0 ? characterData.selectedPowers : commonPowers,
           rank: "street-demon"
         };
 
@@ -121,6 +126,8 @@ export default function CharacterCreation() {
       case 4:
         return characterData.selectedPowers.length >= 1;
       case 5:
+        return true; // Shop always valid
+      case 6:
         return true; // Summary always valid
       default:
         return false;
@@ -190,6 +197,12 @@ export default function CharacterCreation() {
               />
             )}
             {step === 5 && (
+              <ShopStep
+                data={characterData}
+                onChange={(data) => setCharacterData({ ...characterData, ...data })}
+              />
+            )}
+            {step === 6 && (
               <SummaryStep data={characterData} />
             )}
           </CardContent>

@@ -14,7 +14,7 @@ import LocationPanel from "@/components/game/location-panel";
 import ActivitiesPanel from "@/components/game/activities-panel";
 import BattlePanel from "@/components/game/battle-panel";
 import ProgressionPanel from "@/components/game/progression-panel";
-import ShopPanel from "@/components/game/shop-panel";
+import ShopPanel from "@/components/game/shop-panel-collapsible";
 import AnimatedLoading from "@/components/game/animated-loading";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadGame, saveGame } from "@/lib/game-state";
@@ -120,14 +120,22 @@ export default function GamePage() {
         victoryMsg += ` You learned a new power!`;
       }
 
+      // Add mythical power for overlord defeats (low chance)
+      const isMythicalReward = won && rewards.isMythical;
+
       const updatedCharacter = {
         ...gameState.character,
         power: Math.max(0, Math.min(100, (gameState.character.power || 0) + (rewards.power || 0))),
         influence: Math.max(0, (gameState.character.influence || 0) + (rewards.influence || 0)),
         wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
+        soulcoins: Math.max(0, (gameState.character.soulcoins || 0) + (rewards.soulcoins || 0)),
         health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0))),
-        powers: newPowers
+        powers: isMythicalReward && rewards.mythicalPower ? [...newPowers, rewards.mythicalPower] : newPowers
       };
+
+      if (isMythicalReward && rewards.mythicalPower) {
+        victoryMsg += ` MYTHICAL POWER ACQUIRED!`;
+      }
 
       const updatedState: GameState = {
         ...gameState,

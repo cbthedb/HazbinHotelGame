@@ -61,6 +61,33 @@ function getInitialSoulcoins(): number {
   }
 }
 
+// Calculate stat bonus multiplier based on power rarities
+// Stronger powers = better starting stats and faster growth
+function calculatePowerBonus(powerIds: string[]): number {
+  const rarityBonus: Record<string, number> = {
+    common: 0,
+    uncommon: 0.10,
+    rare: 0.20,
+    epic: 0.35,
+    legendary: 0.50,
+    mythical: 0.75
+  };
+  
+  const powers = allPowers as any[];
+  let totalBonus = 0;
+  
+  powerIds.forEach(powerId => {
+    const power = powers.find(p => p.id === powerId);
+    if (power) {
+      totalBonus += rarityBonus[power.rarity] || 0;
+    }
+  });
+  
+  // Average bonus across all powers, capped at 0.75 (mythical tier)
+  const avgBonus = powerIds.length > 0 ? Math.min(totalBonus / powerIds.length, 0.75) : 0;
+  return 1 + avgBonus;
+}
+
 export type CharacterData = {
   firstName: string;
   lastName: string;
@@ -129,6 +156,9 @@ export default function CharacterCreation() {
               .map(p => p.id)
               .slice(0, 3);
 
+        // Calculate power bonus multiplier for starting stats
+        const powerBonus = calculatePowerBonus(characterData.ownedPowers);
+        
         // Create character with all required fields
         const newCharacter: Character = {
           id: `char-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -136,12 +166,12 @@ export default function CharacterCreation() {
           origin: characterData.origin.id,
           appearance: characterData.appearance,
           age: 25,
-          power: characterData.origin.startingStats.power,
-          control: characterData.origin.startingStats.control,
-          influence: characterData.origin.startingStats.influence,
-          corruption: characterData.origin.startingStats.corruption,
-          empathy: characterData.origin.startingStats.empathy,
-          health: characterData.origin.startingStats.health,
+          power: Math.round(characterData.origin.startingStats.power * powerBonus),
+          control: Math.round(characterData.origin.startingStats.control * powerBonus),
+          influence: Math.round(characterData.origin.startingStats.influence * powerBonus),
+          corruption: Math.round(characterData.origin.startingStats.corruption * powerBonus),
+          empathy: Math.round(characterData.origin.startingStats.empathy * powerBonus),
+          health: Math.round(characterData.origin.startingStats.health * powerBonus),
           wealth: 1000,
           soulcoins: characterData.soulcoins,
           mythicalShards: characterData.mythicalShards || 0,

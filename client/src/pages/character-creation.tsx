@@ -16,15 +16,23 @@ import { saveGame, createNewGameState, getAllSaves } from "@/lib/game-state";
 import allPowers from "@/data/powers.json";
 import type { Origin, Character } from "@shared/schema";
 
-// Load globally-owned powers from all previous saves
+// Load globally-owned MYTHICAL powers only from all previous saves
+// This is the only connection between character creation and in-game shops
 function getInitialOwnedPowers(): string[] {
   try {
     const saves = getAllSaves();
     const globalOwnedPowers = new Set<string>();
+    const allPowersData = allPowers as any[];
     
     saves.forEach(save => {
       if (save && save.gameState && save.gameState.character.powers) {
-        save.gameState.character.powers.forEach(p => globalOwnedPowers.add(p));
+        save.gameState.character.powers.forEach((p: string) => {
+          // Only carry over mythical powers from shard purchases
+          const power = allPowersData.find((pow: any) => pow.id === p);
+          if (power && power.rarity === "mythical") {
+            globalOwnedPowers.add(p);
+          }
+        });
       }
     });
     

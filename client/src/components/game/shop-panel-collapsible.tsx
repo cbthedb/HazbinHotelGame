@@ -45,11 +45,11 @@ export default function ShopPanel({ gameState, onPurchasePower }: ShopPanelProps
   const [selectedRarity, setSelectedRarity] = useState<string | null>(null);
 
   const POWER_PRICES: Record<string, number> = {
-    common: 50,
-    uncommon: 500,
-    rare: 1500,
-    epic: 3500,
-    legendary: 7500,
+    common: 200,
+    uncommon: 1500,
+    rare: 4500,
+    epic: 10000,
+    legendary: 20000,
     mythical: 99999 // Not available in shop
   };
 

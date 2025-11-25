@@ -174,7 +174,8 @@ export default function BattlePanel({
     newLog.push(`You unleashed ${power.name}! Devastating hit for ${Math.floor(damage)} damage!`);
 
     const newCE = Math.max(0, battle.cursedEnergy - ceCost);
-    const baseUltimate = Math.round(100 * (1 + playerPowerLevel * 0.03)); // 3% gauge per power
+    // Reduced ultimate gauge gain: only 20 per power attack (was 100+), must still take 7 turns of attacks to charge
+    const baseUltimate = 20;
     const newUltimate = Math.min(700, battle.ultimateGauge + baseUltimate);
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 

@@ -26,11 +26,17 @@ export const characters = pgTable("characters", {
   health: integer("health").notNull().default(100),
   wealth: integer("wealth").notNull().default(100),
   soulcoins: integer("soulcoins").notNull().default(0),
+  mythicalShards: integer("mythical_shards").notNull().default(0),
+  
+  // Powers & Traits
+  powers: jsonb("powers").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  traits: jsonb("traits").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
   
   // Meta Stats
   age: integer("age").notNull().default(0),
   currentRank: text("current_rank").notNull().default("street-demon"), // street-demon, rising-power, overlord-candidate, overlord, supreme-overlord, hells-apex
   currentLocation: text("current_location").notNull().default("hotel-district"),
+  rank: text("rank").notNull().default("street-demon"), // For backward compatibility
   
   // Turn & Progression
   currentTurn: integer("current_turn").notNull().default(0),

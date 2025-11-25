@@ -1,0 +1,154 @@
+# Hazbin Hotel BitLife Simulation Game
+
+## Project Overview
+A comprehensive BitLife-style life simulation game set in the Hazbin Hotel universe featuring character creation with 5 origin paths, 8 core stats, 127 powers across 15 power types with rarity tiers (common→legendary), 60+ traits, Pentagram City exploration across 7 districts, territory control mechanics, NPC relationships with romance options, faction reputation systems, power ranking progression, multiple endings, integrated soundtrack, and AI-generated dynamic scenarios.
+
+## Latest Updates
+
+### Power Shop System (COMPLETED)
+- **Shop Panel**: Integrated shopping UI in left column below progression panel
+- **Power Pricing**: 
+  - Common powers (free at start)
+  - Uncommon: 500 wealth
+  - Rare: 1500 wealth
+  - Epic: 3500 wealth
+  - Legendary: 7500 wealth
+- **Initial Setup**: Players start with 1000 wealth and only common powers, must purchase higher rarities
+- **Currency Usage**: Wealth now has critical gameplay purpose - progression requires purchasing powers
+
+### Overlord Power Rewards (COMPLETED)
+- Defeating overlords rewards one of their signature powers
+- Win conditions now check if opponent is overlord and add their power to character
+- Works for all overlord types: Charlie, Alastor, Valentino, Vox, Carmilla, Lucifer
+
+### Extended Power Set (COMPLETED)
+- **Total Powers**: 127 powers (up from 97)
+- **New Powers Added** (15):
+  - Shadow Strike (common)
+  - Soul Drain (uncommon)
+  - Mind Shatter (uncommon)
+  - Chaos Pulse (rare)
+  - Blood Spiral (rare)
+  - Void Touch (epic)
+  - Redemption Light (uncommon)
+  - Shadow Clones (rare)
+  - Infernal Contract (rare)
+  - Celestial Ascension (epic)
+  - Summoned Legion (rare)
+  - Reality Distortion (legendary)
+  - Demon Form (rare)
+  - Eternal Vow (epic)
+  - Sonic Scream (uncommon)
+
+### Battle System
+- Base Attack: Lowest rarity non-passive power for scaling
+- Ultimate Attack: Highest rarity power for maximum damage (2.5x)
+- Cursed Energy: 15 per turn max, powers cost 3× their base cost
+- Ultimate Gauge: Builds over 7 turns at 100 points/turn, unleash for 2.5x damage burst
+- Damage Scaling: 3% more per power level stat
+- Health Scaling: +0.25 per power level
+
+### Difficulty Tuning
+- Battle rewards reduced 3x for balance
+- Stat gains from activities reduced 3x
+- Progression milestones significantly increased
+- Overlord battles give 300 base health (was 240)
+- Rival demon battles give 120 health
+
+## Architecture
+- **Frontend**: React + TypeScript with Wouter routing
+- **Backend**: Express.js with TanStack Query
+- **Storage**: In-memory storage with browser persistence
+- **UI Framework**: Shadcn + Tailwind CSS
+- **Audio**: Integrated soundtrack system
+- **Data**: Powers, NPCs, Traits in JSON format
+
+## Key Game Features
+
+### Character Creation (5 Origins)
+1. Hellborn - native demon
+2. Corrupted - redeemed soul gone dark
+3. Fallen Angel - cast out from heaven
+4. Contract Dealer - soul trader
+5. Pit Fighter - rises from the arenas
+
+### Stats (8 Core)
+- Power: Combat & magical ability
+- Control: Emotional regulation & ability control
+- Influence: Social manipulation & leadership
+- Corruption: Alignment to demonic corruption
+- Empathy: Connection to others
+- Charisma: Charm & persuasion
+- Health: Physical/mental resilience
+- Wealth: Financial resources
+
+### Power Types (15)
+1. Hellfire
+2. Blood Magic
+3. Shadow
+4. Illusion
+5. Necromancy
+6. Teleportation
+7. Glamour
+8. Summoning
+9. Voice Broadcast
+10. Deals
+11. Holy
+12. Transformation
+13. Bond
+14. Reality
+15. Void/Chaos
+
+### Districts (7)
+1. Pride Ring - downtown center
+2. Wrath Arena - combat district
+3. Lust Pavilion - entertainment
+4. Gluttony Market - trade hub
+5. Envy Tower - corporate
+6. Greed Casino - wealth district
+7. Sloth Gardens - rest/recovery
+
+## Current Game State
+- ✅ Character creation with full customization
+- ✅ Core stats system with progression
+- ✅ 127 power system with rarities and requirements
+- ✅ Battle system with cursed energy mechanics
+- ✅ Shop system with wealth-based purchases
+- ✅ Overlord power rewards
+- ⏳ NPC relationships and romance
+- ⏳ Faction reputation system
+- ⏳ Territory control mechanics
+- ⏳ Multiple endings system
+- ⏳ AI-generated scenario system
+
+## Code Organization
+```
+client/src/
+├── pages/
+│   ├── game.tsx (main game loop)
+│   ├── character-creation.tsx (character setup)
+├── components/
+│   ├── game/
+│   │   ├── battle-panel.tsx (combat system)
+│   │   ├── shop-panel.tsx (power shop)
+│   │   ├── stats-panel.tsx (character stats)
+│   │   ├── powers-panel.tsx (learned powers)
+│   │   ├── progression-panel.tsx (milestones)
+│   │   ├── event-card.tsx (scenarios)
+│   │   └── ... (other UI components)
+├── data/
+│   ├── powers.json (all 127 powers)
+│   ├── npcs.json (all characters)
+│   └── ai-scenarios.ts (217+ story outcomes)
+└── lib/
+    ├── game-state.ts (save/load system)
+    └── audio.ts (soundtrack management)
+```
+
+## Dev Guidelines
+- Follow fullstack_js conventions
+- Minimize files - collapse similar components
+- Keep backend thin - push logic to frontend
+- Always define types in shared/schema.ts first
+- Use in-memory storage unless specified otherwise
+- Validate with Zod schemas before API calls

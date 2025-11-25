@@ -1,0 +1,15 @@
+{
+  "firstNames": {
+    "dark": ["Crimson", "Asher", "Raven", "Vesper", "Nyx", "Sable", "Mordred", "Azrael", "Damien", "Lilith"],
+    "victorian": ["Ambrose", "Beatrice", "Cornelius", "Delilah", "Edmund", "Florence", "Gideon", "Henrietta", "Isadora", "Jasper"],
+    "sinful": ["Avarice", "Envy", "Gluttony", "Greed", "Lust", "Pride", "Sloth", "Wrath", "Vice", "Malice"],
+    "punny": ["Ash Heap", "Ember Burns", "Soul Snatcher", "Grimm Reaper", "Char Broil", "Blaze Inferno", "Shadow Walker", "Night Shade"],
+    "hazbin": ["Charlie", "Alastor", "Angel", "Vaggie", "Husk", "Niffty", "Vox", "Valentino", "Velvette", "Rosie"]
+  },
+  "lastNames": {
+    "dark": ["Nightshade", "Darkmore", "Shadowbane", "Grimwood", "Blackthorn", "Ashborne", "Deathwhisper", "Hellfire"],
+    "victorian": ["Morningstar", "Ashworth", "Blackwood", "Carmine", "DuPont", "Fairchild", "Graves", "Hartwell"],
+    "demonic": ["Hellborn", "Soulreaper", "Brimstone", "Infernal", "Diabolus", "Malevolent", "Sinister", "Vicious"],
+    "hazbin": ["Morningstar", "Carmine", "Overlord", "Media", "Entertainment", "Cannibal", "Royal", "Pride"]
+  }
+}

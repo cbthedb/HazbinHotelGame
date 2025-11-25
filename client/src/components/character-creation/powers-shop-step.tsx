@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Gem, Zap, Lock } from "lucide-react";
+import { Gem, Zap, Lock, AlertCircle } from "lucide-react";
 import powersData from "@/data/powers.json";
+import { getAllSaves } from "@/lib/game-state";
 import type { CharacterData } from "@/pages/character-creation";
 import type { Power } from "@shared/schema";
 
@@ -19,18 +20,27 @@ const SOULCOIN_PRICES: Record<string, number> = {
   rare: 50,
   epic: 100,
   legendary: 200,
-  mythical: 9999 // Not available in character creation
+  mythical: 0 // Mythicals need 10 shards instead
 };
 
 export default function ShopStep({ data, onChange }: ShopStepProps) {
   const powers = powersData as Power[];
   const selectedSet = new Set(data.selectedPowers);
+  const [totalMythicalShards, setTotalMythicalShards] = useState(0);
+
+  // Count total mythical shards across all saves on mount
+  useEffect(() => {
+    const allSaves = getAllSaves();
+    const shards = allSaves.reduce((total, save) => {
+      return total + (save.gameState.character.mythicalShards || 0);
+    }, 0);
+    setTotalMythicalShards(shards);
+  }, []);
   
-  // All powers available except mythicals (including passive)
+  // All powers available including mythicals
   const availablePowers = (powers as any[])
-    .filter(p => p.rarity !== "mythical") // Exclude mythicals from character creation
     .sort((a, b) => {
-      const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
+      const rarityOrder = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4, mythical: 5 };
       const aRarity = rarityOrder[a.rarity as keyof typeof rarityOrder] ?? 6;
       const bRarity = rarityOrder[b.rarity as keyof typeof rarityOrder] ?? 6;
       if (aRarity !== bRarity) return aRarity - bRarity;
@@ -40,8 +50,10 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
   const handlePurchase = (power: Power) => {
     const price = SOULCOIN_PRICES[power.rarity];
     
-    // Don't allow purchasing mythicals
-    if (power.rarity === "mythical") return;
+    // Check if mythical and if have enough shards
+    if (power.rarity === "mythical") {
+      if (totalMythicalShards < 10) return; // Need 10 shards
+    }
     
     if (data.soulcoins < price) return;
     
@@ -77,31 +89,38 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1">
             <CardTitle>Select Your Powers</CardTitle>
             <CardDescription>Choose which powers to start with using your soulcoins</CardDescription>
           </div>
-          <div className="flex items-center gap-2 bg-purple-500/20 px-3 py-2 rounded-md">
-            <Gem className="w-5 h-5 text-purple-500" />
-            <span className="font-semibold text-purple-300">{data.soulcoins}</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2 bg-purple-500/20 px-3 py-2 rounded-md">
+              <Gem className="w-5 h-5 text-purple-500" />
+              <span className="font-semibold text-purple-300">{data.soulcoins} SC</span>
+            </div>
+            <div className="flex items-center gap-2 bg-red-500/20 px-3 py-2 rounded-md">
+              <Zap className="w-5 h-5 text-red-500" />
+              <span className="font-semibold text-red-300">{totalMythicalShards} MS</span>
+            </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <ScrollArea className="h-96">
           <div className="space-y-2 pr-4">
             {availablePowers.map(power => {
               const price = SOULCOIN_PRICES[power.rarity];
               const isSelected = selectedSet.has(power.id);
-              const canAfford = data.soulcoins >= price;
+              const isMythical = power.rarity === "mythical";
+              const canAfford = isMythical ? totalMythicalShards >= 10 : data.soulcoins >= price;
               
               return (
                 <div
                   key={power.id}
-                  className={`p-3 border rounded-md cursor-pointer transition-all ${
+                  className={`p-3 border rounded-md transition-all ${
                     isSelected ? "bg-primary/20 border-primary ring-1 ring-primary" : "bg-card border-card-border hover-elevate"
-                  }`}
+                  } ${!canAfford ? "opacity-60" : ""}`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
@@ -114,6 +133,12 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                       <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
                         {power.description}
                       </p>
+                      {isMythical && totalMythicalShards < 10 && (
+                        <div className="flex items-center gap-1 mt-2 text-xs text-amber-400">
+                          <AlertCircle className="w-3 h-3" />
+                          <span>Need 10 mythical shards ({totalMythicalShards}/10)</span>
+                        </div>
+                      )}
                     </div>
                     <Button
                       size="sm"
@@ -122,7 +147,9 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                       variant={isSelected ? "default" : canAfford ? "outline" : "ghost"}
                       className="whitespace-nowrap"
                     >
-                      {price === 0 ? (
+                      {isMythical ? (
+                        isSelected ? "Own" : totalMythicalShards >= 10 ? "Get" : "Locked"
+                      ) : price === 0 ? (
                         isSelected ? "Own" : "Free"
                       ) : isSelected ? (
                         `Own (${price})`
@@ -136,12 +163,14 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
             })}
           </div>
         </ScrollArea>
-        <div className="mt-4 p-3 bg-muted rounded-md">
+        <div className="space-y-2 p-3 bg-muted rounded-md">
           <p className="text-sm">
             <span className="font-semibold">Selected Powers:</span> {data.selectedPowers.length}/5
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Common powers are free. Max 5 powers in character creation. Mythical powers are earned in-game!
+          <p className="text-xs text-muted-foreground">
+            • Common powers are FREE  
+            • Higher rarities cost soul coins  
+            • Mythical powers need 10 shards total across all your saves
           </p>
         </div>
       </CardContent>

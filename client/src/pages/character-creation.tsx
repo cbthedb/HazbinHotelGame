@@ -71,15 +71,20 @@ export default function CharacterCreation() {
           return;
         }
 
-        // Start with common powers only (free powers)
-        const commonPowers = (allPowers as any[])
-          .filter(p => p.rarity === "common" && !p.isPassive)
-          .map(p => p.id);
+        // Build final powers list: selected powers + fallback to commons if none selected
+        const finalPowers = characterData.selectedPowers.length > 0 
+          ? characterData.selectedPowers
+          : (allPowers as any[])
+              .filter(p => p.rarity === "common")
+              .map(p => p.id)
+              .slice(0, 3);
 
+        // Create character with all required fields
         const newCharacter: Character = {
-          firstName: characterData.firstName,
-          lastName: characterData.lastName,
+          id: `char-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          name: `${characterData.firstName} ${characterData.lastName}`,
           origin: characterData.origin.id,
+          appearance: characterData.appearance,
           age: 25,
           power: characterData.origin.startingStats.power,
           control: characterData.origin.startingStats.control,
@@ -90,16 +95,20 @@ export default function CharacterCreation() {
           wealth: 1000,
           soulcoins: Math.max(0, 100 - characterData.soulcoins),
           mythicalShards: characterData.mythicalShards || 0,
-          appearance: characterData.appearance,
+          powers: finalPowers,
           traits: characterData.selectedTraits,
-          powers: characterData.selectedPowers.length > 0 ? characterData.selectedPowers : commonPowers,
-          rank: "street-demon"
+          currentRank: "street-demon",
+          currentLocation: "hotel-district",
+          currentTurn: 1,
+          rank: "street-demon",
+          createdAt: new Date(),
+          updatedAt: new Date()
         };
 
         const gameState = createNewGameState(newCharacter);
         await saveGame(gameState);
 
-        toast({ title: "Welcome to Hell!", description: `Your life as ${newCharacter.firstName} ${newCharacter.lastName} begins...` });
+        toast({ title: "Welcome to Hell!", description: `Your life as ${characterData.firstName} ${characterData.lastName} begins...` });
         setLocation("/game");
       } catch (error) {
         console.error("Character creation error:", error);

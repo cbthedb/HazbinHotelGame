@@ -123,6 +123,26 @@ export function playBattleMusic(opponent: string): void {
   }
 }
 
+export function playMenuMusic(): void {
+  // Stop existing audio
+  if (audioElement) {
+    audioElement.pause();
+    audioElement.currentTime = 0;
+  }
+  
+  // Create and play Hear My Hope
+  try {
+    audioElement = new Audio(hearMyHopeUrl);
+    audioElement.volume = 0.5;
+    audioElement.loop = true;
+    audioElement.play().catch(e => console.warn("Could not play audio:", e));
+    console.log("Playing: Hear My Hope");
+    currentTrack = "menu";
+  } catch (e) {
+    console.warn("Error playing menu audio:", e);
+  }
+}
+
 export function stopMusic(): void {
   if (audioElement) {
     audioElement.pause();

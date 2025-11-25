@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { initAudio, playMenuMusic } from "@/lib/audio";
 import NameStep from "@/components/character-creation/name-step";
 import AppearanceStep from "@/components/character-creation/appearance-step";
 import OriginStep from "@/components/character-creation/origin-step";
@@ -158,6 +159,12 @@ export default function CharacterCreation() {
   ];
 
   const progress = ((step + 1) / steps.length) * 100;
+
+  // Initialize audio and play menu music on mount
+  useEffect(() => {
+    initAudio();
+    playMenuMusic();
+  }, []);
 
   const handleNext = async () => {
     if (step < steps.length - 1) {

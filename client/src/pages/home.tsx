@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Save, Info, Trash2 } from "lucide-react";
 import SplashScreen from "@/components/splash-screen";
+import { initAudio, playMenuMusic } from "@/lib/audio";
 import { loadGame, getAllSaves, deleteGame, deleteAllSaves, loadLatestSave } from "@/lib/game-state";
 import type { SaveSlot } from "@/lib/game-state";
 
@@ -20,6 +21,12 @@ export default function Home() {
       setFadeIn(true);
     }
   }, [showSplash]);
+
+  // Initialize audio and play menu music on mount
+  useEffect(() => {
+    initAudio();
+    playMenuMusic();
+  }, []);
 
   // Check for saved games on mount
   useEffect(() => {

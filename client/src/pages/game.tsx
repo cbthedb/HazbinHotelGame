@@ -80,10 +80,10 @@ export default function GamePage() {
       age: newAge,
       // Passive health regeneration: restore 5 health per turn (max 100)
       health: Math.min(100, gameState.character.health + 5 + levelUpBonus.health),
-      // Apply level-up bonuses
-      power: Math.min(100, gameState.character.power + levelUpBonus.power),
-      control: Math.min(100, gameState.character.control + levelUpBonus.control),
-      influence: Math.min(100, gameState.character.influence + levelUpBonus.influence)
+      // Apply level-up bonuses (no caps on stats)
+      power: gameState.character.power + levelUpBonus.power,
+      control: gameState.character.control + levelUpBonus.control,
+      influence: gameState.character.influence + levelUpBonus.influence
     };
 
     const updatedState: GameState = {

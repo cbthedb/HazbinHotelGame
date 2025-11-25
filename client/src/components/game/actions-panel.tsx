@@ -91,7 +91,7 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
         const newUseCounts = { ...useCounts, "train-power": (useCounts["train-power"] || 0) + 1 };
         
         onUpdateCharacter({ 
-          power: Math.min(100, character.power + gain),
+          power: character.power + gain,
           health: character.health - 5,
           actionCooldowns: newCooldowns,
           actionUseCounts: newUseCounts
@@ -189,7 +189,7 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
         onUpdateCharacter({
           soulcoins: (character.soulcoins || 0) + soulcoinGain,
           influence: character.influence + influenceGain,
-          corruption: Math.min(100, (character.corruption || 0) + 5),
+          corruption: (character.corruption || 0) + 5,
           health: character.health - 8,
           actionCooldowns: newCooldowns
         } as any);

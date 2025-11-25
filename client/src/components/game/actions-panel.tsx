@@ -85,14 +85,16 @@ export default function ActionsPanel({ onNextTurn, gameState, onUpdateCharacter 
           return;
         }
         
+        const newSoulcoins = (character.soulcoins || 0) + 1;
         const newCooldowns = { ...cooldowns, "work": gameState.turn + 10 };
+        console.log(`[Work] Before: ${character.soulcoins}, After: ${newSoulcoins}`);
         onUpdateCharacter({ 
-          soulcoins: (character.soulcoins || 0) + 1,
+          soulcoins: newSoulcoins,
           health: character.health - 5,
           actionCooldowns: newCooldowns
         } as any);
         
-        toast({ title: "Work Complete", description: "You earned 1 soul coin!" });
+        toast({ title: "Work Complete", description: `You earned 1 soul coin! (Total: ${newSoulcoins})` });
       }
     },
     {

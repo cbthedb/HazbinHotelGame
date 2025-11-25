@@ -25,7 +25,8 @@ export type CharacterData = {
   };
   origin: Origin | null;
   selectedTraits: string[];
-  selectedPowers: string[];
+  ownedPowers: string[]; // Powers player has bought
+  equippedPowers: string[]; // Powers player is actively using (max 5)
   soulcoins: number;
   mythicalShards?: number;
 };
@@ -44,7 +45,8 @@ export default function CharacterCreation() {
     },
     origin: null,
     selectedTraits: [],
-    selectedPowers: [],
+    ownedPowers: [],
+    equippedPowers: [],
     soulcoins: 100,
     mythicalShards: 0
   });
@@ -71,9 +73,9 @@ export default function CharacterCreation() {
           return;
         }
 
-        // Build final powers list: selected powers + fallback to commons if none selected
-        const finalPowers = characterData.selectedPowers.length > 0 
-          ? characterData.selectedPowers
+        // Build final powers list: equipped powers + fallback to commons if none selected
+        const finalPowers = characterData.equippedPowers.length > 0 
+          ? characterData.equippedPowers
           : (allPowers as any[])
               .filter(p => p.rarity === "common")
               .map(p => p.id)

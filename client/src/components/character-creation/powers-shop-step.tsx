@@ -25,7 +25,8 @@ const SOULCOIN_PRICES: Record<string, number> = {
 
 export default function ShopStep({ data, onChange }: ShopStepProps) {
   const powers = powersData as Power[];
-  const selectedSet = new Set(data.selectedPowers);
+  const ownedSet = new Set(data.ownedPowers);
+  const equippedSet = new Set(data.equippedPowers);
   const [totalMythicalShards, setTotalMythicalShards] = useState(0);
 
   // Count total mythical shards across all saves on mount
@@ -47,34 +48,43 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
       return a.name.localeCompare(b.name);
     });
 
-  const handlePurchase = (power: Power) => {
+  const handleBuy = (power: Power) => {
     const price = SOULCOIN_PRICES[power.rarity];
     const isMythical = power.rarity === "mythical";
     
-    if (selectedSet.has(power.id)) {
-      // Deselect and refund
-      const newPowers = data.selectedPowers.filter(id => id !== power.id);
-      const refund = isMythical ? 10 : price; // Refund mythical shards or soulcoins
+    if (ownedSet.has(power.id)) {
+      // Already owned, can't buy again
+      return;
+    }
+    
+    // Check if can afford
+    if (isMythical) {
+      if (totalMythicalShards < 10) return;
+    } else {
+      if (data.soulcoins < price) return;
+    }
+    
+    // Add to owned
+    onChange({
+      ownedPowers: [...data.ownedPowers, power.id],
+      soulcoins: isMythical ? data.soulcoins : (data.soulcoins - price)
+    });
+  };
+
+  const handleEquip = (power: Power) => {
+    if (!ownedSet.has(power.id)) return;
+    
+    if (equippedSet.has(power.id)) {
+      // Unequip
       onChange({
-        selectedPowers: newPowers,
-        soulcoins: data.soulcoins + (isMythical ? 0 : refund)
+        equippedPowers: data.equippedPowers.filter(id => id !== power.id)
       });
     } else {
-      // Try to purchase
-      if (isMythical) {
-        if (totalMythicalShards < 10) return; // Need 10 shards per mythical
-        // Can purchase mythical - spend shards from first save with enough
-        // (Note: in real implementation, would need to track shard spending per save)
-      } else {
-        if (data.soulcoins < price) return; // Need enough soulcoins
-      }
-      
-      // Limit to 5 powers
-      if (data.selectedPowers.length >= 5) return;
+      // Equip (max 5)
+      if (data.equippedPowers.length >= 5) return;
       
       onChange({
-        selectedPowers: [...data.selectedPowers, power.id],
-        soulcoins: isMythical ? data.soulcoins : (data.soulcoins - price)
+        equippedPowers: [...data.equippedPowers, power.id]
       });
     }
   };
@@ -116,7 +126,8 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
           <div className="space-y-2 pr-4">
             {availablePowers.map(power => {
               const price = SOULCOIN_PRICES[power.rarity];
-              const isSelected = selectedSet.has(power.id);
+              const isOwned = ownedSet.has(power.id);
+              const isEquipped = equippedSet.has(power.id);
               const isMythical = power.rarity === "mythical";
               const canAfford = isMythical ? totalMythicalShards >= 10 : data.soulcoins >= price;
               
@@ -124,8 +135,8 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                 <div
                   key={power.id}
                   className={`p-3 border rounded-md transition-all ${
-                    isSelected ? "bg-primary/20 border-primary ring-1 ring-primary" : "bg-card border-card-border hover-elevate"
-                  } ${!canAfford ? "opacity-60" : ""}`}
+                    isEquipped ? "bg-primary/20 border-primary ring-1 ring-primary" : "bg-card border-card-border hover-elevate"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
@@ -134,34 +145,53 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
                         <Badge className={`text-xs ${getRarityColor(power.rarity)} text-white`}>
                           {power.rarity}
                         </Badge>
+                        {isOwned && (
+                          <Badge variant="secondary" className="text-xs">Owned</Badge>
+                        )}
+                        {isEquipped && (
+                          <Badge className="text-xs bg-primary">Equipped</Badge>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
                         {power.description}
                       </p>
-                      {isMythical && totalMythicalShards < 10 && (
+                      {isMythical && totalMythicalShards < 10 && !isOwned && (
                         <div className="flex items-center gap-1 mt-2 text-xs text-amber-400">
                           <AlertCircle className="w-3 h-3" />
                           <span>Need 10 mythical shards ({totalMythicalShards}/10)</span>
                         </div>
                       )}
                     </div>
-                    <Button
-                      size="sm"
-                      onClick={() => handlePurchase(power)}
-                      disabled={!canAfford || (data.selectedPowers.length >= 5 && !isSelected)}
-                      variant={isSelected ? "default" : canAfford ? "outline" : "ghost"}
-                      className="whitespace-nowrap"
-                    >
-                      {isMythical ? (
-                        isSelected ? "Own (10 MS)" : totalMythicalShards >= 10 ? "Get (10 MS)" : "Locked"
-                      ) : price === 0 ? (
-                        isSelected ? "Own" : "Free"
-                      ) : isSelected ? (
-                        `Own (${price})`
-                      ) : (
-                        `${price}`
+                    <div className="flex gap-2">
+                      {!isOwned && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleBuy(power)}
+                          disabled={!canAfford}
+                          variant={canAfford ? "outline" : "ghost"}
+                          className="whitespace-nowrap"
+                        >
+                          {isMythical ? (
+                            totalMythicalShards >= 10 ? "Buy" : "Locked"
+                          ) : price === 0 ? (
+                            "Buy"
+                          ) : (
+                            `Buy (${price})`
+                          )}
+                        </Button>
                       )}
-                    </Button>
+                      {isOwned && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleEquip(power)}
+                          disabled={!isEquipped && data.equippedPowers.length >= 5}
+                          variant={isEquipped ? "default" : "outline"}
+                          className="whitespace-nowrap"
+                        >
+                          {isEquipped ? "Unequip" : "Equip"}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -170,11 +200,12 @@ export default function ShopStep({ data, onChange }: ShopStepProps) {
         </ScrollArea>
         <div className="space-y-2 p-3 bg-muted rounded-md">
           <p className="text-sm">
-            <span className="font-semibold">Selected Powers:</span> {data.selectedPowers.length}/5
+            <span className="font-semibold">Owned:</span> {data.ownedPowers.length} | <span className="font-semibold">Equipped:</span> {data.equippedPowers.length}/5
           </p>
           <p className="text-xs text-muted-foreground">
+            • Buy a power to add it to your inventory  
+            • Equip up to 5 powers to use them in-game  
             • Common powers are FREE  
-            • Higher rarities cost soul coins  
             • Mythical powers need 10 shards total across all your saves
           </p>
         </div>

@@ -354,7 +354,7 @@ export default function GamePage() {
           <ProgressionPanel gameState={gameState} />
         </div>
 
-        {/* Center Column - Events & Actions */}
+        {/* Center Column - Events & Actions & Social */}
         <div className="lg:col-span-2 space-y-4 overflow-y-auto">
           <div className="bg-gradient-to-r from-primary/20 to-primary/10 border-l-4 border-primary rounded p-3 text-sm font-semibold text-amber-100">
             ⚡ CURRENT EVENT
@@ -369,9 +369,13 @@ export default function GamePage() {
             onUpdateCharacter={handleUpdateCharacter} 
           />
           <MapPanel territories={gameState.territory} />
+          <SocialPanel 
+            gameState={gameState}
+            onUpdateGameState={handleUpdateGameState}
+          />
         </div>
 
-        {/* Right Column - Location & Activities & Social */}
+        {/* Right Column - Location & Activities */}
         <div className="space-y-4 overflow-y-auto">
           <LocationPanel 
             gameState={gameState}
@@ -382,10 +386,6 @@ export default function GamePage() {
             onUpdateCharacter={handleUpdateCharacter}
             onEventGenerated={setCurrentEvent}
             onBattleStart={(opponent, district) => setInBattle({ opponent, district })}
-          />
-          <SocialPanel 
-            gameState={gameState}
-            onUpdateGameState={handleUpdateGameState}
           />
         </div>
       </div>

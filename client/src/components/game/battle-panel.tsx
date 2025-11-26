@@ -246,6 +246,40 @@ export default function BattlePanel({
     });
   };
 
+  const handleDefend = () => {
+    const newLog = [...battle.battleLog];
+    newLog.push("You take a defensive stance!");
+
+    const baseCE = Math.round(15 * ceOutputMultiplier);
+    const newCE = Math.min(100, battle.cursedEnergy + baseCE);
+
+    // Opponent attacks while you defend (50% damage reduction)
+    const opponentDamage = (baseOpponentDamage + Math.random() * 12) * 0.5;
+    newLog.push(`${getOpponentName()} attacks! You defend, reducing damage to ${Math.floor(opponentDamage)}!`);
+    const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
+
+    if (newPlayerHealth <= 0) {
+      const affinityChanges: Record<string, number> = {};
+      affinityChanges[opponent] = -15;
+      
+      onBattleEnd(false, {
+        power: -5,
+        health: -60,
+        wealth: -200
+      }, affinityChanges);
+      return;
+    }
+
+    setBattle({
+      ...battle,
+      playerHealth: newPlayerHealth,
+      cursedEnergy: newCE,
+      ultimateGauge: Math.min(700, battle.ultimateGauge + 50),
+      turn: battle.turn + 1,
+      battleLog: newLog
+    });
+  };
+
   const handleUltimate = () => {
     if (battle.ultimateGauge < 700) {
       toast({
@@ -391,9 +425,14 @@ export default function BattlePanel({
               Ultimate ({Math.ceil((700 - battle.ultimateGauge) / 100)})
             </Button>
 
-            <Button variant="outline" disabled data-testid="button-defend">
+            <Button 
+              onClick={handleDefend}
+              variant="outline"
+              className="bg-green-600/20 hover:bg-green-600/40"
+              data-testid="button-defend"
+            >
               <Shield className="w-4 h-4 mr-2" />
-              Defend
+              Defend (50% dmg)
             </Button>
           </div>
 

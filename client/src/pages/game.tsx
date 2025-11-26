@@ -444,7 +444,10 @@ export default function GamePage() {
             gameState={gameState}
             onUpdateCharacter={handleUpdateCharacter}
             onEventGenerated={setCurrentEvent}
-            onBattleStart={(opponent, district) => setInBattle({ opponent, district })}
+            onBattleStart={(opponent, district) => {
+              setInBattle({ opponent, district });
+              setSelectingCompanion(true);
+            }}
             onUpdateGameState={handleUpdateGameState}
           />
         </div>

@@ -257,9 +257,10 @@ export default function BattlePanel({
     }
 
     const baseDamage = (ultimatePower?.basePower || 30) * 2.5;
-    const damage = (baseDamage + Math.random() * 30) * playerDamageMultiplier;
+    const totalUltimateDamage = (baseDamage + Math.random() * 30) * playerDamageMultiplier + damageBonus;
     const newLog = [...battle.battleLog];
-    newLog.push(`${ultimatePower ? "ULTIMATE: " + ultimatePower.name : "ULTIMATE TECHNIQUE"}! Catastrophic damage: ${Math.floor(damage)}!`);
+    const ultimateDamageText = companionJoined ? ` (${Math.floor(damageBonus)} from companion)` : "";
+    newLog.push(`${ultimatePower ? "ULTIMATE: " + ultimatePower.name : "ULTIMATE TECHNIQUE"}! Catastrophic damage: ${Math.floor(totalUltimateDamage)}!${ultimateDamageText}`);
 
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 

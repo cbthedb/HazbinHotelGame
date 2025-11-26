@@ -20,6 +20,8 @@ import MythicalShardShop from "@/components/game/mythical-shard-shop";
 import AnimatedLoading from "@/components/game/animated-loading";
 import NPCBattle from "@/components/game/npc-battle";
 import RivalChallengeModal from "@/components/game/rival-challenge-modal";
+import CompanionSelector from "@/components/game/companion-selector";
+import { updateRelationship } from "@/lib/relationshipSystem";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadLatestSave, saveGame } from "@/lib/game-state";
 import { initAudio, playLocationMusic } from "@/lib/audio";
@@ -36,6 +38,8 @@ export default function GamePage() {
   const [inBattle, setInBattle] = useState<{ opponent: string; district: string } | null>(null);
   const [inNpcBattle, setInNpcBattle] = useState<string | null>(null);
   const [rivalChallenge, setRivalChallenge] = useState<string | null>(null);
+  const [selectingCompanion, setSelectingCompanion] = useState(false);
+  const [selectedCompanion, setSelectedCompanion] = useState<string | null>(null);
   const VERSION = "V0.1";
 
   // Load game on mount and initialize audio
@@ -65,13 +69,58 @@ export default function GamePage() {
     // Don't call playLocationMusic("battle") here - let BattlePanel handle battle themes
   }, [inBattle]);
 
+  const handleBattleEnd = async (won: boolean, rewards: any, affinityChanges?: Record<string, number>) => {
+    if (!gameState || !inBattle) return;
+
+    const newRelationships = { ...gameState.relationships };
+    if (affinityChanges) {
+      Object.entries(affinityChanges).forEach(([npcId, change]) => {
+        if (newRelationships[npcId]) {
+          newRelationships[npcId] = updateRelationship(newRelationships[npcId], change);
+        }
+      });
+    }
+
+    const updatedCharacter = { ...gameState.character };
+    Object.entries(rewards).forEach(([key, value]) => {
+      if (key in updatedCharacter && typeof value === 'number') {
+        const current = updatedCharacter[key as keyof typeof updatedCharacter];
+        if (typeof current === 'number') {
+          let newValue: number;
+          if (key === 'health') {
+            newValue = Math.max(0, Math.min(100, current + value));
+          } else {
+            newValue = Math.max(0, current + value);
+          }
+          (updatedCharacter[key as keyof typeof updatedCharacter] as any) = newValue;
+        }
+      }
+    });
+
+    const newGameState = {
+      ...gameState,
+      character: updatedCharacter,
+      relationships: newRelationships
+    };
+
+    setGameState(newGameState);
+    await saveGame(newGameState, gameState.slot);
+    setInBattle(null);
+    setSelectedCompanion(null);
+
+    const verb = won ? "defeated" : "lost to";
+    toast({ 
+      title: `Battle Complete`, 
+      description: `You ${verb} your opponent!` 
+    });
+  };
+
   const handleNpcBattleEnd = async (won: boolean, affinityChange: number, rewards: any) => {
     if (!gameState || !inNpcBattle) return;
 
     const newRelationships = { ...gameState.relationships };
     if (newRelationships[inNpcBattle]) {
-      newRelationships[inNpcBattle].affinity += affinityChange;
-      newRelationships[inNpcBattle].isRival = newRelationships[inNpcBattle].affinity < -30;
+      newRelationships[inNpcBattle] = updateRelationship(newRelationships[inNpcBattle], affinityChange);
     }
 
     const updatedCharacter = { ...gameState.character };
@@ -450,6 +499,7 @@ export default function GamePage() {
           <EventCard 
             gameState={gameState} 
             onUpdateCharacter={handleUpdateCharacter}
+            onUpdateGameState={handleUpdateGameState}
           />
           <ActionsPanel 
             onNextTurn={handleNextTurn} 
@@ -486,6 +536,30 @@ export default function GamePage() {
         </div>
       )}
 
+      {/* Overlord/Rival Battle with Companion Selection */}
+      {selectingCompanion && inBattle && (
+        <CompanionSelector
+          gameState={gameState}
+          onSelectCompanion={(companion) => {
+            setSelectedCompanion(companion);
+            setSelectingCompanion(false);
+          }}
+          onContinue={() => setSelectingCompanion(false)}
+        />
+      )}
+
+      {inBattle && !selectingCompanion && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <BattlePanel
+            gameState={gameState}
+            opponent={inBattle.opponent}
+            currentDistrict={inBattle.district}
+            companion={selectedCompanion}
+            onBattleEnd={handleBattleEnd}
+          />
+        </div>
+      )}
+
       {/* NPC Battle Modal */}
       {inNpcBattle && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
@@ -502,7 +576,10 @@ export default function GamePage() {
         <RivalChallengeModal
           npcId={rivalChallenge}
           gameState={gameState}
-          onFight={() => setInNpcBattle(rivalChallenge)}
+          onFight={() => {
+            setInNpcBattle(rivalChallenge);
+            setRivalChallenge(null);
+          }}
           onMend={handleMendRelationship}
           onDismiss={() => setRivalChallenge(null)}
         />

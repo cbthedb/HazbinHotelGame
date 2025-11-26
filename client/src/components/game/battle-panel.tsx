@@ -54,8 +54,8 @@ export default function BattlePanel({
   const isOverlord = opponent === "charlie" || opponent === "alastor" || opponent === "valentino" || opponent === "vox" || opponent === "carmilla" || opponent === "lucifer";
   const isRival = opponent === "rival-demon";
   
-  const baseOpponentHealth = isOverlord ? 3500 : (isRival ? 120 : 100);
-  const baseOpponentDamage = isOverlord ? 40 : (isRival ? 12 : 8);
+  const baseOpponentHealth = isOverlord ? 5500 : (isRival ? 120 : 100);
+  const baseOpponentDamage = isOverlord ? 60 : (isRival ? 12 : 8);
   
   // POWER & AGE SCALING: Higher power = more health, more CE output, more damage. Age significantly increases max health
   const playerPowerLevel = gameState.character.power || 0;

@@ -16,9 +16,10 @@ import type { GameEvent } from "@shared/schema";
 interface EventCardProps {
   gameState: GameState;
   onUpdateCharacter: (updates: Partial<GameState["character"]>) => void;
+  onUpdateGameState?: (updates: any) => void;
 }
 
-export default function EventCard({ gameState, onUpdateCharacter }: EventCardProps) {
+export default function EventCard({ gameState, onUpdateCharacter, onUpdateGameState }: EventCardProps) {
   const { toast } = useToast();
   const [currentEvent, setCurrentEvent] = useState<GameEvent | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
@@ -89,7 +90,7 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
     setIsLoading(false);
   };
 
-  const handleChoice = (choiceId: string) => {
+  const handleChoice = (choiceId: string, onUpdateGameState?: (updates: any) => void) => {
     if (!currentEvent) return;
 
     const choice = currentEvent.choices.find((c: any) => c.id === choiceId);
@@ -114,6 +115,24 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
         }
       });
       onUpdateCharacter(updated);
+    }
+
+    // Apply affinity changes based on choice
+    if ((currentEvent as any).npcAffinity && onUpdateGameState) {
+      const affinityChanges = (currentEvent as any).npcAffinity[choiceId];
+      if (affinityChanges) {
+        const newRelationships = { ...gameState.relationships };
+        Object.entries(affinityChanges).forEach(([npcId, change]: [string, any]) => {
+          const numChange = change as number;
+          if (newRelationships[npcId]) {
+            newRelationships[npcId] = applyNpcAffects(
+              { [npcId]: newRelationships[npcId] },
+              { [npcId]: numChange }
+            )[npcId];
+          }
+        });
+        onUpdateGameState({ relationships: newRelationships });
+      }
     }
 
     // Show outcome with stat changes summary

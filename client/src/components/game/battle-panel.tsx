@@ -14,7 +14,8 @@ interface BattlePanelProps {
   gameState: GameState;
   opponent: string; // NPC ID or "overlord"
   currentDistrict: string;
-  onBattleEnd: (won: boolean, rewards: any) => void;
+  onBattleEnd: (won: boolean, rewards: any, affinityChanges?: Record<string, number>) => void;
+  companion?: string | null; // NPC ID of companion
 }
 
 interface BattleState {
@@ -30,7 +31,8 @@ export default function BattlePanel({
   gameState,
   opponent,
   currentDistrict,
-  onBattleEnd
+  onBattleEnd,
+  companion
 }: BattlePanelProps) {
   const { toast } = useToast();
   
@@ -64,6 +66,12 @@ export default function BattlePanel({
   const scaledPlayerHealth = gameState.character.health + Math.floor(playerAge * 2) + Math.floor(playerPowerLevel * 0.25);
   const ceOutputMultiplier = 1 + (playerPowerLevel * 0.02); // 2% more CE per power level
   const playerDamageMultiplier = 1 + (playerPowerLevel * 0.03); // 3% more damage per power level
+
+  // Companion system - 50% join chance if selected
+  const companionNpc = companion ? npcs.find(n => n.id === companion) : null;
+  const companionJoined = companion ? Math.random() < 0.5 : false;
+  const companionPower = companionNpc?.basePower || 0;
+  const damageBonus = companionJoined ? companionPower * 0.3 : 0; // 30% of companion's power as damage bonus
   
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,
@@ -71,7 +79,10 @@ export default function BattlePanel({
     cursedEnergy: 0,
     ultimateGauge: 0,
     turn: 0,
-    battleLog: [`Battle started! You face ${getOpponentName()}!`]
+    battleLog: [
+      `Battle started! You face ${getOpponentName()}!`,
+      companionJoined ? `${companionNpc?.name} joined the battle!` : ""
+    ].filter(Boolean)
   });
 
   // Play battle music based on opponent
@@ -102,14 +113,15 @@ export default function BattlePanel({
 
   const handleBaseAttack = () => {
     const baseDamage = baseAttackPower ? (baseAttackPower.basePower + Math.random() * 10) : 8;
-    const damage = baseDamage * playerDamageMultiplier;
+    const totalDamage = (baseDamage * playerDamageMultiplier) + damageBonus;
     const newLog = [...battle.battleLog];
-    newLog.push(`You used ${baseAttackPower?.name || "Basic Attack"}! Hit for ${Math.floor(damage)} damage.`);
+    const damageText = companionJoined ? ` (${Math.floor(damageBonus)} from companion support)` : "";
+    newLog.push(`You used ${baseAttackPower?.name || "Basic Attack"}! Hit for ${Math.floor(totalDamage)} damage.${damageText}`);
 
     const baseCE = Math.round(15 * ceOutputMultiplier);
     const newCE = Math.min(100, battle.cursedEnergy + baseCE);
     const newUltimate = Math.min(700, battle.ultimateGauge + 100);
-    const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
+    const newOpponentHealth = Math.max(0, battle.opponentHealth - totalDamage);
 
     if (newOpponentHealth <= 0) {
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
@@ -117,6 +129,9 @@ export default function BattlePanel({
       const isMythical = Math.random() < mythicalChance;
       const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
+      
+      const affinityChanges: Record<string, number> = {};
+      affinityChanges[opponent] = -30; // Defeating them damages affinity
       
       onBattleEnd(true, {
         power: 1,
@@ -128,7 +143,7 @@ export default function BattlePanel({
         isMythical: isMythical,
         mythicalPower: mythicalReward,
         isRivalDuel: isRival
-      });
+      }, affinityChanges);
       return;
     }
 
@@ -138,11 +153,14 @@ export default function BattlePanel({
     const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
 
     if (newPlayerHealth <= 0) {
+      const affinityChanges: Record<string, number> = {};
+      affinityChanges[opponent] = -15; // Losing to them damages affinity less
+      
       onBattleEnd(false, {
         power: -5,
         health: -60,
         wealth: -200
-      });
+      }, affinityChanges);
       return;
     }
 
@@ -206,11 +224,14 @@ export default function BattlePanel({
     const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
 
     if (newPlayerHealth <= 0) {
+      const affinityChanges: Record<string, number> = {};
+      affinityChanges[opponent] = -15; // Losing to them damages affinity less
+      
       onBattleEnd(false, {
         power: -5,
         health: -60,
         wealth: -200
-      });
+      }, affinityChanges);
       return;
     }
 

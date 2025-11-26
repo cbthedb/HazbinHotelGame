@@ -262,7 +262,7 @@ export default function BattlePanel({
     const ultimateDamageText = companionJoined ? ` (${Math.floor(damageBonus)} from companion)` : "";
     newLog.push(`${ultimatePower ? "ULTIMATE: " + ultimatePower.name : "ULTIMATE TECHNIQUE"}! Catastrophic damage: ${Math.floor(totalUltimateDamage)}!${ultimateDamageText}`);
 
-    const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
+    const newOpponentHealth = Math.max(0, battle.opponentHealth - totalUltimateDamage);
 
     if (newOpponentHealth <= 0) {
       const powerReward = Math.round(8 * (1 + playerPowerLevel * 0.05));

@@ -310,74 +310,6 @@ export default function GamePage() {
     );
   }
 
-  const handleBattleEnd = async (won: boolean, rewards: any) => {
-    if (gameState) {
-      const { applyNpcAffects, calculateAffinityChange } = await import("@/lib/relationshipSystem");
-      
-      let newPowers = [...(gameState.character.powers || [])];
-      let victoryMsg = "You won the battle!";
-      let mythicalShardsGained = 0;
-      let affinityChanges: Record<string, number> = {};
-      
-      // Add overlord power if reward includes it
-      if (won && rewards.overlordPower && !newPowers.includes(rewards.overlordPower)) {
-        newPowers.push(rewards.overlordPower);
-        victoryMsg += ` You learned a new power!`;
-      }
-
-      // Get mythical shard from overlord defeats (15% chance)
-      if (won && rewards.isMythical) {
-        mythicalShardsGained = 1;
-        victoryMsg += ` You obtained a Mythical Shard!`;
-      }
-
-      // Apply affinity changes based on battle outcome
-      const opponentNpcId = rewards.opponentNpcId || rewards.opponent;
-      if (opponentNpcId) {
-        if (won) {
-          affinityChanges[opponentNpcId] = -10; // Defeating someone damages relationship
-        } else {
-          affinityChanges[opponentNpcId] = -5; // Losing damages less
-        }
-      }
-
-      const updatedCharacter = {
-        ...gameState.character,
-        power: Math.max(0, (gameState.character.power || 0) + (rewards.power || 0)),
-        influence: Math.max(0, (gameState.character.influence || 0) + (rewards.influence || 0)),
-        wealth: Math.max(0, (gameState.character.wealth || 0) + (rewards.wealth || 0)),
-        soulcoins: Math.max(0, (gameState.character.soulcoins || 0) + (rewards.soulcoins || 0)),
-        health: Math.max(0, Math.min(100, (gameState.character.health || 100) + (rewards.health || 0))),
-        powers: newPowers,
-        mythicalShards: (gameState.character.mythicalShards || 0) + mythicalShardsGained
-      };
-
-      // Add cooldown for duel-rival (challenge-overlord has no cooldown)
-      const newCooldowns = { ...gameState.actionCooldowns };
-      if (rewards.isRivalDuel) {
-        newCooldowns["duel-rival"] = gameState.turn + 1 + 5; // 5 turn cooldown after duel
-      }
-
-      const updatedState: GameState = {
-        ...gameState,
-        character: updatedCharacter,
-        relationships: applyNpcAffects(gameState.relationships, affinityChanges),
-        actionCooldowns: newCooldowns,
-        turn: gameState.turn + 1
-      };
-
-      setGameState(updatedState);
-      await saveGame(updatedState);
-      setInBattle(null);
-      
-      toast({
-        title: won ? "Victory!" : "Defeat!",
-        description: victoryMsg,
-        variant: won ? "default" : "destructive"
-      });
-    }
-  };
-
   const handlePurchasePower = async (powerIds: string[], wealthSpent: number) => {
     if (!gameState) return;
 
@@ -417,17 +349,6 @@ export default function GamePage() {
   };
 
   const { character } = gameState;
-
-  if (inBattle) {
-    return (
-      <BattlePanel
-        gameState={gameState}
-        opponent={inBattle.opponent}
-        currentDistrict={inBattle.district}
-        onBattleEnd={handleBattleEnd}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-card">

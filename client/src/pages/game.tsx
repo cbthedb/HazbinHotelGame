@@ -82,6 +82,8 @@ export default function GamePage() {
     }
 
     const updatedCharacter = { ...gameState.character };
+    let rewardText = "";
+    
     Object.entries(rewards).forEach(([key, value]) => {
       if (key in updatedCharacter && typeof value === 'number') {
         const current = updatedCharacter[key as keyof typeof updatedCharacter];
@@ -97,6 +99,23 @@ export default function GamePage() {
       }
     });
 
+    // Handle overlord power reward
+    if (rewards.overlordPower && typeof rewards.overlordPower === 'string') {
+      if (!updatedCharacter.powers.includes(rewards.overlordPower)) {
+        updatedCharacter.powers = [...updatedCharacter.powers, rewards.overlordPower];
+        rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
+      }
+    }
+
+    // Handle mythical power reward
+    if (rewards.isMythical && rewards.mythicalPower && typeof rewards.mythicalPower === 'string') {
+      if (!updatedCharacter.powers.includes(rewards.mythicalPower)) {
+        updatedCharacter.powers = [...updatedCharacter.powers, rewards.mythicalPower];
+      }
+      updatedCharacter.mythicalShards = (updatedCharacter.mythicalShards || 0) + 1;
+      rewardText += `\n✨ Mythical shard obtained! (Total: ${updatedCharacter.mythicalShards})`;
+    }
+
     const newGameState = {
       ...gameState,
       character: updatedCharacter,
@@ -111,7 +130,7 @@ export default function GamePage() {
     const verb = won ? "defeated" : "lost to";
     toast({ 
       title: `Battle Complete`, 
-      description: `You ${verb} your opponent!` 
+      description: `You ${verb} your opponent!${rewardText}` 
     });
   };
 
@@ -128,6 +147,8 @@ export default function GamePage() {
     }
 
     const updatedCharacter = { ...gameState.character };
+    let rewardText = "";
+    
     Object.entries(rewards).forEach(([key, value]) => {
       if (key in updatedCharacter && typeof value === 'number') {
         const current = updatedCharacter[key as keyof typeof updatedCharacter];
@@ -142,6 +163,23 @@ export default function GamePage() {
         }
       }
     });
+
+    // Handle overlord power reward
+    if (rewards.overlordPower && typeof rewards.overlordPower === 'string') {
+      if (!updatedCharacter.powers.includes(rewards.overlordPower)) {
+        updatedCharacter.powers = [...updatedCharacter.powers, rewards.overlordPower];
+        rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
+      }
+    }
+
+    // Handle mythical power reward
+    if (rewards.isMythical && rewards.mythicalPower && typeof rewards.mythicalPower === 'string') {
+      if (!updatedCharacter.powers.includes(rewards.mythicalPower)) {
+        updatedCharacter.powers = [...updatedCharacter.powers, rewards.mythicalPower];
+      }
+      updatedCharacter.mythicalShards = (updatedCharacter.mythicalShards || 0) + 1;
+      rewardText += `\n✨ Mythical shard obtained! (Total: ${updatedCharacter.mythicalShards})`;
+    }
 
     const newGameState = {
       ...gameState,

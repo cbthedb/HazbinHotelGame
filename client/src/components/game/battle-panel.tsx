@@ -23,6 +23,9 @@ interface BattleState {
   opponentHealth: number;
   cursedEnergy: number;
   ultimateGauge: number;
+  companionHealth?: number;
+  companionCE?: number;
+  companionUltimate?: number;
   turn: number;
   battleLog: string[];
 }
@@ -73,11 +76,16 @@ export default function BattlePanel({
   const companionPower = companionNpc?.basePower || 0;
   const damageBonus = companionJoined ? companionPower * 0.3 : 0; // 30% of companion's power as damage bonus
   
+  const companionBaseHealth = companionJoined ? companionPower * 5 + Math.floor((companionNpc?.basePower || 0) * 2) : 0;
+
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,
     opponentHealth: baseOpponentHealth,
     cursedEnergy: 0,
     ultimateGauge: 0,
+    companionHealth: companionJoined ? companionBaseHealth : undefined,
+    companionCE: companionJoined ? 0 : undefined,
+    companionUltimate: companionJoined ? 0 : undefined,
     turn: 0,
     battleLog: [
       `Battle started! You face ${getOpponentName()}!`,
@@ -270,11 +278,34 @@ export default function BattlePanel({
       return;
     }
 
+    // Companion AI action
+    let companionNewHealth = battle.companionHealth;
+    let companionNewCE = battle.companionCE;
+    let companionNewUltimate = battle.companionUltimate;
+    if (companionJoined && companionNpc) {
+      const companionActions = ["attack", "defend", "skill"];
+      const action = companionActions[Math.floor(Math.random() * companionActions.length)];
+      
+      if (action === "attack") {
+        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+      } else if (action === "defend") {
+        newLog.push(`${companionNpc.name} takes a defensive stance!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+      }
+    }
+
     setBattle({
       ...battle,
       playerHealth: newPlayerHealth,
       cursedEnergy: newCE,
       ultimateGauge: Math.min(700, battle.ultimateGauge + 50),
+      companionHealth: companionNewHealth,
+      companionCE: companionNewCE,
+      companionUltimate: companionNewUltimate,
       turn: battle.turn + 1,
       battleLog: newLog
     });

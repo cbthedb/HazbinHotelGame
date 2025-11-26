@@ -18,10 +18,13 @@ import ProgressionPanel from "@/components/game/progression-panel";
 import ShopPanel from "@/components/game/shop-panel-collapsible";
 import MythicalShardShop from "@/components/game/mythical-shard-shop";
 import AnimatedLoading from "@/components/game/animated-loading";
+import NPCBattle from "@/components/game/npc-battle";
+import RivalChallengeModal from "@/components/game/rival-challenge-modal";
 import { Menu, X, LogOut, Save } from "lucide-react";
 import { loadLatestSave, saveGame } from "@/lib/game-state";
 import { initAudio, playLocationMusic } from "@/lib/audio";
 import type { GameState } from "@/lib/game-state";
+import npcsData from "@/data/npcs.json";
 
 export default function GamePage() {
   const [, setLocation] = useLocation();
@@ -31,6 +34,8 @@ export default function GamePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentEvent, setCurrentEvent] = useState<any | null>(null);
   const [inBattle, setInBattle] = useState<{ opponent: string; district: string } | null>(null);
+  const [inNpcBattle, setInNpcBattle] = useState<string | null>(null);
+  const [rivalChallenge, setRivalChallenge] = useState<string | null>(null);
   const VERSION = "V0.1";
 
   // Load game on mount and initialize audio
@@ -59,6 +64,72 @@ export default function GamePage() {
     }
     // Don't call playLocationMusic("battle") here - let BattlePanel handle battle themes
   }, [inBattle]);
+
+  const handleNpcBattleEnd = async (won: boolean, affinityChange: number, rewards: any) => {
+    if (!gameState || !inNpcBattle) return;
+
+    const newRelationships = { ...gameState.relationships };
+    if (newRelationships[inNpcBattle]) {
+      newRelationships[inNpcBattle].affinity += affinityChange;
+      newRelationships[inNpcBattle].isRival = newRelationships[inNpcBattle].affinity < -30;
+    }
+
+    const updatedCharacter = { ...gameState.character };
+    Object.entries(rewards).forEach(([key, value]) => {
+      if (key in updatedCharacter && typeof value === 'number') {
+        const current = updatedCharacter[key as keyof typeof updatedCharacter] as number;
+        if (key === 'health') {
+          updatedCharacter[key as keyof typeof updatedCharacter] = Math.max(0, Math.min(100, current + value)) as any;
+        } else {
+          updatedCharacter[key as keyof typeof updatedCharacter] = Math.max(0, current + value) as any;
+        }
+      }
+    });
+
+    const newGameState = {
+      ...gameState,
+      character: updatedCharacter,
+      relationships: newRelationships
+    };
+
+    setGameState(newGameState);
+    await saveGame(newGameState, gameState.slot);
+    setInNpcBattle(null);
+
+    const verb = won ? "defeated" : "lost to";
+    const npc = (npcsData as any[]).find((n: any) => n.id === inNpcBattle);
+    toast({ 
+      title: `You ${verb} ${npc?.name}!`, 
+      description: `Affinity: ${affinityChange > 0 ? "+" : ""}${affinityChange}` 
+    });
+  };
+
+  const handleMendRelationship = async () => {
+    if (!gameState || !rivalChallenge) return;
+
+    const newRelationships = { ...gameState.relationships };
+    if (newRelationships[rivalChallenge]) {
+      // Mending costs influence but increases affinity
+      newRelationships[rivalChallenge].affinity += 20;
+      newRelationships[rivalChallenge].isRival = newRelationships[rivalChallenge].affinity < -30;
+    }
+
+    const updatedCharacter = {
+      ...gameState.character,
+      influence: Math.max(0, (gameState.character.influence || 0) - 10)
+    };
+
+    const newGameState = {
+      ...gameState,
+      character: updatedCharacter,
+      relationships: newRelationships
+    };
+
+    setGameState(newGameState);
+    await saveGame(newGameState, gameState.slot);
+    setRivalChallenge(null);
+    toast({ title: "Reconciliation", description: "You've begun mending this relationship." });
+  };
 
   const handleNextTurn = async () => {
     if (!gameState) return;
@@ -96,6 +167,19 @@ export default function GamePage() {
       control: gameState.character.control + levelUpBonus.control,
       influence: gameState.character.influence + levelUpBonus.influence
     };
+
+    // Check for rival challenges (10% chance per turn if rivals exist)
+    const hasRivals = Object.values(gameState.relationships).some(r => r.isRival);
+    if (hasRivals && Math.random() < 0.1) {
+      const rivals = Object.entries(gameState.relationships)
+        .filter(([, r]) => r.isRival)
+        .map(([id]) => id);
+      
+      if (rivals.length > 0) {
+        const randomRival = rivals[Math.floor(Math.random() * rivals.length)];
+        setRivalChallenge(randomRival);
+      }
+    }
 
     const updatedState: GameState = {
       ...gameState,

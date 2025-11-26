@@ -505,12 +505,12 @@ export default function GamePage() {
           npcId={rivalChallenge}
           gameState={gameState}
           onFight={() => {
-            setInBattle({ opponent: rivalChallenge, district: gameState.character.currentDistrict || "pride-ring" });
+            setInBattle({ opponent: rivalChallenge, district: "pride-ring" });
             setSelectingCompanion(true);
             setRivalChallenge(null);
           }}
           onFightWithCompanion={() => {
-            setInBattle({ opponent: rivalChallenge, district: gameState.character.currentDistrict || "pride-ring" });
+            setInBattle({ opponent: rivalChallenge, district: "pride-ring" });
             setSelectingCompanion(true);
             setRivalChallenge(null);
           }}

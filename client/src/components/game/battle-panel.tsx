@@ -132,7 +132,7 @@ export default function BattlePanel({
 
     const baseCE = Math.round(15 * ceOutputMultiplier);
     const newCE = Math.min(100, battle.cursedEnergy + baseCE);
-    const newUltimate = Math.min(700, battle.ultimateGauge + 100);
+    const newUltimate = Math.min(700, battle.ultimateGauge + 140);
     const newOpponentHealth = Math.max(0, battle.opponentHealth - totalDamage);
 
     if (newOpponentHealth <= 0) {
@@ -229,7 +229,7 @@ export default function BattlePanel({
 
     const newCE = Math.max(0, battle.cursedEnergy - ceCost);
     // Reduced ultimate gauge gain: only 20 per power attack (was 100+), must still take 7 turns of attacks to charge
-    const baseUltimate = 20;
+    const baseUltimate = 28;
     const newUltimate = Math.min(700, battle.ultimateGauge + baseUltimate);
     const newOpponentHealth = Math.max(0, battle.opponentHealth - damage);
 
@@ -290,7 +290,7 @@ export default function BattlePanel({
     let companionNewUltimate = battle.companionUltimate;
     if (companionJoined && companionNpc && companionNewHealth && companionNewHealth > 0) {
       const companionPowers = (companionNpc.powers || [])
-        .map(id => powers.find(p => p.id === id))
+        .map((id: string) => powers.find(p => p.id === id))
         .filter(Boolean) as any[];
       
       const companionActions = companionPowers.length > 0 ? ["attack", "defend"] : ["defend"];
@@ -365,7 +365,7 @@ export default function BattlePanel({
     let companionNewUltimate = battle.companionUltimate;
     if (companionJoined && companionNpc && companionNewHealth && companionNewHealth > 0) {
       const companionPowers = (companionNpc.powers || [])
-        .map(id => powers.find(p => p.id === id))
+        .map((id: string) => powers.find(p => p.id === id))
         .filter(Boolean) as any[];
       
       const companionActions = companionPowers.length > 0 ? ["attack", "defend"] : ["defend"];
@@ -387,7 +387,7 @@ export default function BattlePanel({
       ...battle,
       playerHealth: newPlayerHealth,
       cursedEnergy: newCE,
-      ultimateGauge: Math.min(700, battle.ultimateGauge + 50),
+      ultimateGauge: Math.min(700, battle.ultimateGauge + 70),
       companionHealth: companionNewHealth,
       companionCE: companionNewCE,
       companionUltimate: companionNewUltimate,

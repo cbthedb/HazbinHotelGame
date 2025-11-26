@@ -74,9 +74,10 @@ export default function BattlePanel({
   const companionNpc = companion ? npcs.find(n => n.id === companion) : null;
   const companionJoined = companion ? Math.random() < 0.5 : false;
   const companionPower = companionNpc?.basePower || 0;
-  const damageBonus = companionJoined ? companionPower * 0.3 : 0; // 30% of companion's power as damage bonus
+  const damageBonus = companionJoined ? companionPower * 0.5 : 0; // 50% of companion's power as damage bonus (stronger allies)
   
-  const companionBaseHealth = companionJoined ? companionPower * 5 + Math.floor((companionNpc?.basePower || 0) * 2) : 0;
+  // Companion health scales like overlord (~80% of overlord health for balance)
+  const companionBaseHealth = companionJoined ? Math.floor(companionPower * 80) : 0;
 
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,
@@ -181,14 +182,15 @@ export default function BattlePanel({
       const action = companionActions[Math.floor(Math.random() * companionActions.length)];
       
       if (action === "attack") {
-        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        // Stronger damage: ~70-80% of base opponent damage per turn
+        const companionDamage = companionPower * 1.2 + Math.random() * 20;
         newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 18);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 120);
       } else if (action === "defend") {
         newLog.push(`${companionNpc.name} takes a defensive stance!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 20);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 100);
       }
     }
 
@@ -275,14 +277,15 @@ export default function BattlePanel({
       const action = companionActions[Math.floor(Math.random() * companionActions.length)];
       
       if (action === "attack") {
-        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        // Stronger damage: ~70-80% of base opponent damage per turn
+        const companionDamage = companionPower * 1.2 + Math.random() * 20;
         newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 18);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 120);
       } else if (action === "defend") {
         newLog.push(`${companionNpc.name} takes a defensive stance!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 20);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 100);
       }
     }
 
@@ -333,14 +336,15 @@ export default function BattlePanel({
       const action = companionActions[Math.floor(Math.random() * companionActions.length)];
       
       if (action === "attack") {
-        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        // Stronger damage: ~70-80% of base opponent damage per turn
+        const companionDamage = companionPower * 1.2 + Math.random() * 20;
         newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 18);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 120);
       } else if (action === "defend") {
         newLog.push(`${companionNpc.name} takes a defensive stance!`);
-        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
-        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 20);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 100);
       }
     }
 

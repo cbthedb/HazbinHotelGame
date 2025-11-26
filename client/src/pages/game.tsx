@@ -103,8 +103,8 @@ export default function GamePage() {
     if (rewards.overlordPower && typeof rewards.overlordPower === 'string') {
       if (!updatedCharacter.powers.includes(rewards.overlordPower)) {
         updatedCharacter.powers = [...updatedCharacter.powers, rewards.overlordPower];
-        rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
       }
+      rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
     }
 
     // Handle mythical shard reward (15% chance)
@@ -165,8 +165,8 @@ export default function GamePage() {
     if (rewards.overlordPower && typeof rewards.overlordPower === 'string') {
       if (!updatedCharacter.powers.includes(rewards.overlordPower)) {
         updatedCharacter.powers = [...updatedCharacter.powers, rewards.overlordPower];
-        rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
       }
+      rewardText += `\n✓ Gained ${rewards.overlordPower} power!`;
     }
 
     // Handle mythical shard reward (15% chance)

@@ -139,7 +139,7 @@ export default function BattlePanel({
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       const mythicalChance = isOverlord ? 0.15 : 0; // 15% from overlords
       const isMythical = Math.random() < mythicalChance;
-      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery", "redstatic-command", "infernal-supremacy", "hellfire-ascension", "void-manipulation", "celestial-severance", "damnation-protocol", "broadcast-omniscience", "cosmic-ruin"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
       const affinityChanges: Record<string, number> = {};
@@ -237,7 +237,7 @@ export default function BattlePanel({
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       const mythicalChance = isOverlord ? 0.15 : 0; // 15% from overlords
       const isMythical = Math.random() < mythicalChance;
-      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery", "redstatic-command", "infernal-supremacy", "hellfire-ascension", "void-manipulation", "celestial-severance", "damnation-protocol", "broadcast-omniscience", "cosmic-ruin"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
       onBattleEnd(true, {
@@ -419,7 +419,7 @@ export default function BattlePanel({
       const overlordPower = isOverlord && opponentNpc?.powers?.[0] ? opponentNpc.powers[0] : null;
       const mythicalChance = isOverlord ? 0.15 : 0; // 15% from overlords
       const isMythical = Math.random() < mythicalChance;
-      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery"];
+      const mythicalPowers = ["absolution-void", "eternal-nightfall", "pact-absolute", "seduction-mastery", "redstatic-command", "infernal-supremacy", "hellfire-ascension", "void-manipulation", "celestial-severance", "damnation-protocol", "broadcast-omniscience", "cosmic-ruin"];
       const mythicalReward = isMythical ? mythicalPowers[Math.floor(Math.random() * mythicalPowers.length)] : null;
       
       // Soulcoin rewards: small chance for overlords

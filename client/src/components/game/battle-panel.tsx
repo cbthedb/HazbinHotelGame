@@ -254,14 +254,27 @@ export default function BattlePanel({
       return;
     }
 
-    // Opponent attacks
+    // Opponent attacks - randomly target player or companion
+    let newPlayerHealth = battle.playerHealth;
+    let newCompanionHealth = battle.companionHealth;
+    
+    const targetCompanion = companionJoined && Math.random() < 0.5;
     const opponentDamage = baseOpponentDamage + Math.random() * 12;
-    newLog.push(`${getOpponentName()} attacks! You take ${Math.floor(opponentDamage)} damage.`);
-    const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
+    
+    if (targetCompanion && battle.companionHealth) {
+      newLog.push(`${getOpponentName()} attacks ${companionNpc?.name}! They take ${Math.floor(opponentDamage)} damage.`);
+      newCompanionHealth = Math.max(0, battle.companionHealth - opponentDamage);
+      if (newCompanionHealth <= 0) {
+        newLog.push(`${companionNpc?.name} has been defeated!`);
+      }
+    } else {
+      newLog.push(`${getOpponentName()} attacks! You take ${Math.floor(opponentDamage)} damage.`);
+      newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
+    }
 
     if (newPlayerHealth <= 0) {
       const affinityChanges: Record<string, number> = {};
-      affinityChanges[opponent] = -15; // Losing to them damages affinity less
+      affinityChanges[opponent] = -15;
       
       onBattleEnd(false, {
         power: -5,
@@ -272,17 +285,20 @@ export default function BattlePanel({
     }
 
     // Companion AI action after power attack
-    let companionNewHealth = battle.companionHealth;
+    let companionNewHealth = newCompanionHealth;
     let companionNewCE = battle.companionCE;
     let companionNewUltimate = battle.companionUltimate;
-    if (companionJoined && companionNpc) {
-      const companionActions = ["attack", "defend", "skill"];
+    if (companionJoined && companionNpc && companionNewHealth && companionNewHealth > 0) {
+      const companionPowers = (companionNpc.powers || [])
+        .map(id => powers.find(p => p.id === id))
+        .filter(Boolean) as any[];
+      
+      const companionActions = companionPowers.length > 0 ? ["attack", "defend"] : ["defend"];
       const action = companionActions[Math.floor(Math.random() * companionActions.length)];
       
-      if (action === "attack") {
-        // Stronger damage: ~70-80% of base opponent damage per turn
-        const companionDamage = companionPower * 1.2 + Math.random() * 20;
-        newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
+      if (action === "attack" && companionPowers.length > 0) {
+        const companionPower = companionPowers[Math.floor(Math.random() * companionPowers.length)];
+        newLog.push(`${companionNpc.name} uses ${companionPower.name}! Devastating hit on the opponent!`);
         companionNewCE = Math.min(100, (companionNewCE || 0) + 18);
         companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 120);
       } else if (action === "defend") {
@@ -313,10 +329,23 @@ export default function BattlePanel({
     const baseCE = Math.round(15 * ceOutputMultiplier);
     const newCE = Math.min(100, battle.cursedEnergy + baseCE);
 
-    // Opponent attacks while you defend (50% damage reduction)
+    // Opponent attacks while you defend (50% damage reduction) - can target companion
+    let newPlayerHealth = battle.playerHealth;
+    let newCompanionHealth = battle.companionHealth;
+    
+    const targetCompanion = companionJoined && Math.random() < 0.5;
     const opponentDamage = (baseOpponentDamage + Math.random() * 12) * 0.5;
-    newLog.push(`${getOpponentName()} attacks! You defend, reducing damage to ${Math.floor(opponentDamage)}!`);
-    const newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
+    
+    if (targetCompanion && battle.companionHealth) {
+      newLog.push(`${getOpponentName()} attacks ${companionNpc?.name}! Reduced damage to ${Math.floor(opponentDamage)}!`);
+      newCompanionHealth = Math.max(0, battle.companionHealth - opponentDamage);
+      if (newCompanionHealth <= 0) {
+        newLog.push(`${companionNpc?.name} has been defeated!`);
+      }
+    } else {
+      newLog.push(`${getOpponentName()} attacks! You defend, reducing damage to ${Math.floor(opponentDamage)}!`);
+      newPlayerHealth = Math.max(0, battle.playerHealth - opponentDamage);
+    }
 
     if (newPlayerHealth <= 0) {
       const affinityChanges: Record<string, number> = {};
@@ -331,17 +360,20 @@ export default function BattlePanel({
     }
 
     // Companion AI action
-    let companionNewHealth = battle.companionHealth;
+    let companionNewHealth = newCompanionHealth;
     let companionNewCE = battle.companionCE;
     let companionNewUltimate = battle.companionUltimate;
-    if (companionJoined && companionNpc) {
-      const companionActions = ["attack", "defend", "skill"];
+    if (companionJoined && companionNpc && companionNewHealth && companionNewHealth > 0) {
+      const companionPowers = (companionNpc.powers || [])
+        .map(id => powers.find(p => p.id === id))
+        .filter(Boolean) as any[];
+      
+      const companionActions = companionPowers.length > 0 ? ["attack", "defend"] : ["defend"];
       const action = companionActions[Math.floor(Math.random() * companionActions.length)];
       
-      if (action === "attack") {
-        // Stronger damage: ~70-80% of base opponent damage per turn
-        const companionDamage = companionPower * 1.2 + Math.random() * 20;
-        newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
+      if (action === "attack" && companionPowers.length > 0) {
+        const companionPower = companionPowers[Math.floor(Math.random() * companionPowers.length)];
+        newLog.push(`${companionNpc.name} uses ${companionPower.name}! Devastating hit on the opponent!`);
         companionNewCE = Math.min(100, (companionNewCE || 0) + 18);
         companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 120);
       } else if (action === "defend") {

@@ -13,12 +13,33 @@ interface SocialPanelProps {
   onUpdateGameState: (updates: Partial<GameState>) => void;
 }
 
+const COOLDOWN_TURNS = 2; // 2 turns between social interactions per NPC
+
 export default function SocialPanel({ gameState, onUpdateGameState }: SocialPanelProps) {
   const { toast } = useToast();
   const [selectedNpc, setSelectedNpc] = useState<string | null>(null);
   const npcs = npcsData as any[];
 
+  const isActionOnCooldown = (npcId: string, actionType: string): boolean => {
+    const cooldownKey = `social-${npcId}-${actionType}`;
+    const cooldowns = gameState.actionCooldowns || {};
+    const availableTurn = cooldowns[cooldownKey];
+    return availableTurn ? availableTurn > gameState.turn : false;
+  };
+
+  const setCooldown = (npcId: string, actionType: string) => {
+    const cooldownKey = `social-${npcId}-${actionType}`;
+    const newCooldowns = { ...gameState.actionCooldowns };
+    newCooldowns[cooldownKey] = gameState.turn + COOLDOWN_TURNS;
+    return newCooldowns;
+  };
+
   const handleSocialize = (npcId: string) => {
+    if (isActionOnCooldown(npcId, "socialize")) {
+      toast({ title: "Need Time", description: "You need time before socializing again", variant: "destructive" });
+      return;
+    }
+
     const npc = npcs.find(n => n.id === npcId);
     if (!npc) return;
 
@@ -36,6 +57,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
 
     onUpdateGameState({
       relationships: newRelationships,
+      actionCooldowns: setCooldown(npcId, "socialize"),
       character: {
         ...gameState.character,
         influence: Math.max(0, (gameState.character.influence || 0) + 1)
@@ -44,6 +66,11 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
   };
 
   const handleGiftGiving = (npcId: string) => {
+    if (isActionOnCooldown(npcId, "gift")) {
+      toast({ title: "Too Soon", description: "They still remember the last gift", variant: "destructive" });
+      return;
+    }
+
     const npc = npcs.find(n => n.id === npcId);
     if (!npc) return;
 
@@ -66,6 +93,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
 
     onUpdateGameState({
       relationships: newRelationships,
+      actionCooldowns: setCooldown(npcId, "gift"),
       character: {
         ...gameState.character,
         wealth: Math.max(0, (gameState.character.wealth || 0) - 50)
@@ -74,6 +102,11 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
   };
 
   const handleRomance = (npcId: string) => {
+    if (isActionOnCooldown(npcId, "romance")) {
+      toast({ title: "Too Rushed", description: "Give them time to think", variant: "destructive" });
+      return;
+    }
+
     const npc = npcs.find(n => n.id === npcId);
     if (!npc || !npc.romanceable) {
       toast({ title: "Cannot Romance", description: `${npc?.name} is not interested in romance.`, variant: "destructive" });
@@ -100,6 +133,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
 
     onUpdateGameState({
       relationships: { ...newRelationships, [npcId]: { ...newRel, isRomanced: isNowRomanced } },
+      actionCooldowns: setCooldown(npcId, "romance"),
       character: {
         ...gameState.character,
         empathy: Math.max(0, (gameState.character.empathy || 0) + 3)
@@ -138,6 +172,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
                   size="sm"
                   variant="outline"
                   onClick={() => handleSocialize(npc.id)}
+                  disabled={isActionOnCooldown(npc.id, "socialize")}
                   className="text-xs h-8"
                   data-testid={`button-socialize-${npc.id}`}
                 >
@@ -148,7 +183,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
                   size="sm"
                   variant="outline"
                   onClick={() => handleGiftGiving(npc.id)}
-                  disabled={(gameState.character.wealth || 0) < 50}
+                  disabled={(gameState.character.wealth || 0) < 50 || isActionOnCooldown(npc.id, "gift")}
                   className="text-xs h-8"
                   data-testid={`button-gift-${npc.id}`}
                 >
@@ -160,7 +195,7 @@ export default function SocialPanel({ gameState, onUpdateGameState }: SocialPane
                     size="sm"
                     variant={rel.isRomanced ? "default" : "outline"}
                     onClick={() => handleRomance(npc.id)}
-                    disabled={(rel.affinity || 0) < 40}
+                    disabled={(rel.affinity || 0) < 40 || isActionOnCooldown(npc.id, "romance")}
                     className="text-xs h-8"
                     data-testid={`button-romance-${npc.id}`}
                   >

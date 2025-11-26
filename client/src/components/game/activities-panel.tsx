@@ -6,6 +6,7 @@ import { Zap, Sword, Users, Trophy } from "lucide-react";
 import districts from "@/data/districts.json";
 import { generateActivityOutcome } from "@/lib/smart-ai";
 import { useToast } from "@/hooks/use-toast";
+import { getNpcData, updateRelationship } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 
 interface ActivitiesPanelProps {
@@ -13,6 +14,7 @@ interface ActivitiesPanelProps {
   onUpdateCharacter: (updates: any) => void;
   onEventGenerated: (event: any) => void;
   onBattleStart?: (opponent: string, district: string) => void;
+  onUpdateGameState?: (updates: Partial<GameState>) => void;
 }
 
 interface Activity {
@@ -27,12 +29,39 @@ interface Activity {
   cooldown?: number; // Cooldown in turns (0 or undefined = no cooldown)
 }
 
-export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventGenerated, onBattleStart }: ActivitiesPanelProps) {
+export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventGenerated, onBattleStart, onUpdateGameState }: ActivitiesPanelProps) {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
 
   const currentDistrict = districts.find(d => d.id === gameState.character.currentLocation);
   const districtRuler = currentDistrict?.currentRuler || "unknown";
+
+  // Track territory affinity penalties
+  const applyTerritoryAffinityPenalties = (activity: Activity) => {
+    const newRelationships = { ...gameState.relationships };
+    let affinityChanged = false;
+    
+    // Seizing territory damages affinity with the ruler
+    if (activity.id === "seize-territory" && districtRuler !== "unknown") {
+      const ruler = getNpcData(districtRuler);
+      if (ruler && newRelationships[districtRuler]) {
+        newRelationships[districtRuler] = updateRelationship(
+          newRelationships[districtRuler],
+          -25 // Major affinity hit
+        );
+        affinityChanged = true;
+        toast({
+          title: "Territory Dispute",
+          description: `${ruler.name} is extremely displeased with your territorial aggression!`,
+          variant: "destructive"
+        });
+      }
+    }
+
+    if (affinityChanged && onUpdateGameState) {
+      onUpdateGameState({ relationships: newRelationships });
+    }
+  };
   
   const handleBattleActivity = (activityId: string) => {
     if (!currentDistrict) return;
@@ -158,6 +187,9 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       handleBattleActivity(activity.id);
       return;
     }
+
+    // Apply territory affinity penalties before generating outcome
+    applyTerritoryAffinityPenalties(activity);
 
     setIsGenerating(true);
     const outcome = await generateActivityOutcome(activity, gameState, currentDistrict);

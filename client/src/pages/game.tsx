@@ -77,11 +77,15 @@ export default function GamePage() {
     const updatedCharacter = { ...gameState.character };
     Object.entries(rewards).forEach(([key, value]) => {
       if (key in updatedCharacter && typeof value === 'number') {
-        const current = updatedCharacter[key as keyof typeof updatedCharacter] as number;
-        if (key === 'health') {
-          updatedCharacter[key as keyof typeof updatedCharacter] = Math.max(0, Math.min(100, current + value)) as any;
-        } else {
-          updatedCharacter[key as keyof typeof updatedCharacter] = Math.max(0, current + value) as any;
+        const current = updatedCharacter[key as keyof typeof updatedCharacter];
+        if (typeof current === 'number') {
+          let newValue: number;
+          if (key === 'health') {
+            newValue = Math.max(0, Math.min(100, current + value));
+          } else {
+            newValue = Math.max(0, current + value);
+          }
+          (updatedCharacter[key as keyof typeof updatedCharacter] as any) = newValue;
         }
       }
     });
@@ -470,6 +474,7 @@ export default function GamePage() {
             onUpdateCharacter={handleUpdateCharacter}
             onEventGenerated={setCurrentEvent}
             onBattleStart={(opponent, district) => setInBattle({ opponent, district })}
+            onUpdateGameState={handleUpdateGameState}
           />
         </div>
       </div>
@@ -479,6 +484,28 @@ export default function GamePage() {
         <div className="fixed inset-y-0 right-0 w-80 bg-card border-l border-card-border p-4 overflow-y-auto z-40">
           <NPCPanel relationships={gameState.relationships} />
         </div>
+      )}
+
+      {/* NPC Battle Modal */}
+      {inNpcBattle && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <NPCBattle
+            npcId={inNpcBattle}
+            gameState={gameState}
+            onBattleEnd={handleNpcBattleEnd}
+          />
+        </div>
+      )}
+
+      {/* Rival Challenge Modal */}
+      {rivalChallenge && (
+        <RivalChallengeModal
+          npcId={rivalChallenge}
+          gameState={gameState}
+          onFight={() => setInNpcBattle(rivalChallenge)}
+          onMend={handleMendRelationship}
+          onDismiss={() => setRivalChallenge(null)}
+        />
       )}
     </div>
   );

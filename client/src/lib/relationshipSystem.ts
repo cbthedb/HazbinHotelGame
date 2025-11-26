@@ -54,18 +54,18 @@ export function calculateAffinityChange(
 
   if (interactionType === 'positive') {
     const affinity = characterTraits.filter(t => npc.affinityTraits?.includes(t)).length;
-    change = 5 + (affinity * 3);
+    change = 2 + (affinity * 1); // Reduced from 5 + (affinity * 3)
   } else if (interactionType === 'negative') {
     const disliked = characterTraits.filter(t => npc.dislikedTraits?.includes(t)).length;
-    change = -5 - (disliked * 2);
+    change = -3 - (disliked * 1); // Reduced from -5 - (disliked * 2)
   } else if (interactionType === 'territory') {
     // Respect overlords in their own domain
-    change = 8;
+    change = 3; // Reduced from 8
   } else if (interactionType === 'romance') {
-    change = 10;
+    change = 4; // Reduced from 10
   } else if (interactionType === 'conflict') {
     // Fighting overlords in their own domain damages affinity significantly
-    change = -15;
+    change = -15; // Keep same as it's already harsh
   }
 
   return change;

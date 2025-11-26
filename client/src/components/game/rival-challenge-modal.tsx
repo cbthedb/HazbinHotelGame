@@ -12,6 +12,7 @@ interface RivalChallengeModalProps {
   onFight: () => void;
   onMend: () => void;
   onDismiss: () => void;
+  onFightWithCompanion?: () => void;
 }
 
 export default function RivalChallengeModal({
@@ -19,7 +20,8 @@ export default function RivalChallengeModal({
   gameState,
   onFight,
   onMend,
-  onDismiss
+  onDismiss,
+  onFightWithCompanion
 }: RivalChallengeModalProps) {
   const npcs = npcsData as any[];
   const npc = npcs.find(n => n.id === npcId);
@@ -59,7 +61,7 @@ export default function RivalChallengeModal({
 
           <div className="flex gap-2 flex-col">
             <Button
-              onClick={onFight}
+              onClick={onFightWithCompanion ? onFightWithCompanion : onFight}
               variant="destructive"
               className="w-full gap-2"
               data-testid={`button-rival-fight-${npcId}`}

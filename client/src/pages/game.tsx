@@ -116,11 +116,15 @@ export default function GamePage() {
   };
 
   const handleNpcBattleEnd = async (won: boolean, affinityChange: number, rewards: any) => {
-    if (!gameState || !inNpcBattle) return;
+    if (!gameState) return;
+
+    // Handle both inNpcBattle and rivalChallenge battle endings
+    const npcId = inNpcBattle || rivalChallenge;
+    if (!npcId) return;
 
     const newRelationships = { ...gameState.relationships };
-    if (newRelationships[inNpcBattle]) {
-      newRelationships[inNpcBattle] = updateRelationship(newRelationships[inNpcBattle], affinityChange);
+    if (newRelationships[npcId]) {
+      newRelationships[npcId] = updateRelationship(newRelationships[npcId], affinityChange);
     }
 
     const updatedCharacter = { ...gameState.character };

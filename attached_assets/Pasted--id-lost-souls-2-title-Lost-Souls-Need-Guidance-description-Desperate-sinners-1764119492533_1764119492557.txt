@@ -1,0 +1,250 @@
+{
+  "id":"lost_souls_2",
+  "title":"Lost Souls Need Guidance",
+  "description":"Desperate sinners seek salvation guidance.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"help",
+      "text":"Guide them toward redemption.",
+      "outcomes":{
+        "statChanges":{"empathy":6,"influence":3},
+        "narrativeText":"You illuminate their path, however dim."
+      }
+    },
+    {
+      "id":"exploit",
+      "text":"Manipulate their desperation.",
+      "outcomes":{
+        "statChanges":{"corruption":5,"power":3},
+        "narrativeText":"They cling to you, unaware of your intentions."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"imps_riot",
+  "title":"Imp Riot in the Streets",
+  "description":"Imps have formed a violent mob, demanding 'better torture options.'",
+  "type":"war",
+  "choices":[
+    {
+      "id":"quell",
+      "text":"Suppress the riot with force.",
+      "outcomes":{
+        "statChanges":{"power":7,"control":5},
+        "narrativeText":"The imps scatter, terrified of your authority."
+      }
+    },
+    {
+      "id":"negotiate",
+      "text":"Hear out their demands.",
+      "outcomes":{
+        "statChanges":{"empathy":3,"influence":4},
+        "narrativeText":"The imps surprisingly appreciate your attention."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"hell_train",
+  "title":"The Helltrain Arrives",
+  "description":"A demonic locomotive arrives with unusual cargo.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"inspect",
+      "text":"Investigate the cargo.",
+      "outcomes":{
+        "statChanges":{"control":4,"influence":2},
+        "narrativeText":"You uncover occult materials of unknown origin."
+      }
+    },
+    {
+      "id":"claim_cargo",
+      "text":"Take the cargo for yourself.",
+      "outcomes":{
+        "statChanges":{"wealth":200,"corruption":2},
+        "narrativeText":"The conductor looks the other way."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"overlord_summit",
+  "title":"Overlord Summit Invitation",
+  "description":"You’ve been invited to a rare gathering of Hell’s overlords.",
+  "type":"contract",
+  "choices":[
+    {
+      "id":"attend",
+      "text":"Attend and network.",
+      "outcomes":{
+        "statChanges":{"influence":10,"power":5},
+        "narrativeText":"You gain insight into Hell's political landscape."
+      }
+    },
+    {
+      "id":"decline",
+      "text":"Reject the invitation.",
+      "outcomes":{
+        "statChanges":{"control":4},
+        "narrativeText":"Your absence raises eyebrows, but asserts independence."
+      }
+    }
+  ],
+  "onlyOnce":true
+},
+{
+  "id":"hellquake",
+  "title":"Hellquake Tremors",
+  "description":"A violent quake shakes the foundations of Hell.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"assist_civilians",
+      "text":"Help stabilize damaged areas.",
+      "outcomes":{
+        "statChanges":{"empathy":5,"influence":3},
+        "narrativeText":"Demons appreciate your rare kindness."
+      }
+    },
+    {
+      "id":"seize_opportunity",
+      "text":"Use the chaos to expand your territory.",
+      "outcomes":{
+        "statChanges":{"power":6,"corruption":4},
+        "narrativeText":"In the dust and ruin, you claim new ground."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"portal_glitch",
+  "title":"Malfunctioning Hell Portal",
+  "description":"A teleportation portal glitches violently, spitting out anomalies.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"stabilize",
+      "text":"Try to repair the portal.",
+      "outcomes":{
+        "statChanges":{"control":6,"power":2},
+        "narrativeText":"You bring order to chaotic magic."
+      }
+    },
+    {
+      "id":"experiment",
+      "text":"Use the instability for arcane research.",
+      "outcomes":{
+        "statChanges":{"corruption":4,"power":6},
+        "narrativeText":"The portal’s madness becomes your advantage."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"sinful_celeb",
+  "title":"A Sinful Celebrity Requests You",
+  "description":"A notorious Hell celebrity wants you in their newest scandal.",
+  "type":"career",
+  "choices":[
+    {
+      "id":"join",
+      "text":"Lean into the scandal.",
+      "outcomes":{
+        "statChanges":{"influence":7,"wealth":250},
+        "narrativeText":"Your fame skyrockets—for better or worse."
+      }
+    },
+    {
+      "id":"decline",
+      "text":"Avoid the drama.",
+      "outcomes":{
+        "statChanges":{"control":3,"influence":-2},
+        "narrativeText":"Your restraint earns quiet respect from some."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"underworld_library",
+  "title":"Forbidden Archives of the Underworld",
+  "description":"The library opens once a century, filled with cursed knowledge.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"study",
+      "text":"Read a forbidden tome.",
+      "outcomes":{
+        "statChanges":{"power":8,"corruption":5},
+        "narrativeText":"Your mind expands… and frays."
+      }
+    },
+    {
+      "id":"copy",
+      "text":"Secretly copy a page.",
+      "outcomes":{
+        "statChanges":{"control":4,"influence":3},
+        "narrativeText":"Knowledge is power—especially stolen knowledge."
+      }
+    }
+  ],
+  "onlyOnce":true
+},
+{
+  "id":"demonic_heir",
+  "title":"A Demon Heir Seeks Mentorship",
+  "description":"A young noble demon wants you to be their mentor.",
+  "type":"daily",
+  "choices":[
+    {
+      "id":"accept",
+      "text":"Take them under your wing.",
+      "outcomes":{
+        "statChanges":{"influence":5,"empathy":3},
+        "narrativeText":"Your guidance shapes a future power."
+      }
+    },
+    {
+      "id":"strict",
+      "text":"Teach them through fear.",
+      "outcomes":{
+        "statChanges":{"power":4,"corruption":3},
+        "narrativeText":"They obey—but tremble."
+      }
+    }
+  ],
+  "onlyOnce":false
+},
+{
+  "id":"soul_market_auction",
+  "title":"Soul Auction at the Market",
+  "description":"A rare auction of high-value souls begins.",
+  "type":"career",
+  "choices":[
+    {
+      "id":"bid",
+      "text":"Compete for a premium soul.",
+      "outcomes":{
+        "statChanges":{"wealth":-300,"power":10},
+        "narrativeText":"You obtain a soul pulsing with potential."
+      }
+    },
+    {
+      "id":"scout",
+      "text":"Observe and gather information.",
+      "outcomes":{
+        "statChanges":{"influence":3,"control":2},
+        "narrativeText":"You learn who’s buying what—and why."
+      }
+    }
+  ],
+  "onlyOnce":false
+}

@@ -162,9 +162,12 @@ export default function GamePage() {
 
   const handleBattleEnd = async (won: boolean, rewards: any) => {
     if (gameState) {
+      const { applyNpcAffects, calculateAffinityChange } = await import("@/lib/relationshipSystem");
+      
       let newPowers = [...(gameState.character.powers || [])];
       let victoryMsg = "You won the battle!";
       let mythicalShardsGained = 0;
+      let affinityChanges: Record<string, number> = {};
       
       // Add overlord power if reward includes it
       if (won && rewards.overlordPower && !newPowers.includes(rewards.overlordPower)) {
@@ -176,6 +179,16 @@ export default function GamePage() {
       if (won && rewards.isMythical) {
         mythicalShardsGained = 1;
         victoryMsg += ` You obtained a Mythical Shard!`;
+      }
+
+      // Apply affinity changes based on battle outcome
+      const opponentNpcId = rewards.opponentNpcId || rewards.opponent;
+      if (opponentNpcId) {
+        if (won) {
+          affinityChanges[opponentNpcId] = -10; // Defeating someone damages relationship
+        } else {
+          affinityChanges[opponentNpcId] = -5; // Losing damages less
+        }
       }
 
       const updatedCharacter = {
@@ -198,6 +211,7 @@ export default function GamePage() {
       const updatedState: GameState = {
         ...gameState,
         character: updatedCharacter,
+        relationships: applyNpcAffects(gameState.relationships, affinityChanges),
         actionCooldowns: newCooldowns,
         turn: gameState.turn + 1
       };

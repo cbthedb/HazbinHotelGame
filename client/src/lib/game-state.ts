@@ -1,12 +1,13 @@
 import type { Character } from "@shared/schema";
+import type { Relationship } from "./relationshipSystem";
 
 export interface GameState {
   character: Character;
   turn: number;
   slot: number; // Track which save slot this game is in
   eventLog: Array<{ turn: number; title: string; choices: string[] }>;
-  relationships: Record<string, number>;
-  territory: Record<string, boolean>;
+  relationships: Record<string, Relationship>;
+  territory: Record<string, string>; // district -> owner
   actionCooldowns: Record<string, number>;
   actionUseCounts: Record<string, number>;
 }
@@ -17,6 +18,9 @@ export interface SaveSlot {
   characterName: string;
   timestamp: number;
 }
+
+// Import to ensure it's available
+import { initializeAllRelationships } from "./relationshipSystem";
 
 const STORAGE_KEY = "hazbin-game-saves";
 const MAX_SAVES = 5;
@@ -124,7 +128,7 @@ export function createNewGameState(character: Character, slot: number = 1): Game
     turn: 1,
     slot,
     eventLog: [],
-    relationships: {},
+    relationships: initializeAllRelationships(),
     territory: {},
     actionCooldowns: {},
     actionUseCounts: {}

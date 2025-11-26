@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Heart, Users } from "lucide-react";
 import npcsData from "@/data/npcs.json";
+import { getRelationshipStatus, getRelationshipColor } from "@/lib/relationshipSystem";
 import type { GameState } from "@/lib/game-state";
 
 interface NPCPanelProps {
@@ -12,13 +13,6 @@ interface NPCPanelProps {
 export default function NPCPanel({ relationships }: NPCPanelProps) {
   const npcs = npcsData as Array<{ id: string; name: string; faction: string }>;
 
-  const getAffinityColor = (affinity: number) => {
-    if (affinity >= 50) return "text-green-500";
-    if (affinity >= 25) return "text-blue-500";
-    if (affinity >= 0) return "text-amber-500";
-    return "text-red-500";
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -27,8 +21,9 @@ export default function NPCPanel({ relationships }: NPCPanelProps) {
       </div>
 
       {npcs.map((npc) => {
-        const affinity = relationships[npc.id]?.affinity || 0;
-        const isRomanced = relationships[npc.id]?.isRomanced || false;
+        const rel = relationships[npc.id] || { affinity: 0, isRomanced: false, isRival: false, favorsOwed: 0 };
+        const status = getRelationshipStatus(rel.affinity);
+        const color = getRelationshipColor(rel.affinity);
 
         return (
           <Card key={npc.id} className="border-card-border" data-testid={`npc-${npc.id}`}>
@@ -38,7 +33,7 @@ export default function NPCPanel({ relationships }: NPCPanelProps) {
                   <CardTitle className="text-base">{npc.name}</CardTitle>
                   <p className="text-xs text-muted-foreground">{npc.faction}</p>
                 </div>
-                {isRomanced && (
+                {rel.isRomanced && (
                   <Heart className="w-4 h-4 text-pink-500" />
                 )}
               </div>
@@ -47,25 +42,18 @@ export default function NPCPanel({ relationships }: NPCPanelProps) {
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">Affinity</span>
-                  <span className={`font-semibold ${getAffinityColor(affinity)}`}>
-                    {affinity > 0 ? "+" : ""}{affinity}
+                  <span className={`font-semibold ${color}`}>
+                    {rel.affinity > 0 ? "+" : ""}{rel.affinity}
                   </span>
                 </div>
                 <Progress 
-                  value={Math.max(0, Math.min(100, affinity + 50))} 
+                  value={Math.max(0, Math.min(100, rel.affinity + 50))} 
                   className="h-1.5" 
                 />
               </div>
-              {affinity >= 50 && (
-                <Badge variant="secondary" className="text-xs">
-                  Close Friend
-                </Badge>
-              )}
-              {affinity < 0 && (
-                <Badge variant="destructive" className="text-xs">
-                  Hostile
-                </Badge>
-              )}
+              <Badge variant={rel.affinity >= 50 ? "secondary" : rel.affinity < -30 ? "destructive" : "outline"} className="text-xs">
+                {status}
+              </Badge>
             </CardContent>
           </Card>
         );

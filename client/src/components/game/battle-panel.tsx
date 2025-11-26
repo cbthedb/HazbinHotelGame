@@ -172,12 +172,35 @@ export default function BattlePanel({
       return;
     }
 
+    // Companion AI action after player attacks
+    let companionNewHealth = battle.companionHealth;
+    let companionNewCE = battle.companionCE;
+    let companionNewUltimate = battle.companionUltimate;
+    if (companionJoined && companionNpc) {
+      const companionActions = ["attack", "defend", "skill"];
+      const action = companionActions[Math.floor(Math.random() * companionActions.length)];
+      
+      if (action === "attack") {
+        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+      } else if (action === "defend") {
+        newLog.push(`${companionNpc.name} takes a defensive stance!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+      }
+    }
+
     setBattle({
       ...battle,
       playerHealth: newPlayerHealth,
       opponentHealth: newOpponentHealth,
       cursedEnergy: newCE,
       ultimateGauge: newUltimate,
+      companionHealth: companionNewHealth,
+      companionCE: companionNewCE,
+      companionUltimate: companionNewUltimate,
       turn: battle.turn + 1,
       battleLog: newLog
     });
@@ -243,12 +266,35 @@ export default function BattlePanel({
       return;
     }
 
+    // Companion AI action after power attack
+    let companionNewHealth = battle.companionHealth;
+    let companionNewCE = battle.companionCE;
+    let companionNewUltimate = battle.companionUltimate;
+    if (companionJoined && companionNpc) {
+      const companionActions = ["attack", "defend", "skill"];
+      const action = companionActions[Math.floor(Math.random() * companionActions.length)];
+      
+      if (action === "attack") {
+        const companionDamage = companionPower * 0.6 + Math.random() * 15;
+        newLog.push(`${companionNpc.name} attacks the opponent! Hit for ${Math.floor(companionDamage)} damage!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 12);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 80);
+      } else if (action === "defend") {
+        newLog.push(`${companionNpc.name} takes a defensive stance!`);
+        companionNewCE = Math.min(100, (companionNewCE || 0) + 15);
+        companionNewUltimate = Math.min(700, (companionNewUltimate || 0) + 60);
+      }
+    }
+
     setBattle({
       ...battle,
       playerHealth: newPlayerHealth,
       opponentHealth: newOpponentHealth,
       cursedEnergy: newCE,
       ultimateGauge: newUltimate,
+      companionHealth: companionNewHealth,
+      companionCE: companionNewCE,
+      companionUltimate: companionNewUltimate,
       turn: battle.turn + 1,
       battleLog: newLog
     });
@@ -410,6 +456,30 @@ export default function BattlePanel({
               <Progress value={(battle.ultimateGauge / 700) * 100} className="h-2" />
             </div>
           </div>
+
+          {/* Companion Health & Resources */}
+          {companionJoined && (
+            <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-3 space-y-2">
+              <div className="text-sm font-semibold text-blue-100">{companionNpc?.name} - Ally</div>
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div>
+                  <div className="text-blue-200 mb-1">Health</div>
+                  <Progress value={(battle.companionHealth || 0) / (companionBaseHealth || 1) * 100} className="h-2" />
+                  <div className="text-blue-300 mt-1">{Math.floor(battle.companionHealth || 0)} / {Math.floor(companionBaseHealth)}</div>
+                </div>
+                <div>
+                  <div className="text-blue-200 mb-1">CE</div>
+                  <Progress value={battle.companionCE || 0} className="h-2" />
+                  <div className="text-blue-300 mt-1">{Math.floor(battle.companionCE || 0)}/100</div>
+                </div>
+                <div>
+                  <div className="text-blue-200 mb-1">Ultimate</div>
+                  <Progress value={((battle.companionUltimate || 0) / 700) * 100} className="h-2" />
+                  <div className="text-blue-300 mt-1">{Math.floor(battle.companionUltimate || 0)}/700</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Opponent Skills */}
           {opponentNpc?.powers && (

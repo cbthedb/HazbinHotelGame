@@ -371,7 +371,7 @@ export default function GamePage() {
           <MapPanel territories={gameState.territory} />
         </div>
 
-        {/* Right Column - Location & Activities */}
+        {/* Right Column - Location & Activities & Social */}
         <div className="space-y-4 overflow-y-auto">
           <LocationPanel 
             gameState={gameState}
@@ -382,6 +382,10 @@ export default function GamePage() {
             onUpdateCharacter={handleUpdateCharacter}
             onEventGenerated={setCurrentEvent}
             onBattleStart={(opponent, district) => setInBattle({ opponent, district })}
+          />
+          <SocialPanel 
+            gameState={gameState}
+            onUpdateGameState={handleUpdateGameState}
           />
         </div>
       </div>

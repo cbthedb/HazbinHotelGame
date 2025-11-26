@@ -166,15 +166,16 @@ export default function ActivitiesPanel({ gameState, onUpdateCharacter, onEventG
       onEventGenerated(outcome);
       // Apply stat changes immediately
       const updated = { ...gameState.character };
-      Object.entries(outcome.statChanges || {}).forEach(([stat, value]) => {
-        const currentValue = updated[stat as keyof typeof updated] as number;
+      Object.entries(outcome.statChanges || {}).forEach(([stat, rawValue]: [string, unknown]) => {
+        const value = rawValue as number;
+        const currentValue = updated[stat as keyof typeof updated];
         if (typeof currentValue === "number") {
           // Cap health at 100, other stats grow infinitely
           const newValue = currentValue + value;
           if (stat === "health") {
-            updated[stat as keyof typeof updated] = Math.max(0, Math.min(100, newValue)) as any;
+            (updated[stat as keyof typeof updated] as any) = Math.max(0, Math.min(100, newValue));
           } else {
-            updated[stat as keyof typeof updated] = Math.max(0, newValue) as any;
+            (updated[stat as keyof typeof updated] as any) = Math.max(0, newValue);
           }
         }
       });

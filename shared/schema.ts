@@ -214,6 +214,25 @@ export type NPC = {
   portrait?: string; // path to portrait image
 };
 
+export type GameEventChoice = {
+  id: string;
+  text: string;
+  outcomes: {
+    statChanges?: Record<string, number>;
+    narrativeText: string;
+    affinityChanges?: Record<string, number>;
+  };
+};
+
+export type GameEvent = {
+  id: string;
+  title: string;
+  description: string;
+  type: "daily" | "career" | "contract" | "romance" | "war" | "misfortune";
+  choices: GameEventChoice[];
+  onlyOnce?: boolean;
+};
+
 export type Event = {
   id: string;
   title: string;

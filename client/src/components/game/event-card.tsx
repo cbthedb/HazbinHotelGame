@@ -92,7 +92,7 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
   const handleChoice = (choiceId: string) => {
     if (!currentEvent) return;
 
-    const choice = currentEvent.choices.find(c => c.id === choiceId);
+    const choice = currentEvent.choices.find((c: any) => c.id === choiceId);
     if (!choice) return;
 
     const { outcomes } = choice;
@@ -100,15 +100,16 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
     // Apply stat changes
     if (outcomes.statChanges) {
       const updated = { ...gameState.character };
-      Object.entries(outcomes.statChanges).forEach(([stat, value]) => {
-        const currentValue = updated[stat as keyof typeof updated] as number;
+      Object.entries(outcomes.statChanges).forEach(([stat, rawValue]: [string, unknown]) => {
+        const value = rawValue as number;
+        const currentValue = updated[stat as keyof typeof updated];
         if (typeof currentValue === "number") {
           // Cap health at 100, other stats grow infinitely
           const newValue = currentValue + value;
           if (stat === "health") {
-            updated[stat as keyof typeof updated] = Math.max(0, Math.min(100, newValue)) as any;
+            (updated[stat as keyof typeof updated] as any) = Math.max(0, Math.min(100, newValue));
           } else {
-            updated[stat as keyof typeof updated] = Math.max(0, newValue) as any;
+            (updated[stat as keyof typeof updated] as any) = Math.max(0, newValue);
           }
         }
       });
@@ -119,8 +120,11 @@ export default function EventCard({ gameState, onUpdateCharacter }: EventCardPro
     let statSummary = "";
     if (outcomes.statChanges) {
       const changes = Object.entries(outcomes.statChanges)
-        .filter(([_, v]) => v !== 0)
-        .map(([stat, value]) => `${value > 0 ? "+" : ""}${value} ${stat}`)
+        .filter(([_, v]: [string, unknown]) => v !== 0)
+        .map(([stat, rawValue]: [string, unknown]) => {
+          const value = rawValue as number;
+          return `${value > 0 ? "+" : ""}${value} ${stat}`;
+        })
         .join(", ");
       if (changes) statSummary = `\n\n${changes}`;
     }

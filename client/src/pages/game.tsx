@@ -8,6 +8,7 @@ import PowersPanel from "@/components/game/powers-panel";
 import EventCard from "@/components/game/event-card";
 import ActionsPanel from "@/components/game/actions-panel";
 import NPCPanel from "@/components/game/npc-panel";
+import SocialPanel from "@/components/game/social-panel";
 import MapPanel from "@/components/game/map-panel";
 import RankingPanel from "@/components/game/ranking-panel";
 import LocationPanel from "@/components/game/location-panel";
@@ -129,6 +130,18 @@ export default function GamePage() {
     };
 
     console.log(`[GameUpdate] Slot: ${gameState.slot}, Old SC: ${gameState.character.soulcoins}, New SC: ${updatedState.character.soulcoins}`);
+    setGameState(updatedState);
+    await saveGame(updatedState, gameState.slot);
+  };
+
+  const handleUpdateGameState = async (updates: Partial<GameState>) => {
+    if (!gameState) return;
+    
+    const updatedState: GameState = {
+      ...gameState,
+      ...updates
+    };
+    
     setGameState(updatedState);
     await saveGame(updatedState, gameState.slot);
   };

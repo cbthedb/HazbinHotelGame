@@ -77,7 +77,8 @@ export default function BattlePanel({
   const damageBonus = companionJoined ? companionPower * 0.5 : 0; // 50% of companion's power as damage bonus (stronger allies)
   
   // Companion health scales like overlord (~80% of overlord health for balance)
-  const companionBaseHealth = companionJoined ? Math.floor(companionPower * 80) : 0;
+  // For typical NPC basePower (60-120): companionPower * 45 = 2700-5400
+  const companionBaseHealth = companionJoined && companionPower > 0 ? Math.max(3500, Math.floor(companionPower * 45)) : 0;
 
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,

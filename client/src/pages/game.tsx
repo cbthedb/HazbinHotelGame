@@ -107,11 +107,8 @@ export default function GamePage() {
       }
     }
 
-    // Handle mythical power reward
-    if (rewards.isMythical && rewards.mythicalPower && typeof rewards.mythicalPower === 'string') {
-      if (!updatedCharacter.powers.includes(rewards.mythicalPower)) {
-        updatedCharacter.powers = [...updatedCharacter.powers, rewards.mythicalPower];
-      }
+    // Handle mythical shard reward (15% chance)
+    if (rewards.isMythical) {
       updatedCharacter.mythicalShards = (updatedCharacter.mythicalShards || 0) + 1;
       rewardText += `\n✨ Mythical shard obtained! (Total: ${updatedCharacter.mythicalShards})`;
     }
@@ -172,11 +169,8 @@ export default function GamePage() {
       }
     }
 
-    // Handle mythical power reward
-    if (rewards.isMythical && rewards.mythicalPower && typeof rewards.mythicalPower === 'string') {
-      if (!updatedCharacter.powers.includes(rewards.mythicalPower)) {
-        updatedCharacter.powers = [...updatedCharacter.powers, rewards.mythicalPower];
-      }
+    // Handle mythical shard reward (15% chance)
+    if (rewards.isMythical) {
       updatedCharacter.mythicalShards = (updatedCharacter.mythicalShards || 0) + 1;
       rewardText += `\n✨ Mythical shard obtained! (Total: ${updatedCharacter.mythicalShards})`;
     }

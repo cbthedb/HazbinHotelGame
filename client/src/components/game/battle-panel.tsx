@@ -72,13 +72,15 @@ export default function BattlePanel({
 
   // Companion system - 50% join chance if selected
   const companionNpc = companion ? npcs.find(n => n.id === companion) : null;
-  const companionJoined = companion ? Math.random() < 0.5 : false;
   const companionPower = companionNpc?.basePower || 0;
-  const damageBonus = companionJoined ? companionPower * 0.5 : 0; // 50% of companion's power as damage bonus (stronger allies)
   
   // Companion health scales like overlord (~80% of overlord health for balance)
   // For typical NPC basePower (60-120): companionPower * 45 = 2700-5400
-  const companionBaseHealth = companionJoined && companionPower > 0 ? Math.max(3500, Math.floor(companionPower * 45)) : 0;
+  const companionBaseHealth = companion && companionPower > 0 ? Math.max(3500, Math.floor(companionPower * 45)) : 0;
+  
+  // Track if companion actually joined (50% chance, determined once)
+  const [companionJoined] = useState(() => companion ? Math.random() < 0.5 : false);
+  const damageBonus = companionJoined ? companionPower * 0.5 : 0; // 50% of companion's power as damage bonus (stronger allies)
 
   const [battle, setBattle] = useState<BattleState>({
     playerHealth: scaledPlayerHealth,
